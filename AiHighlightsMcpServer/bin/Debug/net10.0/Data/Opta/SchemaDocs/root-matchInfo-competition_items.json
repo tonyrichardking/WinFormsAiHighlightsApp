@@ -1,0 +1,55 @@
+﻿{
+  "Nesting": "root-matchInfo-competition_items",
+  "Description": "Required. Root element of the fields related to the competition",
+  "Required": true,
+  "attributes": [
+    {
+      "Attribute": "id",
+      "Description": "Required. Unique ID (UUID) of the competition",
+      "Required": true,
+      "Type": "String (Alphanumeric - UUID)"
+    },
+    {
+      "Attribute": "ocId",
+      "Description": "Optional. Unique Opta Core competition ID. Returned only if the feed is queried by Opta Core legacy ID; the attribute is not present otherwise. Empty string if no such value exists.",
+      "Required": false,
+      "Type": "String"
+    },
+    {
+      "Attribute": "opId",
+      "Description": "Optional. Unique Opta competition ID. Returned only if the feed is queried by Opta legacy ID; the attribute is not present otherwise. Empty string if no such value exists.",
+      "Required": false,
+      "Type": "String"
+    },
+    {
+      "Attribute": "name",
+      "Description": "Required. The name of the competition",
+      "Required": true,
+      "Type": "String"
+    },
+    {
+      "Attribute": "knownName",
+      "Description": "Required. The known name of the competition",
+      "Required": true,
+      "Type": "String"
+    },
+    {
+      "Attribute": "sponsorName",
+      "Description": "Oprional. The name of the sponsor of a competition",
+      "Required": false,
+      "Type": "String"
+    },
+    {
+      "Attribute": "competitionCode",
+      "Description": "Required. The short three-digit competition code",
+      "Required": true,
+      "Type": "String"
+    },
+    {
+      "Attribute": "competitionFormat",
+      "Description": "Required. The format of the competition - one of the following values: Domestic league | Domestic cup | Domestic super cup | International cup | International super cup",
+      "Required": true,
+      "Type": "String"
+    }
+  ]
+}

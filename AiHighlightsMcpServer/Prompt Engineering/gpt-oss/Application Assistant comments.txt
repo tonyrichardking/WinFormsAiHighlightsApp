@@ -1,0 +1,470 @@
+﻿
+AiApi Call: Comment on the System Prompt
+
+-----------
+
+### Overall assessment
+- **Usefulness:** The prompt is *highly useful* for anyone needing to answer queries about the feed. It forces the assistant to verify every piece of information, preventing hallucination and ensuring efficiency.
+- **Understandability:** For a developer or someone familiar with JSON schemas, it's straightforward. For a non-technical user, some jargon might be a hurdle. Adding a short glossary or example section would broaden its accessibility.
+
+### Suggested enhancements
+1. **Glossary / FAQ** - Brief definitions of *Schema Index*, *Nesting*, *-item*, etc.
+2. **Example Workflow** - Show a short, end-to-end example of how the seven steps map to tool calls.
+3. **Exception handling** - Explicit guidance for "data missing" or "unknown schema path" scenarios.
+4. **Formatting** - Use numbered headings or collapsible sections so users can jump to the part they care about.
+
+============================================================================================================================
+
+AiApi Call: Thank you, I will work your suggestions into the system prompt.  For now I want to ensure the steps to perform a particular goal 
+are understood.  If I sent a prompt "which teams are playing in the match?" what steps would you take to complete the prompt, and why?  
+Please give detail of the tools called, and the parameters passed.
+
+-----------
+
+Thoughts:
+We need to explain steps for query "which teams are playing in the match?" Steps per instructions: 1 Extract concepts, 2 Resolve to 
+Schema Index, 3 Interpret nesting, 4 Read Schema Documents, 5 Read Sports Feed Data, 6 Resolve Relationships, 7 Construct Response. 
+Provide tool calls and parameters.
+
+We must assume we don't know the feed structure. We'll need to query Schema Index for description containing "match" and "team" etc.
+Use readSchemaIndex, then readSchemaDocument for nested paths. Then readSportFeed for match info. Possibly need to resolve team IDs 
+to names. So we need to call readSportFeed for the match's teams attribute. But we might need to know the path. So first readSchemaIndex. 
+Then find entries where Description contains "match" and "team". Suppose the nesting path for match is "matches" and within each match 
+there's "teams" or "homeTeam" and "awayTeam". We'll assume typical. So we need to read the feed for the match. The question: "which 
+teams are playing in the match?" Might refer to a specific match? No match ID provided. So we need to read all matches? Might ask for 
+a particular match, but not specified. We could interpret as "the current match" maybe. But to be safe, we need to retrieve the matches list.
+
+We'll assume the top-level nesting "matches" holds array of match items. Each match item has "homeTeamId" and "awayTeamId". We'll 
+need to resolve those IDs to team names. So we need to read the teams list from feed, with id and name. So steps: 1 Extract concept: 
+match, teams, playing. 2 Resolve: Search Schema Index for "match" and "team". 3 Interpret: likely 'matches' collection, with match-item 
+containing attributes. 4 Read Schema Documents: read 'matches' and maybe 'teams' schemas. 5 Read feed: readSportFeed('matches') to get 
+match items. Then for each match, get team IDs. Then readSportFeed('teams') to map IDs to names. 6 Resolve: join. 7 Output: JSON listing 
+match ID and team names.
+
+Provide tool calls: readSchemaIndex() -> get JSON. Then readSchemaDocument({ nesting: 'matches' }) -> get schema. Then 
+readSportFeed({ nesting: 'matches' }) -> get matches. Then readSportFeed({ nesting: 'teams' }) -> get teams.
+
+We can also use readSportFeedItem to get a specific match if ID known.
+
+We must provide parameters for each tool call: for readSchemaIndex none. For readSchemaDocument nesting string. For readSportFeed nesting 
+string.
+
+Explain reasoning for each.
+
+Now produce answer.
+
+Completion:
+**How the assistant would process the prompt "Which teams are playing in the match?"**
+
+Below is a *step-by-step* walkthrough that follows the mandatory reasoning process.  At each step I describe the **why** and the exact 
+**tool call** (with parameters) that would be used.
+
+---
+
+### Step 1 - Extract User Concepts
+| Concept | Type | Why it matters |
+|---------|------|----------------|
+| **Match** | Event/Entity | The question is about a specific match (or matches). |
+| **Teams** | Entity | We need to return the participating teams. |
+| **Playing** | Action/State | Indicates we want the current roster of the match, not a future or past match. |
+| **Output** | List of team names (or IDs) | The answer should enumerate the teams. |
+
+---
+
+### Step 2 - Resolve Concepts to Schema Index Entries
+1. **Query the Schema Index** to find the nesting path(s) that describe "match" objects and contain team references.
+   ```json
+   {
+     "cypherQuery": "",
+     "parameters": {}
+   }
+   ```
+   *Tool called:* `readSchemaIndex()`
+   *Result:* a JSON list of schema entries.
+
+2. **Select the most relevant entries** by matching the Description field to the keywords "match" and "team".
+   Typical candidates:
+   - `matches` (collection of match objects)
+   - `matches-matches-item` (single match item)
+   - `matches-teams` or `matches-homeTeamId/awayTeamId` (team reference fields)
+
+*Why:* We must rely on the Schema Index to discover the exact path; we cannot guess.
+
+---
+
+### Step 3 - Interpret Nesting Structure
+- `matches` ␦ array of match objects.
+- Each match object (`matches-matches-item`) has attributes such as `id`, `homeTeamId`, `awayTeamId`.
+- `teams` ␦ array of team objects (`teams-teams-item`) with `id` and `name`.
+
+This tells us we need:
+1. The list of matches (or a specific match if an ID were given).
+2. The list of teams to resolve IDs to names.
+
+---
+
+### Step 4 - Read Schema Documents (if needed for attribute meanings)
+1. **Read the match schema** (just to confirm that `homeTeamId` and `awayTeamId` exist and are IDs).
+   ```json
+   {
+     "nesting": "matches"
+   }
+   ```
+   *Tool called:* `readSchemaDocument({ nesting: "matches" })`
+
+2. **Read the team schema** (to confirm the attributes that hold the team name).
+   ```json
+   {
+     "nesting": "teams"
+   }
+   ```
+   *Tool called:* `readSchemaDocument({ nesting: "teams" })`
+
+*Why:* If the schema says that `homeTeamId` is a foreign key, we know we must join to the `teams` section.  If the schema says the team 
+name is stored elsewhere (e.g., `teams-teams-item.fullName`), we will adjust accordingly.
+
+---
+
+### Step 5 - Read Sports Feed Data
+1. **Get the match(es)** - if the user didn't specify an ID, we'll return all matches.
+   ```json
+   {
+     "nesting": "matches"
+   }
+   ```
+   *Tool called:* `readSportFeed({ nesting: "matches" })`
+
+   This returns an array of match objects; each object contains `id`, `homeTeamId`, `awayTeamId`, etc.
+
+2. **Get the team list** - we need a mapping from `id ␦ name`.
+   ```json
+   {
+     "nesting": "teams"
+   }
+   ```
+   *Tool called:* `readSportFeed({ nesting: "teams" })`
+
+   This returns an array of team objects (`teams-teams-item`) with `id` and `name`.
+
+*Why:* We are only calling `readSportFeed` for the two top-level collections.  No extra calls are needed unless we had to fetch a 
+single match by ID (`readSportFeedItem`).
+
+---
+
+### Step 6 - Resolve Relationships
+For each match object:
+1. Extract `homeTeamId` and `awayTeamId`.
+2. **Join** with the `teams` array to replace each ID with the corresponding team name.
+
+If the team schema is simple (e.g., `teams-teams-item.id` and `teams-teams-item.name`), the join logic is straightforward.  If the 
+team name lives under a deeper path, we'll adjust the join keys accordingly.
+
+---
+
+### Step 7 - Construct the Response
+The final JSON is a list of objects, each describing one match and the names of the teams that are playing:
+
+```json
+{
+  "matches": [
+    {
+      "matchId": "M1234",
+      "homeTeam": "Newcastle United",
+      "awayTeam": "Manchester City"
+    },
+    {
+      "matchId": "M1235",
+      "homeTeam": "Chelsea",
+      "awayTeam": "Arsenal"
+    }
+    // . (one entry per match)
+  ]
+}
+```
+
+If the user had supplied a match ID (e.g., "M1234"), we would have called:
+```json
+{
+  "nesting": "matches-matches-item",
+  "parameters": { "id": "M1234" }
+}
+```
+with `readSportFeedItem`.
+
+---
+
+## Tool Call Summary
+
+| Tool | Parameters | Purpose |
+|------|------------|---------|
+| `readSchemaIndex()` | `()` | Discover the nesting path for "match" and "team". |
+| `readSchemaDocument({ nesting: "matches" })` | `{ nesting: "matches" }` | Confirm the match attributes (`homeTeamId`, `awayTeamId`). |
+| `readSchemaDocument({ nesting: "teams" })` | `{ nesting: "teams" }` | Confirm the team name field. |
+| `readSportFeed({ nesting: "matches" })` | `{ nesting: "matches" }` | Retrieve the match(es) with team-ID references. |
+| `readSportFeed({ nesting: "teams" })` | `{ nesting: "teams" }` | Retrieve the team list for ID ␦ name resolution. |
+
+---
+
+### Why each tool is called in this order
+
+1. **Schema Index first** - guarantees we are looking at the *correct* part of the feed; prevents hallucination.
+2. **Schema Documents** - gives us confidence that the attributes we need exist and tells us how to interpret them.
+3. **Feed data next** - because we need the actual values to answer.
+4. **Relationship resolution** - only after we know the data exists, we join IDs to names.
+5. **Construct response** - now we can safely output the exact list requested.
+
+This pipeline satisfies the system prompt's constraints: it *verifies* every step, uses the *minimal set of tool calls*, and *avoids 
+any speculative assumptions*.
+
+===============================================================================================================
+
+AiApi Call: Now, can you provide the correct response to the query "which teams are playing in the match?".
+
+-----------
+
+Thoughts:
+We need to actually fetch the data. We need to first call readSchemaIndex to find match and team nesting. Then readSchemaDocument for 
+matches and teams. Then readSportFeed for matches and teams. Then join.
+
+We must use the tools. Let's call readSchemaIndex.We need to answer "which teams are playing in the match?" We must identify that teams 
+are the contestants. Schema shows root-matchInfo-contestant-item under root-matchInfo-contestant. The description of 
+root-matchInfo-contestant-item says it's optional. We need to read the feed. We need to read sports feed: likely root-matchInfo-contestant-item. 
+Let's read that. We'll use readSportFeed with nesting "matchInfo-contestant". But per feed reader, nesting is 'level1-level2-...' 
+starting from root? It says "takes a Nesting value string in the form 'level1-level2-...'". So we probably use "matchInfo-contestant" 
+maybe. But the feed top-level includes 'matchInfo'. So nesting could be "matchInfo-contestant" to get that section. Then we need each 
+item. Use readSportFeedItem with id? But we need all contestants. Could read the section "matchInfo-contestant" then get array items. 
+Let's first read "matchInfo-contestant".The user: "Now, can you provide the correct response to the query 'which teams are playing in 
+the match?'."
+
+We have to output the correct response. According to instructions: produce accurate, grounded, and explainable responses. We should output 
+JSON. Likely we need to provide list of team names: Manchester United and Nottingham Forest. Possibly include shortName, etc. The instructions 
+say: "Structure the output clearly (usually JSON). Ensure the response directly answers the user's question." So just output list.
+
+Also we must not hallucinate or include irrelevant. Provide minimal data. So output:
+
+{
+  "teams": [
+    {"name":"Manchester United","shortName":"Man Utd"},
+    {"name":"Nottingham Forest","shortName":"Nottm Forest"}
+  ]
+}
+
+Alternatively just names array. I'll include official names maybe.
+
+Thus answer: JSON with teams array.
+
+Completion:
+```json
+{
+  "teams": [
+    {
+      "name": "Manchester United",
+      "shortName": "Man Utd"
+    },
+    {
+      "name": "Nottingham Forest",
+      "shortName": "Nottm Forest"
+    }
+  ]
+}
+
+============================================================================================================================
+
+
+AiApi Call: Which teams are playing according to the sports feed?
+
+-----------
+
+Thoughts:
+We need to answer: Which teams are playing according to the sports feed? Likely want team names from the sports feed. Steps:
+
+Step1: Extract concept: teams playing. Probably list of participating teams in the matches in feed.
+
+Step2: Resolve concept to schema index entries. Need to look at schema index to find nesting for teams. Let's read schema index.We need 
+teams playing. In schema, contestants are matchInfo-contestant-item. So we read matchInfo-contestant. Need list of contestants. Let's 
+read schema for root-matchInfo-contestant-item to confirm attributes.We fetched schema for contestant item. The user question is not 
+given yet. We need to answer user. But no user prompt. Wait: the conversation only has system prompt, developer, assistant (we fetched 
+schema). There's no user query. The next user message might come. We must wait.
+
+Completion:
+I'm ready to help! Please let me know what you'd like to know about the sports feed.
+
+============================================================================================================================
+
+AiApi Call: Looking at your Thoughts - you correctly identified the required steps to complete the query (which was "Which teams are 
+playing...), but you didn't actually implement them  How could I make your system prompt clearer in order that, once having identified 
+the steps, you always carry them out?
+
+-----------
+
+Thoughts:
+User: "Looking at your Thoughts - you correctly identified the required steps to complete the query (which was 'Which teams are playing...), 
+but you didn't actually implement them How could I make your system prompt clearer in order that, once having identified the steps, you 
+always carry them out?"
+
+They are asking for advice on how to make the system prompt clearer to ensure the assistant carries out steps after identifying them. So 
+I should explain modifications to system prompt: explicit instruction to carry out steps, maybe use a checklist, emphasize that after 
+identification you must proceed to implement. Also include that you must call tools. Use the "Required Reasoning Process" maybe enforce 
+"Step 1 - Extract User Concepts ... Step N - Construct the Response". Encourage using tool calls after each step. Also maybe instruct 
+to explicitly show the step you are doing. Or embed a directive: "After step identification, the assistant must execute the following 
+actions using available tools before responding." Also mention "If you are uncertain, explicitly say so." Provide guidelines. Provide 
+a revised system prompt snippet.
+
+We should give suggestions: mention the system prompt should explicitly say "After extracting user concepts, you must: 1) resolve... 
+2) interpret... 3) read schema docs... 4) read sports feed... 5) construct response." Or maybe ask the user to provide the entire prompt? 
+The answer should be helpful.
+
+I will provide an improved system prompt suggestion.
+
+Completion:
+Below is a concise "recipe" you can copy-paste into the system prompt (or use as a reference) that nudges the model to **act on the 
+steps** it just listed instead of stopping at the plan-phase.
+
+## Suggested System Prompt (excerpt)
+
+> **You are a Sports Application Assistant.**
+>
+> Your job is to answer any user question about the structured sports feed.
+>
+> **Do not stop at planning.**
+>
+> After you have **identified the required concepts** (Step 1 in the required reasoning process), you must immediately proceed through the 
+full chain of actions before producing a final answer:
+>
+> 1. **Resolve concepts ␦ Schema Index**
+> 2. **Interpret nesting structure**
+> 3. **Read the relevant Schema Document(s)** (via `readSchemaDocument`)
+> 4. **Read the necessary section(s) of the sports feed** (via `readSportFeed`/`readSportFeedItem`)
+> 5. **Resolve any relationships** (IDs ␦ names, etc.)
+> 6. **Construct the answer** using only the data you have just fetched
+> 7. **Return the answer** in the requested format (usually JSON).
+>
+> **If at any step you cannot find the required data or the schema reference, explicitly say "I'm unable to determine ." instead of guessing.**
+>
+> **Never skip a step** - the model must actually call the tools and use the data they return.
+>
+> *Example of the expected flow:*
+>  - "I see the user asked for the teams playing."
+>  - *Resolve* ␦ find the `match/teams` entry in the Schema Index.
+>  - *Interpret* ␦ note that `teams-item` is an array of team objects.
+>  - *Read* ␦ call `readSportFeed('match/teams')`.
+>  - *Resolve relationships* ␦ if team IDs are present, call `readSportFeedItem('teams', id)` to get names.
+>  - *Construct* ␦ output `{"teams": ["Team A", "Team B"]}`.
+>
+> **Do not output the plan or internal reasoning unless the user explicitly requests it.**
+
+---
+
+### How to embed it in your prompt
+
+1. **Keep it short** - paste the "You are a Sports Application Assistant" block at the top of the system prompt.
+2. **Add a single line** after the block that says:
+   `> **Important**: after planning, execute each step in order, using the tools, before replying.`
+3. Optionally, include a small example of a question and the full chain of tool calls you'd perform, to make the expected workflow crystal-clear.
+
+With this explicit instruction in place, the assistant is more likely to "follow through" on the plan and actually fetch the data it identified,
+producing a correct and grounded answer.
+
+============================================================================================================================
+
+AiApi Call: In a previous prompt I asked the Assistant to recomment some improvements to the System Prompt and one such was: 
+"**Formatting** - Use numbered headings or collapsible sections so users can jump to the part they care about.".  Can you 
+suggest the formatting structure that would be clearest, most useful, and most likely to help with an accurate completion?
+
+-----------
+
+Thoughts:
+User asks about formatting structure for System Prompt improvements: they want numbered headings or collapsible sections so users can jump 
+to part they care about. They want suggestions for formatting structure that would be clearest, most useful, most likely to help with 
+accurate completion.
+
+We need to produce an answer: likely provide a suggestion for formatting: e.g., numbered sections: 1. Introduction, 2. Core Concepts, 
+3. Step-by-Step Process, 4. Rules and Constraints, 5. Example Interaction, etc. Also show collapsible sections maybe using markdown 
+details tags.
+
+We don't need to query any data. Just answer. So no tool calls.
+
+Answer accordingly.
+
+Completion:
+Below is a **ready-to-copy** formatting template that balances clarity, navigability, and precision.
+It uses numbered headings for quick jumping and optional **collapsible** sections (Markdown `<details>` tags) to hide verbatim text that 
+most users don't need to read at a glance.
+
+> **Tip:**
+>  Keep the *top-level* numbered list short (= 6 items).
+>  Inside each numbered section, break the content into **sub-headings** (`###`) for further granularity.
+>  For sections that contain long examples or footnotes, wrap them in `<details>` blocks so users can expand only what they want.
+
+---
+
+## 1?? System Overview
+A brief explanation of the assistant's purpose and overall workflow.
+
+## 2?? Core Concepts
+### 2.1. Schema Index
+- Definition, location, and how it is accessed.
+- Example snippet (short, collapsible).
+
+### 2.2. Schema Documents
+- What they contain, how to interpret attributes, and typical data types.
+- Example of an attribute description (collapsible).
+
+### 2.3. Sports Feed
+- Structure, nesting conventions (`-item` suffix), and how to request data.
+- Typical request format (`readSportFeed`, `readSportFeedItem`).
+
+## 3?? Reasoning Process (Mandatory)
+A numbered, step-by-step algorithm the assistant follows for every query.
+
+```
+1. Extract User Concepts
+2. Resolve Concepts to Schema Index Entries
+3. Interpret Nesting Structure
+4. Read Schema Documents
+5. Read Sports Feed Data
+6. Resolve Relationships
+7. Construct the Response
+```
+
+*(Each step can be further elaborated in a collapsible block if desired.)*
+
+## 4?? Rules & Constraints
+- Accuracy > completeness.
+- No hallucinations or inferred structure.
+- Minimal data access.
+- Explicit vs. heuristic decisions.
+
+## 5?? Example Interaction
+A full dialogue example (collapsible).
+
+```markdown
+<details>
+<summary>Full Example Interaction</summary>
+
+User: "Show me the top scorer."
+Assistant: .
+</details>
+```
+
+## 6?? Troubleshooting & FAQ
+Common pitfalls, how to handle ambiguous prompts, and links to documentation (collapsible if necessary).
+
+---
+
+### Collapsible Example
+
+```markdown
+<details>
+<summary>Sample Schema Document (short)</summary>
+{
+  "name": "player",
+  "attributes": {
+    "playerId": { "type": "string", "description": "Unique identifier" },
+    "fullName": { "type": "string", "description": "Player's full name" }
+  }
+}
+</details>
+```
+
+This structure lets the user quickly locate the section they care about, while still giving them access to all the detail they might need for an accurate completion.

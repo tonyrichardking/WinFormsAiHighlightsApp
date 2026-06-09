@@ -1,0 +1,43 @@
+﻿{
+  "Nesting": "root-matchInfo-series_items",
+  "Description": "Optional. Root element of the fields related to the series - this element is optional (it may not always be returned in the feed). Value (XML only): String giving the series name",
+  "Required": false,
+  "attributes": [
+    {
+      "Attribute": "id",
+      "Description": "Required. Unique ID (UUID) of the series",
+      "Required": true,
+      "Type": "String (Alphanumeric - UUID)"
+    },
+    {
+      "Attribute": "ocId",
+      "Description": "Optional. Unique Opta Core series ID. Returned only if the feed is queried by Opta Core legacy ID. Empty string if the ID does not exist.",
+      "Required": false,
+      "Type": "String"
+    },
+    {
+      "Attribute": "opId",
+      "Description": "Optional. Unique Opta series ID. Returned only if the feed is queried by Opta legacy ID. Empty string if the ID does not exist.",
+      "Required": false,
+      "Type": "String"
+    },
+    {
+      "Attribute": "horizontal",
+      "Description": "Optional. The order to display fixtures and standings for groups with the same vertical value.",
+      "Required": false,
+      "Type": "String"
+    },
+    {
+      "Attribute": "formatId",
+      "Description": "Required. Unique ID related to the series format of the competition",
+      "Required": true,
+      "Type": "String (Alphanumeric - UUID)"
+    },
+    {
+      "Attribute": "name (JSON only)",
+      "Description": "Required. Name of the series",
+      "Required": true,
+      "Type": "String"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+﻿
+Yes, there are several effective ways to reduce token usage during development without touching your system prompt.
+
+1. Switch to a cheaper/faster model
+The biggest win. Replace claude-opus-4-6 with claude-haiku-4-5-20251001 in your API calls:
+javascriptmodel: "claude-haiku-4-5-20251001"  // instead of claude-opus-4-6
+Haiku has much higher rate limits and is far cheaper. For development/testing it's perfectly adequate — you're just checking that your MCP plumbing works, not optimising response quality yet.
+
+2. Reduce max_tokens
+You're probably requesting far more output tokens than needed for testing:
+javascriptmax_tokens: 300  // instead of 1000 or 2048
+This doesn't reduce input token counting, but it reduces your overall API footprint and cost.
+
+3. Trim the MCP tool schema payload
+When you include an MCP server, the tool definitions (all the tool names, descriptions, and parameter schemas) are injected into the input token count automatically. You can't control this directly, but you can check how large it is by logging data.usage.input_tokens in your response — you may find the MCP schema alone is eating thousands of tokens per call.
+
+4. Avoid sending full conversation history during testing
+If you're doing multi-turn testing, each request re-sends the entire history. For isolated dev tests, just send the single message you're testing rather than a growing history array.
+
+5. Add a delay between calls
+The limit is per minute, so if you're firing multiple test calls quickly, a simple throttle helps:
+javascriptawait new Promise(r => setTimeout(r, 3000)); // 3s between calls
+
+
+Recommended dev setup:
+
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+var client = new HttpClient();
+client.DefaultRequestHeaders.Add("x-api-key", "YOUR_API_KEY");
+client.DefaultRequestHeaders.Add("anthropic-version", "2023-06-01");
+client.DefaultRequestHeaders.Add("anthropic-beta", "mcp-client-2025-04-04");
+
+var requestBody = new
+{
+    model = "claude-haiku-4-5-20251001",
+    max_tokens = 300,
+    system = "Your system prompt here",
+    messages = new[]
+    {
+        new { role = "user", content = "List the highlights of the latest soccer match" }
+    },
+    mcp_servers = new[]
+    {
+        new
+        {
+            type = "url",
+            url = "https://your-mcp-server-url",
+            name = "sports"
+        }
+    }
+};
+
+try
+{
+    var response = await client.PostAsJsonAsync("https://api.anthropic.com/v1/messages", requestBody);
+    var responseBody = await response.Content.ReadAsStringAsync();
+
+    if (!response.IsSuccessStatusCode)
+    {
+        Console.WriteLine($"Error: {response.StatusCode}");
+        Console.WriteLine(responseBody);
+        return;
+    }
+
+    using var doc = JsonDocument.Parse(responseBody);
+    var root = doc.RootElement;
+
+    // Log token usage
+    if (root.TryGetProperty("usage", out var usage))
+    {
+        Console.WriteLine($"Input tokens:  {usage.GetProperty("input_tokens").GetInt32()}");
+        Console.WriteLine($"Output tokens: {usage.GetProperty("output_tokens").GetInt32()}");
+    }
+
+    // Extract text from content blocks
+    if (root.TryGetProperty("content", out var content))
+    {
+        foreach (var block in content.EnumerateArray())
+        {
+            if (block.TryGetProperty("type", out var type) && type.GetString() == "text")
+            {
+                Console.WriteLine("\nAssistant:");
+                Console.WriteLine(block.GetProperty("text").GetString());
+            }
+        }
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Exception: {ex.Message}");
+}
+
+
+Once you're happy with the integration and ready to move to production, switch back to Sonnet or Opus. 
+The OAuth issue you mentioned (separate question, noted!) will also need resolving before production use.
+
+
+A few C#-specific notes:
+
+anthropic-beta: mcp-client-2025-04-04 — this header is required for MCP server support in the API; easy to forget when moving from the chat interface.
+PostAsJsonAsync handles serialisation automatically, but anonymous types work fine here since we're only sending, not deserialising back into typed objects.
+JsonDocument is used for the response since the content array can contain mixed block types (text, mcp_tool_use, mcp_tool_result) — a fully typed model would need a discriminated union or a custom converter, which is overkill for dev testing.
+The HttpClient should ideally be a singleton (via IHttpClientFactory in a real app) but for a dev console app this is fine.

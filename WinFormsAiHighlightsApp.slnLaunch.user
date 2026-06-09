@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "AiHighlightsWinFormsUi\\AiHighlightsWinFormsUi.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

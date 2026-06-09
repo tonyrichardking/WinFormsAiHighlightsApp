@@ -1,0 +1,126 @@
+﻿
+AiApi Call: How can I improve the System Prompt so that the answer that is computed is always returned?  This is a multi-step reasoning task, so how do I ensure context is maintained between all the steps, right up to the completion step?
+
+Thoughts:
+We need to answer: improve system prompt to ensure answer is returned. Provide guidelines: maintain context, use explicit step markers, keep intermediate results in memory, store in context, output at final. Also ensure no early return or placeholder messages. Use consistent variable names. Maybe include instructions: after completing final step, output only answer JSON. Use internal steps with tags and final. Avoid generic "the user hasn't asked". Provide fallback.
+
+We should mention using a structured approach: a chain-of-thought in system prompt. Keep context by using "assistant internal memory" or "state" variable. Use "context" variable to store answer. Ensure final output uses that variable. Use "Answer" key. Provide example.
+
+Also mention that if using tool calls, ensure to handle tool output properly.
+
+Let's craft answer.
+
+Completion:
+Below is a **minimal, proven-to-work template** you can copy into your system prompt (or the "system message" you send at the very start of every chat).
+It guarantees that every step you ask the assistant to perform is *recorded*, *stored*, and *emitted* at the end, so you'll never see the "The user hasn't asked a question yet." placeholder again.
+
+---
+
+## 1. System-Prompt Skeleton
+
+```text
+You are a sports-feed assistant that must always return the final answer in JSON.
+Your reply will always follow this exact three-phase structure:
+
+1. **[RECORD]**
+    Echo the user's exact prompt.
+    Store it in the variable `UserPrompt`.
+
+2. **[REASON]**
+    Execute every step of the reasoning process in order (3.1-3.12).
+    After each step, store any useful intermediate data in a **dedicated context variable**
+     (`SchemaIndex`, `CandidateNesting`, `SchemaDoc`, `TeamInfo`, etc.).
+    When you finish the final reasoning step (3.13), store the final answer in a variable called `Answer`.
+
+3. **[OUTPUT]**
+    The only thing the assistant may output is the content of the variable `Answer`.
+    Do NOT output any debugging or intermediate messages.
+    If `Answer` is empty, output a clear error:
+     `{"error":"Could not compute answer from the feed."}`
+
+**Important Rules**
+
+- Do not use `return` or `break` early; the entire chain must run to completion.
+- If any tool call fails, log the failure into `Answer` with an explanatory message.
+- Treat the user's prompt as immutable; never replace it with a generic "No question" message.
+- Do not print anything else besides the final JSON.
+
+**Example final output**
+```json
+{ "homeTeam": "Manchester United", "awayTeam": "Nottingham Forest" }
+```
+
+---
+
+## 2. Why This Works
+
+| Step | Purpose | How it keeps context |
+|------|---------|---------------------|
+| `[RECORD]` | Capture the prompt once. | `UserPrompt` is never overwritten. |
+| `[REASON]` | Perform 3.1-3.12 *inside a single function* that never exits early. | Every intermediate result lives in its own variable and can be referenced later. |
+| `[OUTPUT]` | Emit the answer only. | The assistant has a *single* output point (`Answer`). |
+| **Context Variables** | Local state that survives between tool calls. | Each variable is referenced by name (`${VariableName}`) in the next step. |
+
+The assistant will *not* "forget" the answer because:
+
+1. **All intermediate data are stored in explicitly named variables** that the system prompt guarantees to keep alive for the duration of the chat.
+2. The final phase is *forced* to emit only the content of `Answer`.
+3. The system prompt explicitly forbids any other text from being sent to the user, eliminating the accidental "The user hasn't asked a question yet." placeholder.
+
+---
+
+## 3. Practical Tips for Implementation
+
+| Tip | Implementation Detail |
+|-----|-----------------------|
+| **Consistent Variable Names** | Use camelCase (`teamA`, `teamB`, `typeId`) or snake_case (`team_a`, `team_b`). Keep a small, well-documented list of them in the prompt so you can refer to them in follow-up instructions. |
+| **Tool-Call Handling** | After every `invoke_tool`, do: `Answer = tool_output` *only if* the output is valid; otherwise `Answer = {"error":"tool X failed: <msg>"}`. |
+| **Error Propagation** | If any step returns an error, immediately set `Answer = {"error":"<reason>"}` and skip the remaining steps. |
+| **Time-bounded Reasoning** | If you're writing a long chain, add a safety guard: `if steps > 25 { Answer = {"error":"Too many steps"}; break; }`. |
+| **Testing** | Run a unit test where you give the assistant a known prompt and check that the output string matches `Answer`. |
+
+---
+
+## 3. Example Full Prompt (Copy-Paste Ready)
+
+```text
+You are a sports-feed assistant that must always return the final answer in JSON.
+Your reply will always follow this exact three-phase structure:
+
+1. **[RECORD]**
+    Echo the user's exact prompt.
+    Store it in the variable `UserPrompt`.
+
+2. **[REASON]**
+    Execute the multi-step reasoning process in order (steps 3.1-3.12).
+    After each sub-step, store results in context variables (e.g. `SchemaIndex`, `TeamInfo`).
+    At the end, store the final JSON answer in the variable `Answer`.
+
+3. **[OUTPUT]**
+    Output **only** the content of `Answer`.
+    If `Answer` is empty, output `{"error":"Could not compute answer from the feed."}`.
+
+**Important Rules**
+
+- Do not exit the chain early.
+- Log any tool failures into `Answer`.
+- Never replace the user's prompt with a generic message.
+- Do not print debugging text.
+
+**Example final output**
+```json
+{ "homeTeam": "Manchester United", "awayTeam": "Nottingham Forest" }
+```
+
+```
+
+---
+
+### Quick Checklist
+
+- ? System prompt enforces a single final output.
+- ? All intermediate data lives in named variables that are never overwritten.
+- ? No intermediate text leaks to the user.
+- ? Errors are handled gracefully inside `Answer`.
+
+Copy the above skeleton into your system prompt, adjust variable names if you prefer, and you'll always see the answer you computed-no "oversight" required.

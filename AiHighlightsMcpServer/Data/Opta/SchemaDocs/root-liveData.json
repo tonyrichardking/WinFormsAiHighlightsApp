@@ -1,0 +1,6 @@
+﻿{
+  "Nesting": "root-liveData",
+  "Description": "Required. Root element of the fields related to live data\nNote: If no live data is available (for example, if the fixture is scheduled but is not playing or has not been played) then an empty liveData element is returned and some sub-elements will not be returned. However, when new information is available the feed will be updated - see our polling frequency recommendations for more information.\nAttributes list is empty\n\u003CmatchDetails\u003E\u003CmatchDetails\u003E",
+  "Required": true,
+  "attributes": []
+}

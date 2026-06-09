@@ -1,0 +1,163 @@
+{
+    "comments": [
+        "Metadata Central management object",
+        "This JSON object is written to the db on initial cold startup with an empty database",
+        "A new version is written each time the 'mdcManagement' section is updated.",
+        "The version number must be increased, the id must be assigned a new GUID, and the lastFileUpdateDateTime updated when a new version is made",
+        "The resource reference for this object in the database is <namespace><id>, e.g., http://teragator.com/ns/management/objects/mdcstartup#34C890F9-9900-4C1E-9B58-B9BB99B6298A",
+        "A mdcConfiguration specifies the domains enabled for the application",
+        "A domain specifies the namespace, data objects, initialisation, query objects, ETL, and other run-time behaviour for an application",
+        "The 'history' section is appended with new information each time the software is started"
+    ],
+    "managementInstance": {
+        "metadata": {
+            "name": "Metadata Central management object",
+            "version": "1",
+            "mdcStartupManagementNamespace": "http://teragator.com/ns/management/objects/mdcstartup/v1.0#",
+            "id": "34C890F9-9900-4C1E-9B58-B9BB99B6298A",
+            "lastFileUpdateDateTime": "2022-09-14T00:00:00",
+            "originalFileCreateDateTime": "2022-09-01T00:00:00",
+            "contentChecksum": "6C5A-E013-DE7E-9099-C7F5-582B-FB82-60FD-E503-C1DE-2F3A-6A32-E590-326F-F0D0-583C",
+            "originalSoftwareBuildNumber": "3.0"
+        },
+        "content": {
+            "mdcDatabase": {
+                "host": "localhost",
+                "user": "neo4j",
+                "databaseName": "neo4j",
+                "httpPort": "7687",
+                "boltPort": "7474",
+                "providerName": "Neo4j",
+                "password": ""
+            },
+            "mdcConfigurations": [
+                {
+                    "configName": "MetadataConfiguration_FullTestConfig",
+                    "configDescription": "All the domains for QA",
+                    "includedDomains": [
+                        "http://teragator.com/ns/ontology/management/mdcstartup/v1.0#",
+                        "http://teragator.com/ns/ontology/etl/generic/teamsportroster-2.0#",
+                        "http://teragator.com/ns/ontology/etl/generic/teamsportdailyschedule-2.0#",
+                        "http://teragator.com/ns/ontology/etl/cv/skos-1.0#"
+                    ]
+                },
+                {
+                    "configName": "MetadataConfiguration_GenericSportsAndSkosConfig",
+                    "configDescription": "For generic team sports and SKOS controlled vocabulary",
+                    "includedDomains": [
+                        "http://teragator.com/ns/ontology/management/mdcstartup/v1.0#",
+                        "http://teragator.com/ns/ontology/etl/generic/teamsportroster-2.0#",
+                        "http://teragator.com/ns/ontology/etl/generic/teamsportdailyschedule-2.0#",
+                        "http://teragator.com/ns/ontology/etl/cv/skos-1.0#"
+                    ]
+                },
+                {
+                    "configName": "MetadataConfiguration_Administration",
+                    "configDescription": "For general admin tasks, including support of the MDC Admin Client V2",
+                    "includedDomains": ["http://teragator.com/ns/ontology/management/mdcstartup/v1.0#"]
+                },
+                {
+                    "configName": "MetadataConfiguration_GenericMultiTeamSportsLoggerConfig",
+                    "configDescription": "For generic team sports loggers",
+                    "includedDomains": [
+                        "http://teragator.com/ns/ontology/management/mdcstartup/v1.0#",
+                        "http://teragator.com/ns/ontology/etl/generic/teamsportroster-2.0#",
+                        "http://teragator.com/ns/ontology/etl/generic/teamsportdailyschedule-2.0#"
+                    ]
+                },
+                {
+                    "configName": "MetadataConfiguration_IpvSkosConfig",
+                    "configDescription": "For SKOS controlled vocabulary systems",
+                    "includedDomains": [
+                        "http://teragator.com/ns/ontology/management/mdcstartup/v1.0#",
+                        "http://teragator.com/ns/ontology/etl/cv/skos-1.0#"
+                    ]
+                }
+            ],
+            "mdcDomains": [
+                {
+                    "domainName": "MDC Administration",
+                    "domainDescription": "General admin tasks, including support of the MDC Admin Client V2",
+                    "domainNamespace": "http://teragator.com/ns/ontology/management/mdcstartup/v1.0#",
+                    "subdomain": "default",
+                    "etl": {
+                        "useEtl": "false",
+                        "etlDescription": "",
+                        "etlAction": ""
+                    },
+                    "initialisation": {
+                        "initialise": "false",
+                        "filepath": "",
+                        "filetype": ""
+                    }
+                },
+                {
+                    "domainName": "Generic Team Sport Roster",
+                    "domainDescription": "Team sport roster data",
+                    "domainNamespace": "http://teragator.com/ns/ontology/etl/generic/teamsportroster-2.0#",
+                    "subdomain": "GenericTeamSportsPlayersSubdomainV2",
+                    "etl": {
+                        "useEtl": "true",
+                        "etlDescription": "ETL GenericTeamPlayer data for Generic Team Sports Roster domain",
+                        "etlAction": "StartBuildPeriodic"
+                    },
+                    "initialisation": {
+                        "initialise": "false",
+                        "filepath": "",
+                        "filetype": ""
+                    }
+                },
+                {
+                    "domainName": "Generic TeamSport Daily Schedule",
+                    "domainDescription": "Team sport daily schedule data",
+                    "domainNamespace": "http://teragator.com/ns/ontology/etl/generic/teamsportdailyschedule-2.0#",
+                    "subdomain": "GenericTeamSportsDailyScheduleSubdomainV2",
+                    "etl": {
+                        "useEtl": "true",
+                        "etlDescription": "ETL GenericTeamSportDailySchedule data for Generic Team Sports Daily Schedule domain",
+                        "etlAction": "StartBuildPeriodic"
+                    },
+                    "initialisation": {
+                        "initialise": "false",
+                        "filepath": "",
+                        "filetype": ""
+                    }
+                },
+                {
+                    "domainName": "Generic SKOS",
+                    "domainDescription": "Controlled vocabulary SKOS data",
+                    "domainNamespace": "http://teragator.com/ns/ontology/etl/cv/skos-1.0#",
+                    "subdomain": "ControlledVocabGenericSkosSubdomainV1",
+                    "etl": {
+                        "useEtl": "true",
+                        "etlDescription": "ETL SKOS data for IPV GenericSkosOntologyV1 domain",
+                        "etlAction": "StartBuildPeriodic"
+                    },
+                    "initialisation": {
+                        "initialise": "false",
+                        "filepath": "",
+                        "filetype": ""
+                    }
+                }
+            ]
+        },
+        "history": {
+            "startups": [
+                {
+                    "isSentinel": "true",
+                    "startupManagementVersion": "",
+                    "startupManagementId": "",
+                    "startupIndex": "",
+                    "startupDateTime": "",
+                    "startupInfo": "",
+                    "startupConfigName": "",
+                    "startupMachineName": "",
+                    "startupSoftwareBuildNumber": "",
+                    "startupSoftwareBuildDate": "",
+                    "startupDatabaseName": "",
+                    "startupDatabaseVersion": ""
+                }
+            ]
+        }
+    }
+}

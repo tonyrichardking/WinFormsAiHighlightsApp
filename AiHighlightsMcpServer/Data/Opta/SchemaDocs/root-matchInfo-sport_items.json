@@ -1,0 +1,19 @@
+﻿{
+  "Nesting": "root-matchInfo-sport_items",
+  "Description": "Required. Root element of the related fields for the sport. Value (XML only): string giving the sport name (for example: Soccer)",
+  "Required": true,
+  "attributes": [
+    {
+      "Attribute": "id",
+      "Description": "Required. Unique ID (UUID) of the sport",
+      "Required": true,
+      "Type": "String (Alphanumeric - UUID)"
+    },
+    {
+      "Attribute": "name (JSON only)",
+      "Description": "Required. Name of the sport",
+      "Required": true,
+      "Type": "String"
+    }
+  ]
+}

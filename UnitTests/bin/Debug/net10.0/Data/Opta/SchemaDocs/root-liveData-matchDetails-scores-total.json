@@ -1,0 +1,19 @@
+﻿{
+  "Nesting": "root-liveData-matchDetails-scores-total",
+  "Description": "Optional. Root element of the fields related to the total scores.",
+  "Required": false,
+  "attributes": [
+    {
+      "Attribute": "home",
+      "Description": "Required. The total score of the home team",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "away",
+      "Description": "Required. The total score of the away team",
+      "Required": true,
+      "Type": "Integer"
+    }
+  ]
+}

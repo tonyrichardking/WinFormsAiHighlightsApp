@@ -1,0 +1,115 @@
+﻿{
+  "Nesting": "root-liveData-event_items",
+  "Description": "Required. Match event element which contains information about an individual event that has occured during the match\nJSON/JSONP: This element contains an array of individual events - each event in the response can be identified by its own id and typeId, and its relevant attributes and values.\nXML: This element represents an individual event - each event can be identified by its own id and typeId.",
+  "Required": true,
+  "attributes": [
+    {
+      "Attribute": "id",
+      "Description": "Required. The unique ID for this event within Opta\u0027s entire database of all events in all games",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "eventId",
+      "Description": "Required. The unique ID for this event instance for the associated contestant (not the entire fixture) within this match. Each contestant is assigned an eventId value for the given event. Use it in conjunction with the contestantId value to uniquely identify the action in a match. The first instance has a value of \u00271\u0027 and it will be incremented with each event for that contestant.",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "typeId",
+      "Description": "Required. The ID for the type of event, which defines the type of event that has occurred - it may also have an associated qualifierId value which provides more information about the event. See:\nEvent Types and Qualifier Types",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "periodId",
+      "Description": "Required. The current match period - one of the following:\n\u2022 1 (First half)\n\u2022 2 (Second half)\n\u2022 3 (Extra time - first half)\n\u2022 4 (Extra time - second half)\n\u2022 5 (Penalty shootout)\n\u2022 10 (Half time)\n\u2022 11 (End of second half - before extra time)\n\u2022 12 (Extra time half time)\n\u2022 13 (End of extra time - before penalties)\n\u2022 14 (Full time)\n\u2022 16 (Pre-match)",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "timeMin",
+      "Description": "Required. Game time in minutes",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "timeSec",
+      "Description": "Required. Game time in seconds",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "contestantId",
+      "Description": "Required. Unique ID (UUID) of the team related to the event",
+      "Required": true,
+      "Type": "String (Alphanumeric - UUID)"
+    },
+    {
+      "Attribute": "opContestantId",
+      "Description": "Optional. The unique Opta ID of the team related to the event",
+      "Required": false,
+      "Type": "String"
+    },
+    {
+      "Attribute": "playerId",
+      "Description": "Required. Unique ID (UUID) of the player related to the event",
+      "Required": true,
+      "Type": "String (Alphanumeric - UUID)"
+    },
+    {
+      "Attribute": "opPlayerId",
+      "Description": "Optional. The unique Opta ID of the player related to the event",
+      "Required": false,
+      "Type": "String"
+    },
+    {
+      "Attribute": "playerName",
+      "Description": "Required. The name of the player related to the event",
+      "Required": true,
+      "Type": "String"
+    },
+    {
+      "Attribute": "outcome",
+      "Description": "Required. Boolean operator - refer to the Event Types and Qualifier Types tables for an explanation. One of the following: 0 or 1",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "assist",
+      "Description": "Optional. This attribute will only appear for an event if this event led directly to a goal - refer to the Event Types and Qualifier Types tables for an explanation.",
+      "Required": false,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "keyPass",
+      "Description": "Optional. This attribute will only appear for an event if this event led directly to a shot off target, blocked or saved - refer to the Event Types and Qualifier Types tables for an explanation.",
+      "Required": false,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "x(was xCoord)",
+      "Description": "Required. X-coordinate - this is the length of the pitch where 0 is always the defensive goal line and 100 is the attacking goal line. This is true for both teams in both halves. All coordinates are always displayed as if both teams are playing left to right.",
+      "Required": true,
+      "Type": "String (example: 73.9)"
+    },
+    {
+      "Attribute": "y(was yCoord)",
+      "Description": "Required. Y-coordinate - this is the width of the pitch where the right-hand touch line (nearest the TV camera) is 0 and the left-hand touch line (furthest away) is 100.",
+      "Required": true,
+      "Type": "String (example: 95.1"
+    },
+    {
+      "Attribute": "timestamp",
+      "Description": "Required. The UK time/date at which this event was initially entered into Opta\u0027s database",
+      "Required": true,
+      "Type": "String\u00A0- in the format: YYYY-MM-DDThh:mm:ss.sssZ"
+    },
+    {
+      "Attribute": "lastModified",
+      "Description": "Required. The UK time/date at which this event was last modified by Opta",
+      "Required": true,
+      "Type": "String\u00A0- in the format: YYYY-MM-DDThh:mm:ssZ"
+    }
+  ]
+}

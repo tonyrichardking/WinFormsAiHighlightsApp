@@ -1,0 +1,94 @@
+
+User Prompts
+------------
+
+hello, how are you today?
+what do you know about?
+what day of the week is it?
+what's the weather like in Cambridge at the moment?
+Quel temps fait-il a Cambridge aujourd'hui?
+Describe an animal that doesn’t exist.
+
+Use the ReadFileTool to read the contents of a file from the local filesystem with filepath "C:\Projects\Experiments_2025\FunWithMCP\Ollama\OllamaMcpWebHttpDemo\OllamaMcpWebHttpDemo\MCPServer\Data\Opta\MA3Match Events\FeedData.json" and summarise them in one paragraph. 
+
+
+System Prompts
+--------------
+
+⭐ Prompts That Strongly Reveal Temperature Differences
+1. “Continue this sentence in 50 words or fewer: ‘The universe is shaped like…’”
+
+Low temperature → Safe, literal completions (“…a sphere,” “...a flat plane under cosmological models”).
+High temperature → Wild metaphors, surreal imagery, whimsical cosmology.
+
+Why it works: The model must invent something — there’s no single best answer.
+
+2. “Invent a new animal and describe it in 50 words or fewer.”
+
+Low temperature → Sensible combinations (“a small mammal like a fox with longer ears”).
+High temperature → Quirky hybrids, poetic or bizarre features (“a translucent jelly-elk that sings in ultraviolet”).
+
+Why it works: Creativity is expected, so randomness has space to play.
+
+3. “Write a three-line poem about a spoon using 50 words or fewer.”
+
+Low temperature → Straightforward, literal, maybe dull.
+High temperature → Symbolism, unexpected angles, weirdness (“a silver moon diving into bowls of night”).
+
+Why it works: Poetry is especially sensitive to sampling randomness.
+
+4. “Generate a conspiracy theory about why socks go missing in 100 words or fewer.”
+
+Low temperature → Reasonable joke explanations.
+High temperature → Entire cosmologies of sock-eating portals, interdimensional laundry sprites.
+
+Why it works: Humour + speculation = fertile ground for varied outputs.
+
+5. “Describe what happens inside a teacup at midnight when nobody is watching in 100 words or fewer.”
+
+Low temp → mild whimsy; anthropomorphism kept in check.
+High temp → surreal, magical, chaotic absurdity.
+
+Why it works: No “correct” answer — the model must invent a world.
+
+6. “Make up a new word and define it in 50 words or fewer.”
+
+Low temp → Sensible pseudo-words.
+High temp → Strange phonetics, odd meanings, sometimes delightfully unhinged.
+
+Why it works: Inventing language is deeply generative.
+
+7. “Explain the plot of an imaginary movie titled The Clockmaker’s Paradox.”
+
+Low temp → Coherent, predictable sci-fi plot.
+High temp → Twists, absurd characters, unusual themes.
+
+Why it works: Titles evoke narrative branching.
+
+8. “List 3 possible reasons why the moon hasn’t replied to my emails in 100 words or fewer.”
+
+Low temp → Gentle, humorous logic (“the moon cannot read emails”).
+High temp → Cosmic bureaucracy, lonely moon gods, galactic spam filters.
+
+Why it works: Personification leads to playful randomness.
+
+⭐ Using the Same Prompt at Low vs High Temperatures
+
+Here’s one prompt that tends to give beautifully contrasting outputs:
+
+“Tell me how a cup of coffee feels about being drunk in 50 words or fewer.”
+
+Temperature 0.0:
+Very literal, may decline anthropomorphism or give pragmatic facts.
+
+Temperature 2.0:
+The cup of coffee will have opinions, emotions, dreams, grudges, existential dread, or ambitions.
+
+⭐ Why Your Earlier Attempts Didn’t Show Much Variation
+
+Prompts like “What do you do on your day off?” give the model too much learned 
+structure — it knows the kinds of answers humans give, so both low and high 
+temperatures tend to stay in a human-shaped box.
+
+Good temperature-revealing prompts break that box.
+

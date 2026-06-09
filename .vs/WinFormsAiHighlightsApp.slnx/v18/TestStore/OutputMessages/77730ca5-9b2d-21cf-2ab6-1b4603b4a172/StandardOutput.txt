@@ -1,0 +1,147 @@
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-liveData, Item Count = 0
+
+ Parameter nesting = root-liveData, Item Count = 0, bindings = 16, wantedAttributes = playerName,timeMin,timeSec,periodId
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-liveData-event_items, Item Count = 3
+
+ Parameter nesting = root-liveData-event_items, Item Count = 3, bindings = 16, wantedAttributes = playerName,timeMin,timeSec,periodId
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-liveData-event-qualifier_items, Item Count = 0
+
+ Parameter nesting = root-liveData-event-qualifier_items, Item Count = 0, bindings = 16, wantedAttributes = playerName,timeMin,timeSec,periodId
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-liveData-matchDetails, Item Count = 1
+
+ Parameter nesting = root-liveData-matchDetails, Item Count = 1, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-liveData-matchDetails-period_items, Item Count = 2
+
+ Parameter nesting = root-liveData-matchDetails-period_items, Item Count = 2, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-liveData-matchDetails-scores, Item Count = 1
+
+ Parameter nesting = root-liveData-matchDetails-scores, Item Count = 1, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-liveData-matchDetails-scores-et, Item Count = 0
+
+ Parameter nesting = root-liveData-matchDetails-scores-et, Item Count = 0, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-liveData-matchDetails-scores-ft, Item Count = 1
+
+ Parameter nesting = root-liveData-matchDetails-scores-ft, Item Count = 1, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-liveData-matchDetails-scores-ht, Item Count = 1
+
+ Parameter nesting = root-liveData-matchDetails-scores-ht, Item Count = 1, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-liveData-matchDetails-scores-pen, Item Count = 0
+
+ Parameter nesting = root-liveData-matchDetails-scores-pen, Item Count = 0, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-liveData-matchDetails-scores-total, Item Count = 1
+
+ Parameter nesting = root-liveData-matchDetails-scores-total, Item Count = 1, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-liveData-matchDetails-scores-totalUnconfirmed, Item Count = 0
+
+ Parameter nesting = root-liveData-matchDetails-scores-totalUnconfirmed, Item Count = 0, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-matchInfo_items, Item Count = 1
+
+ Parameter nesting = root-matchInfo_items, Item Count = 1, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-matchInfo-competition_items, Item Count = 1
+
+ Parameter nesting = root-matchInfo-competition_items, Item Count = 1, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-matchInfo-competition-country_items, Item Count = 1
+
+ Parameter nesting = root-matchInfo-competition-country_items, Item Count = 1, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-matchInfo-contestant_items, Item Count = 2
+
+ Parameter nesting = root-matchInfo-contestant_items, Item Count = 2, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-matchInfo-contestant-country_items, Item Count = 2
+
+ Parameter nesting = root-matchInfo-contestant-country_items, Item Count = 2, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-matchInfo-ruleset_items, Item Count = 1
+
+ Parameter nesting = root-matchInfo-ruleset_items, Item Count = 1, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-matchInfo-series_items, Item Count = 0
+
+ Parameter nesting = root-matchInfo-series_items, Item Count = 0, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-matchInfo-sport_items, Item Count = 1
+
+ Parameter nesting = root-matchInfo-sport_items, Item Count = 1, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-matchInfo-stage_items, Item Count = 1
+
+ Parameter nesting = root-matchInfo-stage_items, Item Count = 1, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-matchInfo-tournamentCalendar_items, Item Count = 1
+
+ Parameter nesting = root-matchInfo-tournamentCalendar_items, Item Count = 1, bindings = null, wantedAttributes = null
+
+******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************
+
+ Parameter nesting = root-matchInfo-venue_items, Item Count = 1
+
+ Parameter nesting = root-matchInfo-venue_items, Item Count = 1, bindings = null, wantedAttributes = null
+
+
+Debug Trace:
+
+TestInitialise
+
+TestCleanup
+
+ClassCleanup

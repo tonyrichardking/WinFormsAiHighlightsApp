@@ -1,0 +1,79 @@
+﻿{
+  "Nesting": "root-liveData-matchDetails",
+  "Description": "Required. Root element of the fields related to the match details",
+  "Required": true,
+  "attributes": [
+    {
+      "Attribute": "periodId",
+      "Description": "Required. The current match period - one of the following:\n\u2022 1 (First half)\n\u2022 2 (Second half)\n\u2022 3 (Extra time - first half)\n\u2022 4 (Extra time - second half)\n\u2022 5 (Penalty shootout)\n\u2022 10 (Half time)\n\u2022 11 (End of second half - before extra time)\n\u2022 12 (Extra time half time)\n\u2022 13 (End of extra time - before penalties)\n\u2022 14 (Full time)\n\u2022 16 (Pre-match)",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "matchStatus",
+      "Description": "Required. The status of the match - one of the following: Fixture | Playing | Played | Cancelled | Postponed | Suspended | Awarded\n\u2022 Fixture - The match is scheduled and yet to start\n\u2022 Playing - The game is live\n\u2022 Cancelled - The game is cancelled due to some reason\n\u2022 Postponed - The game is postponed to another date\n\u2022 Suspended - The match is interurpted in between and suspended. It can be rescheduled to another date in future\n\u2022 Awarded - The match is awarded to one contestants with an associated result",
+      "Required": true,
+      "Type": "String"
+    },
+    {
+      "Attribute": "matchTime",
+      "Description": "Required.\u00A0The current minute of the match. Available only for certain competitions and during the match (when matchStatus=\u0022Playing\u0022).",
+      "Required": true,
+      "Type": "Dynamic"
+    },
+    {
+      "Attribute": "winner",
+      "Description": "Required. The outcome of the match.\nNote: This attribute is only shown when the match is completed (when matchStatus=\u0022Played\u0022)",
+      "Required": true,
+      "Type": "String - one of the following: home | away | draw"
+    },
+    {
+      "Attribute": "leg",
+      "Description": "Optional. The leg of the competition a match is being played in.",
+      "Required": false,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "matchLengthMin",
+      "Description": "Required. The total number of full minutes played in the match (includes stoppage time).\nNote: This attribute is only shown when the match is completed (when matchStatus=\u0022Played\u0022)",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "matchLengthSec",
+      "Description": "Required. The number of seconds in addition to the full minutes played in the match (includes stoppage time).\nNote: This attribute is only shown when the match is completed (when matchStatus=\u0022Played\u0022)",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "contestantOfTheMatchId",
+      "Description": "Optional. UUID of \u2018Team of the Match\u2019",
+      "Required": false,
+      "Type": "String (Alphanumeric - UUID)"
+    },
+    {
+      "Attribute": "playerOfTheMatch",
+      "Description": "Optional. Name of \u2018Player of the Match\u2019",
+      "Required": false,
+      "Type": "String"
+    },
+    {
+      "Attribute": "playerOfTheMatchId",
+      "Description": "Optional. UUID of \u2018Player of the Match\u2019",
+      "Required": false,
+      "Type": "String (Alphanumeric - UUID)"
+    },
+    {
+      "Attribute": "goalkeeperOfTheMatch",
+      "Description": "Optional. Name of \u2018Goal Keeper of the Match",
+      "Required": false,
+      "Type": "String"
+    },
+    {
+      "Attribute": "goalkeeperOfTheMatchId",
+      "Description": "Optional. UUID of \u2018Goal Keeper of the Match\u2019",
+      "Required": false,
+      "Type": "String (Alphanumeric - UUID)"
+    }
+  ]
+}

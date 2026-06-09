@@ -1,0 +1,287 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{089100B1-113F-4E66-888A-E83F3999EAFD}|Solution Items{089100B1-113F-4E66-888A-E83F3999EAFD}|C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\CLAUDE.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{089100B1-113F-4E66-888A-E83F3999EAFD}|Solution Items{089100B1-113F-4E66-888A-E83F3999EAFD}|solutionrelative:CLAUDE.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|c:\\projects\\experiments_2026\\funwithaisoccerhighlights\\winformsaihighlightsapp\\aihighlightsmcpserver\\data\\opta\\schemamaps\\eventmap.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|solutionrelative:aihighlightsmcpserver\\data\\opta\\schemamaps\\eventmap.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|c:\\projects\\experiments_2026\\funwithaisoccerhighlights\\winformsaihighlightsapp\\aihighlightsmcpserver\\data\\opta\\schemamaps\\schemaindex.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|solutionrelative:aihighlightsmcpserver\\data\\opta\\schemamaps\\schemaindex.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BC032CE3-2708-D5F8-50C6-68251F52BEA8}|AiHighlightsWinFormsUi\\AiHighlightsWinFormsUi.csproj|c:\\projects\\experiments_2026\\funwithaisoccerhighlights\\winformsaihighlightsapp\\aihighlightswinformsui\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BC032CE3-2708-D5F8-50C6-68251F52BEA8}|AiHighlightsWinFormsUi\\AiHighlightsWinFormsUi.csproj|solutionrelative:aihighlightswinformsui\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BC032CE3-2708-D5F8-50C6-68251F52BEA8}|AiHighlightsWinFormsUi\\AiHighlightsWinFormsUi.csproj|c:\\projects\\experiments_2026\\funwithaisoccerhighlights\\winformsaihighlightsapp\\aihighlightswinformsui\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BC032CE3-2708-D5F8-50C6-68251F52BEA8}|AiHighlightsWinFormsUi\\AiHighlightsWinFormsUi.csproj|solutionrelative:aihighlightswinformsui\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|c:\\projects\\experiments_2026\\funwithaisoccerhighlights\\winformsaihighlightsapp\\aihighlightsmcpserver\\prompt engineering\\claude\\system prompt for claude v2.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|solutionrelative:aihighlightsmcpserver\\prompt engineering\\claude\\system prompt for claude v2.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|c:\\projects\\experiments_2026\\funwithaisoccerhighlights\\winformsaihighlightsapp\\aihighlightsmcpserver\\mcptools\\sportsfeedprocessortoolhelpers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|solutionrelative:aihighlightsmcpserver\\mcptools\\sportsfeedprocessortoolhelpers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{74CFBE70-1EBF-4A6B-8DA4-CBAEC6750D81}|UnitTests\\UnitTests.csproj|c:\\projects\\experiments_2026\\funwithaisoccerhighlights\\winformsaihighlightsapp\\unittests\\mcpsportsfeedtoolsunittests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{74CFBE70-1EBF-4A6B-8DA4-CBAEC6750D81}|UnitTests\\UnitTests.csproj|solutionrelative:unittests\\mcpsportsfeedtoolsunittests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|c:\\projects\\experiments_2026\\funwithaisoccerhighlights\\winformsaihighlightsapp\\aihighlightsmcpserver\\mcptools\\sportsfeedprocessortools.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|solutionrelative:aihighlightsmcpserver\\mcptools\\sportsfeedprocessortools.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BC032CE3-2708-D5F8-50C6-68251F52BEA8}|AiHighlightsWinFormsUi\\AiHighlightsWinFormsUi.csproj|c:\\projects\\experiments_2026\\funwithaisoccerhighlights\\winformsaihighlightsapp\\aihighlightswinformsui\\chatinterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BC032CE3-2708-D5F8-50C6-68251F52BEA8}|AiHighlightsWinFormsUi\\AiHighlightsWinFormsUi.csproj|solutionrelative:aihighlightswinformsui\\chatinterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|c:\\projects\\experiments_2026\\funwithaisoccerhighlights\\winformsaihighlightsapp\\aihighlightsmcpserver\\services\\aichatclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|solutionrelative:aihighlightsmcpserver\\services\\aichatclientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|c:\\projects\\experiments_2026\\funwithaisoccerhighlights\\winformsaihighlightsapp\\aihighlightsmcpserver\\data\\opta\\schemamaps\\qualifiermap.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|solutionrelative:aihighlightsmcpserver\\data\\opta\\schemamaps\\qualifiermap.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BC032CE3-2708-D5F8-50C6-68251F52BEA8}|AiHighlightsWinFormsUi\\AiHighlightsWinFormsUi.csproj|c:\\projects\\experiments_2026\\funwithaisoccerhighlights\\winformsaihighlightsapp\\aihighlightswinformsui\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BC032CE3-2708-D5F8-50C6-68251F52BEA8}|AiHighlightsWinFormsUi\\AiHighlightsWinFormsUi.csproj|solutionrelative:aihighlightswinformsui\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|c:\\projects\\experiments_2026\\funwithaisoccerhighlights\\winformsaihighlightsapp\\aihighlightsmcpserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBCFDF1F-9326-BBEC-019F-550EBA42854D}|AiHighlightsMcpServer\\AiHighlightsMcpServer.csproj|solutionrelative:aihighlightsmcpserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 13,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsWinFormsUi\\Program.cs",
+              "RelativeDocumentMoniker": "AiHighlightsWinFormsUi\\Program.cs",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsWinFormsUi\\Program.cs",
+              "RelativeToolTip": "AiHighlightsWinFormsUi\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAABcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-01T11:45:06.874Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\Program.cs",
+              "RelativeDocumentMoniker": "AiHighlightsMcpServer\\Program.cs",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\Program.cs",
+              "RelativeToolTip": "AiHighlightsMcpServer\\Program.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAQwDsAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-01T11:16:30.521Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ChatInterface.cs",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsWinFormsUi\\ChatInterface.cs",
+              "RelativeDocumentMoniker": "AiHighlightsWinFormsUi\\ChatInterface.cs",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsWinFormsUi\\ChatInterface.cs",
+              "RelativeToolTip": "AiHighlightsWinFormsUi\\ChatInterface.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAwwEEAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-01T11:21:37.529Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AiChatClientService.cs",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\Services\\AiChatClientService.cs",
+              "RelativeDocumentMoniker": "AiHighlightsMcpServer\\Services\\AiChatClientService.cs",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\Services\\AiChatClientService.cs",
+              "RelativeToolTip": "AiHighlightsMcpServer\\Services\\AiChatClientService.cs",
+              "ViewState": "AgIAAJIAAAAAAAAAAIA5wKUAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-18T17:42:18.98Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "MCPSportsFeedToolsUnitTests.cs",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\UnitTests\\MCPSportsFeedToolsUnitTests.cs",
+              "RelativeDocumentMoniker": "UnitTests\\MCPSportsFeedToolsUnitTests.cs",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\UnitTests\\MCPSportsFeedToolsUnitTests.cs",
+              "RelativeToolTip": "UnitTests\\MCPSportsFeedToolsUnitTests.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAAewF0AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-03T12:03:09.306Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "SportsFeedProcessorTools.cs",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\MCPTools\\SportsFeedProcessorTools.cs",
+              "RelativeDocumentMoniker": "AiHighlightsMcpServer\\MCPTools\\SportsFeedProcessorTools.cs",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\MCPTools\\SportsFeedProcessorTools.cs",
+              "RelativeToolTip": "AiHighlightsMcpServer\\MCPTools\\SportsFeedProcessorTools.cs",
+              "ViewState": "AgIAAJ0AAAAAAAAAAAAEwK4AAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-02T13:53:18.755Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "SportsFeedProcessorToolHelpers.cs",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\MCPTools\\SportsFeedProcessorToolHelpers.cs",
+              "RelativeDocumentMoniker": "AiHighlightsMcpServer\\MCPTools\\SportsFeedProcessorToolHelpers.cs",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\MCPTools\\SportsFeedProcessorToolHelpers.cs",
+              "RelativeToolTip": "AiHighlightsMcpServer\\MCPTools\\SportsFeedProcessorToolHelpers.cs",
+              "ViewState": "AgIAAGsAAAAAAAAAAAAjwHkAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-04T09:28:12.219Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "System Prompt for Claude v2.txt",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\Prompt Engineering\\Claude\\System Prompt for Claude v2.txt",
+              "RelativeDocumentMoniker": "AiHighlightsMcpServer\\Prompt Engineering\\Claude\\System Prompt for Claude v2.txt",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\Prompt Engineering\\Claude\\System Prompt for Claude v2.txt",
+              "RelativeToolTip": "AiHighlightsMcpServer\\Prompt Engineering\\Claude\\System Prompt for Claude v2.txt",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAADQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2026-06-03T16:52:18.752Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CLAUDE.md",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\CLAUDE.md",
+              "RelativeDocumentMoniker": "CLAUDE.md",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\CLAUDE.md",
+              "RelativeToolTip": "CLAUDE.md",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAADcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-06-08T15:32:16.607Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsWinFormsUi\\Form1.cs",
+              "RelativeDocumentMoniker": "AiHighlightsWinFormsUi\\Form1.cs",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsWinFormsUi\\Form1.cs",
+              "RelativeToolTip": "AiHighlightsWinFormsUi\\Form1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-08T09:55:57.064Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Form1.Designer.cs",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsWinFormsUi\\Form1.Designer.cs",
+              "RelativeDocumentMoniker": "AiHighlightsWinFormsUi\\Form1.Designer.cs",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsWinFormsUi\\Form1.Designer.cs",
+              "RelativeToolTip": "AiHighlightsWinFormsUi\\Form1.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-08T09:55:52.508Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EventMap.json",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\Data\\Opta\\SchemaMaps\\EventMap.json",
+              "RelativeDocumentMoniker": "AiHighlightsMcpServer\\Data\\Opta\\SchemaMaps\\EventMap.json",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\Data\\Opta\\SchemaMaps\\EventMap.json",
+              "RelativeToolTip": "AiHighlightsMcpServer\\Data\\Opta\\SchemaMaps\\EventMap.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-06-04T10:19:25.777Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "QualifierMap.json",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\Data\\Opta\\SchemaMaps\\QualifierMap.json",
+              "RelativeDocumentMoniker": "AiHighlightsMcpServer\\Data\\Opta\\SchemaMaps\\QualifierMap.json",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\Data\\Opta\\SchemaMaps\\QualifierMap.json",
+              "RelativeToolTip": "AiHighlightsMcpServer\\Data\\Opta\\SchemaMaps\\QualifierMap.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-06-04T10:18:20.841Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SchemaIndex.json",
+              "DocumentMoniker": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\Data\\Opta\\SchemaMaps\\SchemaIndex.json",
+              "RelativeDocumentMoniker": "AiHighlightsMcpServer\\Data\\Opta\\SchemaMaps\\SchemaIndex.json",
+              "ToolTip": "C:\\Projects\\Experiments_2026\\FunWithAiSoccerHighlights\\WinFormsAiHighlightsApp\\AiHighlightsMcpServer\\Data\\Opta\\SchemaMaps\\SchemaIndex.json",
+              "RelativeToolTip": "AiHighlightsMcpServer\\Data\\Opta\\SchemaMaps\\SchemaIndex.json",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-06-04T09:09:17.593Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 297,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

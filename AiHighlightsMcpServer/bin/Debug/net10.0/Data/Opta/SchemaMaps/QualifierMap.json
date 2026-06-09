@@ -1,0 +1,2242 @@
+﻿{
+  "qualifiers": [
+    {
+      "QualifierId": "1",
+      "Name": "Long ball",
+      "Description": "A pass over 32 metres in length",
+      "AssociatedEventIds": "1, 2"
+    },
+    {
+      "QualifierId": "2",
+      "Name": "Cross",
+      "Description": "A ball played in from wide areas into the box",
+      "AssociatedEventIds": "1, 2"
+    },
+    {
+      "QualifierId": "3",
+      "Name": "Head pass",
+      "Description": "A pass made with a player\u0027s head",
+      "AssociatedEventIds": "1, 2"
+    },
+    {
+      "QualifierId": "4",
+      "Name": "Through ball",
+      "Description": "Ball played through for player making an attacking run to create a chance on goal",
+      "AssociatedEventIds": "1, 2"
+    },
+    {
+      "QualifierId": "5",
+      "Name": "Free kick taken",
+      "Description": "Any free kick taken (direct or indirect)",
+      "AssociatedEventIds": "1, 2"
+    },
+    {
+      "QualifierId": "6",
+      "Name": "Corner taken",
+      "Description": "All corners taken. Look for qualifierId 6 but excluding qualifier IDs 1 and 2 for short corners",
+      "AssociatedEventIds": "1, 2"
+    },
+    {
+      "QualifierId": "7",
+      "Name": "Players caught offside",
+      "Description": "String (Alphanumeric - UUID)\r\nThe player was in an offside position when the pass was made. The value is the ID of the player caught offside.",
+      "AssociatedEventIds": "2"
+    },
+    {
+      "QualifierId": "8",
+      "Name": "Goal disallowed",
+      "Description": "Pass led to a goal disallowed for a foul or offside",
+      "AssociatedEventIds": "2"
+    },
+    {
+      "QualifierId": "9",
+      "Name": "Penalty",
+      "Description": "Indicates that a penalty has been taken (an attempt on goal was a penalty kick) or that a penalty has been awarded (with event typeId 4).",
+      "AssociatedEventIds": "4, 10, 13, 14, 15, 16, 58, 65"
+    },
+    {
+      "QualifierId": "10",
+      "Name": "Handball",
+      "Description": "Free kick or card is given for handball",
+      "AssociatedEventIds": "4, 17"
+    },
+    {
+      "QualifierId": "11",
+      "Name": "6-seconds violation",
+      "Description": "Goalkeeper held onto the ball longer than 6 seconds, resulting in a free kick",
+      "AssociatedEventIds": "4"
+    },
+    {
+      "QualifierId": "12",
+      "Name": "Dangerous play",
+      "Description": "A free kick or card is given due to dangerous play",
+      "AssociatedEventIds": "4, 17"
+    },
+    {
+      "QualifierId": "13",
+      "Name": "Foul",
+      "Description": "All fouls. A free kick or card is given for a foul",
+      "AssociatedEventIds": "4, 17"
+    },
+    {
+      "QualifierId": "14",
+      "Name": "Last line",
+      "Description": "When a player makes a defensive action and they are the last player on their team between the opponent(s) and their own goal\r\nWhen using Last Line on Save in combination with Blocked (82) on a Save Event (TypeID=10), this indicates that a defender has made a goal-saving last line clearance",
+      "AssociatedEventIds": "7, 8, 10"
+    },
+    {
+      "QualifierId": "15",
+      "Name": "Head",
+      "Description": "The action is made using the player\u0027s head - for example, any event where the player used their head, such as a shot or a clearance - and added for \u0027Live\u0027 data.\r\nNote: From June 2020, it can also be added \u0027Post-match\u0027 to all \u0027touch\u0027 events, if applicable, but only for some competitions. When added as a post-match qualifier it will be shown once the post-match analysis is complete.",
+      "AssociatedEventIds": "8, 12, 13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "16",
+      "Name": "Small box - Centre",
+      "Description": "A defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "17",
+      "Name": "Box - Centre",
+      "Description": "A defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "18",
+      "Name": "Out of box - Centre",
+      "Description": "A defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "19",
+      "Name": "35\u002B Centre",
+      "Description": "A defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "20",
+      "Name": "Right footed",
+      "Description": "The action is made with the player\u0027s right foot\r\nNote: This can be shown for \u0027Live\u0027 data (for example, for eventTypeId \u002713\u0027). However, from June 2020 it can also be added \u0027Post-match\u0027 to all \u0027touch\u0027 events if applicable, but only for some competitions. When added as a post-match qualifier it is only shown once the post-match analysis is complete.",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "21",
+      "Name": "Other body part",
+      "Description": "The action is made with a different body part to the player\u0027s head or feet - for example, using their knee or chest\r\nNote: This can be shown for \u0027Live\u0027 data (for example, for eventTypeId \u002713\u0027). However, from June 2020 it can also be added \u0027Post-match\u0027 to all \u0027touch\u0027 events if applicable, but only for some competitions. When added as a post-match qualifier it is only shown once the post-match analysis is complete.",
+      "AssociatedEventIds": "10, 13, 14, 15, 16, 61, 73"
+    },
+    {
+      "QualifierId": "22",
+      "Name": "Regular play",
+      "Description": "The event occurred in open play (not from a set play situation)",
+      "AssociatedEventIds": "1, 13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "23",
+      "Name": "Fast break",
+      "Description": "The event occurred in open play and part of/following a fast break situation",
+      "AssociatedEventIds": "1, 2, 3, 4, 13, 14, 15, 16, 50, 61"
+    },
+    {
+      "QualifierId": "24",
+      "Name": "Set piece",
+      "Description": "The event occurred following a free kick (not a directly-struck deadball).\r\nNote: A first time shot following a \u0027Tap\u0027 pass will be set to \u0027Free kick\u0027 (ID 26) instead of \u0027Set piece\u0027",
+      "AssociatedEventIds": "1, 13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "25",
+      "Name": "From corner",
+      "Description": "The event occurred following a corner",
+      "AssociatedEventIds": "1, 13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "26",
+      "Name": "Free kick",
+      "Description": "A shot direct from a free kick (deadball struck directly) or first time shot following a \u201CTap\u201D pass",
+      "AssociatedEventIds": "13, 14, 15, 16, 65"
+    },
+    {
+      "QualifierId": "28",
+      "Name": "Own Goal",
+      "Description": "Indicates a goal event was an own goal.\r\nNote: Use the inverse coordinates of the goal location",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "29",
+      "Name": "Assisted",
+      "Description": "Indicates that there was a shot or missed chance that was assisted - that is, there was a pass (assist) from another player to set up the goal opportunity",
+      "AssociatedEventIds": "13, 14, 15, 16, 60"
+    },
+    {
+      "QualifierId": "30",
+      "Name": "Involved",
+      "Description": "String (array)\r\nA list of comma-separated Player IDs or Coach IDs in an array, indicating the player/coach position in the team/coach lineup/setup. For players, it will show all players in the starting lineup and available as a substitute. Note: The values may be Opta IDs.",
+      "AssociatedEventIds": "34, 40, 71"
+    },
+    {
+      "QualifierId": "31",
+      "Name": "Yellow Card",
+      "Description": "The person is given a yellow card",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "32",
+      "Name": "Second yellow",
+      "Description": "The person is given a second yellow card",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "33",
+      "Name": "Red Card",
+      "Description": "The person is given a straight red card",
+      "AssociatedEventIds": "17, 65"
+    },
+    {
+      "QualifierId": "34",
+      "Name": "Referee abuse",
+      "Description": "A card is given to a person because of their abuse towards a match official",
+      "AssociatedEventIds": "4"
+    },
+    {
+      "QualifierId": "35",
+      "Name": "Argument",
+      "Description": "A card is given for arguing",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "36",
+      "Name": "Violent Conduct",
+      "Description": "A card is given for violent conduct",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "37",
+      "Name": "Time wasting",
+      "Description": "A card is given for time wasting",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "38",
+      "Name": "Excessive celebration",
+      "Description": "A card is given for excessively celebrating a goal",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "39",
+      "Name": "Crowd interaction",
+      "Description": "A card is given because of contact or communication with the crowd",
+      "AssociatedEventIds": "4"
+    },
+    {
+      "QualifierId": "40",
+      "Name": "Other reason",
+      "Description": "A card/match delay/contentious decision is given for some other/unspecified reason - added to cards if applicable only in very rare exceptions",
+      "AssociatedEventIds": "17, 27, 65, 75"
+    },
+    {
+      "QualifierId": "41",
+      "Name": "Injury",
+      "Description": "String\r\nA substitution or match delay occurs due to an injury",
+      "AssociatedEventIds": "18, 19, 27"
+    },
+    {
+      "QualifierId": "42",
+      "Name": "Tactical",
+      "Description": "A substitution occurs for tactical reasons",
+      "AssociatedEventIds": "18, 19"
+    },
+    {
+      "QualifierId": "43",
+      "Name": "Deleted event",
+      "Description": "An event has been deleted from the game file; usually, qualifierId 144 (Deleted Event Type) is present to describe the type of event that has been deleted and its value will give the event type ID for the previous instance of the event.\r\nNote: The event instance will also carry an event id value. The event ID is unique to each event instance - in this case, it is a reference for the event instance previously recorded in the feed. Therefore, the event ID remains the same in all instances, but the event type ID will be different.\r\nIf you store feed samples, you will be able to use the event ID (the database ID) to cross-reference which specific event instance concerned - if you don\u0027t, this is not possible. Once we delete an event, the associated event\u0027s data will be removed from the feed.",
+      "AssociatedEventIds": "44"
+    },
+    {
+      "QualifierId": "45",
+      "Name": "Temperature",
+      "Description": "Array - includes:",
+      "AssociatedEventIds": "1, 2, 3, 4, 5, 458"
+    },
+    {
+      "QualifierId": "46",
+      "Name": "Conditions",
+      "Description": "String - possible values:\r\n1, 2, 3, 4, 5, 6, 7, 8, 9, 10\r\nqualifierId detailsqualifierId details\r\nPossible qualifier values:\r\n* 1 - Windy\r\n* 2 - Rain\r\n* 3 - Fog\r\n* 4 - Snow/hail\r\n* 5 - Clear\r\n* 6 - Sunny\r\n* 7 - Cloudy\r\n* 8 - Partly Cloudy\r\n* 9 - Heavy Rain\r\n* 10 - Heavy Snow\r\nThe weather conditions\r\nNote: No longer used",
+      "AssociatedEventIds": "24"
+    },
+    {
+      "QualifierId": "47",
+      "Name": "Field Pitch",
+      "Description": "String - possible values:\r\n1, 2, 3, 4, 5\r\nqualifierId detailsqualifierId details\r\nPossible qualifier values:\r\n* 1 - Waterlogged\r\n* 2 - Wet\r\n* 3 - Damp\r\n* 4 - Normal\r\n* 5 - Dry\r\nThe condition of the playing surface\r\nNote: No longer used",
+      "AssociatedEventIds": "24"
+    },
+    {
+      "QualifierId": "48",
+      "Name": "Lightings",
+      "Description": "String - possible values:\r\n1, 2, 3, 458\r\nqualifierId detailsqualifierId details\r\nPossible qualifier values:\r\n* 1 - Flood lights\r\n* 2 - Bad visibility\r\n* 3 - Natural lights\r\nThe lighting conditions\r\nNote: No longer used",
+      "AssociatedEventIds": "24"
+    },
+    {
+      "QualifierId": "49",
+      "Name": "Attendance figure",
+      "Description": "String\r\nThe attendance at the match (number of people in the crowd)",
+      "AssociatedEventIds": "24"
+    },
+    {
+      "QualifierId": "50",
+      "Name": "Official position",
+      "Description": "String - possible values:\r\n1, 2, 3, 4, 5, 6, 458\r\nqualifierId details qualifierId details\r\nPossible qualifier values:\r\n* 1 - Referee\r\n* 2 - Assistant Referee #1\r\n* 3 - Assistant Referee #2\r\n* 4 - Fourth Official\r\n* 5 - Additional Assistant Referee #1\r\n* 6 - Additional Assistant Referee #2\r\nThe position of a replacement official",
+      "AssociatedEventIds": "25"
+    },
+    {
+      "QualifierId": "51",
+      "Name": "Official ID",
+      "Description": "String (Alphanumeric - UUID)\r\nThe unique ID (UUID) of the official being replaced",
+      "AssociatedEventIds": "25"
+    },
+    {
+      "QualifierId": "52",
+      "Name": "Possession time",
+      "Description": "",
+      "AssociatedEventIds": "26"
+    },
+    {
+      "QualifierId": "53",
+      "Name": "Injured player ID",
+      "Description": "String (Alphanumeric - UUID)\r\nThe unique ID (UUID) of the injured player, causing a delay in the game",
+      "AssociatedEventIds": "27"
+    },
+    {
+      "QualifierId": "54",
+      "Name": "End cause",
+      "Description": "Numeric - possible values:\r\n0, 1, 2, 3, 4, 5, 6, 7, 8, 99, 100, 101, 458\r\nqualifierId detailsqualifierId details\r\nPossible qualifier values:\r\n* 0 = Normal\r\n* 1 = Golden Goal\r\n* 2 = Weather\r\n* 3 = Crowd trouble\r\n* 4 = Insufficient players on the pitch\r\n* 5 = Floodlight failure\r\n* 6 = Frozen pitch\r\n* 7 = Waterlogged pitch\r\n* 8 = Suspended\r\n* 99 = Other reason\r\n* 100 = Unknown\r\n* 101 = No events\r\nNote:The below reasons are no longer used starting from February 2023\r\n\u2022 Normal\r\n\u2022 Golden Goal\r\n\u2022 Suspended\r\n\u2022 Unknown\r\n\u2022 No Events\r\nThe related reason that has caused the match to end early",
+      "AssociatedEventIds": "76"
+    },
+    {
+      "QualifierId": "55",
+      "Name": "Related event ID",
+      "Description": "String\r\nThe event ID of the related event (example: 678 - this will have been previously returned in the feed as the value of eventId. Where the event type is a goal or shot, the related Event ID will be that of the assist and thus show the assisting player ID.",
+      "AssociatedEventIds": "13, 14, 15, 16, 18, 19, 28, 60"
+    },
+    {
+      "QualifierId": "56",
+      "Name": "Zone",
+      "Description": "String - possible values: Back, Left, Center, Right\r\nDefined zone of the pitch where an action takes place (for a \u0027Pass\u0027 this is where it ends). See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 44, 45, 50, 56, 57, 58, 59, 60, 61, 67, 69, 74"
+    },
+    {
+      "QualifierId": "57",
+      "Name": "End type",
+      "Description": "String - 0 or 1\r\nThe end type. For example, value 1 = indicates when it is the end of collection (for example, the end event has a Period ID of 14 \u0027Post Game\u0027), whereas value 0 can appear with an event that has a Period ID where data collection can start/resume but does not normally end completely for the match - for example, periodId of 1 (\u0027First Half\u0027) or 2 (\u0027Second Half\u0027).",
+      "AssociatedEventIds": "30"
+    },
+    {
+      "QualifierId": "58",
+      "Name": "Temp stop status",
+      "Description": "",
+      "AssociatedEventIds": "29"
+    },
+    {
+      "QualifierId": "59",
+      "Name": "Jersey Number",
+      "Description": "String/Array - value string\r\nA single value or an array of values giving the jersey/shirt numbers of the players involved. This will be shown for substitutions (Player Off/Player On), lineups (Team set up), and lineup changes. The order that the values are listed here will be the same order as the positions listed on qualifierId 131. For more information, see\r\nAppendix 4 - Playing positions",
+      "AssociatedEventIds": "18, 19, 34, 40"
+    },
+    {
+      "QualifierId": "60",
+      "Name": "Small box - Right",
+      "Description": "Defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "61",
+      "Name": "Small box - Left",
+      "Description": "Defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "62",
+      "Name": "Box - Deep Right",
+      "Description": "Defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "63",
+      "Name": "Box - Right",
+      "Description": "Defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "64",
+      "Name": "Box - Left",
+      "Description": "Defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "65",
+      "Name": "Box - Deep Left",
+      "Description": "Defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "66",
+      "Name": "Out of box - Deep Right",
+      "Description": "Defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "67",
+      "Name": "Out of box - Right",
+      "Description": "Defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "68",
+      "Name": "Out of box - Left",
+      "Description": "Defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "69",
+      "Name": "Out of box - Deep Left",
+      "Description": "Defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "70",
+      "Name": "35\u002B Right",
+      "Description": "Defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "71",
+      "Name": "35\u002B Left",
+      "Description": "Defined zone of the pitch where an action takes place. See: Appendix 3 - Pitch zones",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "72",
+      "Name": "Left footed",
+      "Description": "The action is performed with the left foot\r\nNote: This can be shown for \u0027Live\u0027 data (for example, for eventTypeId \u002713\u0027). However, from June 2020 it can also be added \u0027Post-match\u0027 to all \u0027touch\u0027 events if applicable, but only for some competitions. When added as a post-match qualifier it is only shown once the post-match analysis is complete.",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "73",
+      "Name": "Left",
+      "Description": "Indicates that: a corner is taken from the attacking left side; an off-target shot goes to the left of the goal or hits the left post; a goalkeeper facing a penalty dives to their left",
+      "AssociatedEventIds": "6, 13, 14, 58"
+    },
+    {
+      "QualifierId": "74",
+      "Name": "High",
+      "Description": "Indicates that: a goal kick is launched high into the air; an off-target shot goes over the goal or hits the crossbar",
+      "AssociatedEventIds": "1, 13, 14"
+    },
+    {
+      "QualifierId": "75",
+      "Name": "Right",
+      "Description": "Indicates that: a corner is taken from the attacking right side; an off-target shot goes to the right of the goal or hits the right post; a goalkeeper facing a penalty dives to their right",
+      "AssociatedEventIds": "6, 13, 14, 58"
+    },
+    {
+      "QualifierId": "76",
+      "Name": "Low Left",
+      "Description": "Defined zone of the goalmouth where a shot goes/is aimed towards. See: Appendix 2 - Goalmouth coordinates",
+      "AssociatedEventIds": "15, 16"
+    },
+    {
+      "QualifierId": "77",
+      "Name": "High Left",
+      "Description": "Defined zone of the goalmouth where a shot goes/is aimed towards. See: Appendix 2 - Goalmouth coordinates",
+      "AssociatedEventIds": "13, 15, 16"
+    },
+    {
+      "QualifierId": "78",
+      "Name": "Low Centre",
+      "Description": "Defined zone of the goalmouth where a shot goes/is aimed towards. See: Appendix 2 - Goalmouth coordinates",
+      "AssociatedEventIds": "15, 16"
+    },
+    {
+      "QualifierId": "79",
+      "Name": "High Centre",
+      "Description": "Defined zone of the goalmouth where a shot goes/is aimed towards. See: Appendix 2 - Goalmouth coordinates",
+      "AssociatedEventIds": "15, 16"
+    },
+    {
+      "QualifierId": "80",
+      "Name": "Low Right",
+      "Description": "Defined zone of the goalmouth where a shot goes/is aimed towards. See: Appendix 2 - Goalmouth coordinates",
+      "AssociatedEventIds": "15, 16"
+    },
+    {
+      "QualifierId": "81",
+      "Name": "High Right",
+      "Description": "Defined zone of the goalmouth where a shot goes/is aimed towards. See: Appendix 2 - Goalmouth coordinates",
+      "AssociatedEventIds": "13, 15, 16"
+    },
+    {
+      "QualifierId": "82",
+      "Name": "Blocked",
+      "Description": "The shot is blocked",
+      "AssociatedEventIds": "15"
+    },
+    {
+      "QualifierId": "83",
+      "Name": "Close Left",
+      "Description": "Defined zone of the goalmouth where a shot goes/is aimed towards. See: Appendix 2 - Goalmouth coordinates",
+      "AssociatedEventIds": "13"
+    },
+    {
+      "QualifierId": "84",
+      "Name": "Close Right",
+      "Description": "Defined zone of the goalmouth where a shot goes/is aimed towards. See: Appendix 2 - Goalmouth coordinates",
+      "AssociatedEventIds": "13"
+    },
+    {
+      "QualifierId": "85",
+      "Name": "Close High",
+      "Description": "Defined zone of the goalmouth where a shot goes/is aimed towards. See: Appendix 2 - Goalmouth coordinates",
+      "AssociatedEventIds": "13"
+    },
+    {
+      "QualifierId": "86",
+      "Name": "Close Left and High",
+      "Description": "Defined zone of the goalmouth where a shot goes/is aimed towards. See: Appendix 2 - Goalmouth coordinates",
+      "AssociatedEventIds": "13"
+    },
+    {
+      "QualifierId": "87",
+      "Name": "Close Right and High",
+      "Description": "Defined zone of the goalmouth where a shot goes/is aimed towards. See: Appendix 2 - Goalmouth coordinates",
+      "AssociatedEventIds": "13"
+    },
+    {
+      "QualifierId": "88",
+      "Name": "High claim",
+      "Description": "The goalkeeper attempts to claim a high ball",
+      "AssociatedEventIds": "11"
+    },
+    {
+      "QualifierId": "89",
+      "Name": "1 on 1",
+      "Description": "A player was in a \u0027one-on-one\u0027 situation with the opposition goalkeeper when they took a shot or missed a chance to shoot",
+      "AssociatedEventIds": "13, 14, 15, 16, 60"
+    },
+    {
+      "QualifierId": "90",
+      "Name": "Deflected save",
+      "Description": "Note - October 2019: No longer collected as of June 2016\r\nFor event typeId 10 (\u0027Save\u0027): When the goalkeeper saves a shot but does not catch the ball",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "91",
+      "Name": "Dive and deflect",
+      "Description": "Note - October 2019: No longer collected as of June 2016\r\nFor event typeId 10 (\u0027Save\u0027): When the goalkeeper saves a shot while diving but does not catch the ball",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "92",
+      "Name": "Catch",
+      "Description": "Note - October 2019: No longer collected as of June 2016\r\nFor event typeId 10 (\u0027Save\u0027): When the goalkeeper saves a shot and catches it",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "93",
+      "Name": "Dive and catch",
+      "Description": "Note - October 2019: No longer collected as of June 2016\r\nFor event typeId 10 (\u0027Save\u0027): When the goalkeeper saves a shot while diving and catches it.",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "94",
+      "Name": "Def block",
+      "Description": "A shot is blocked by an outfield player/defender.",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "95",
+      "Name": "Back pass",
+      "Description": "A free kick is awarded for a deliberate back pass (illegal pass) that is picked up or handled by the goalkeeper.",
+      "AssociatedEventIds": "4"
+    },
+    {
+      "QualifierId": "96",
+      "Name": "Corner situation",
+      "Description": "Note - October 2019: No longer used\r\n\u0027Pass\u0027 or \u0027Shot\u0027 event in a \u0027Corner\u0027 situation. Event typeId 25 is used when the goal is direct from corner and qualifierId 96 relates to 2nd phase attack.",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "97",
+      "Name": "Direct free",
+      "Description": "This qualifier is only used with Opta GoalData (game system 4) but not with full data; qualifierId 26 will be used for a shot directly from a free kick.",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "98",
+      "Name": "Pitch X Coordinate",
+      "Description": "String\r\nNote - October 2019: No longer used",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "99",
+      "Name": "Pitch Y Coordinate",
+      "Description": "String\r\nNote - October 2019: No longer used",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "100",
+      "Name": "Six Yard Blocked",
+      "Description": "An Attempt on goal that was blocked by a defender inside the six yard box",
+      "AssociatedEventIds": "15"
+    },
+    {
+      "QualifierId": "101",
+      "Name": "Saved Off Line",
+      "Description": "A last line attempt blocked where the block prevents a certain Goal (not possible for the Goalkeeper to make a save)",
+      "AssociatedEventIds": "15"
+    },
+    {
+      "QualifierId": "102",
+      "Name": "Goalmouth Y Coordinate",
+      "Description": "String\r\nThe Y-coordinate (0-100) of where the shot/ball crossed/was projected to cross the goal line. See: Appendix 2 - Goalmouth coordinates",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "103",
+      "Name": "Goalmouth Z Coordinate",
+      "Description": "String\r\nThe Z-coordinate (0-100) for the height at which a shot/the ball crossed/was projected to cross the goal line. See: Appendix 2 - Goalmouth coordinates",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "104",
+      "Name": "Attempt Position X Coordinate",
+      "Description": "String\r\nNote - October 2019: No longer used",
+      "AssociatedEventIds": "13, 14, 15, 16, 38, 39"
+    },
+    {
+      "QualifierId": "105",
+      "Name": "Attempt Position Y Coordinate",
+      "Description": "String\r\nNote - October 2019: No longer used",
+      "AssociatedEventIds": "13, 14, 15, 16, 38, 39"
+    },
+    {
+      "QualifierId": "106",
+      "Name": "Attacking Pass",
+      "Description": "Note - October 2019: No longer collected as of June 2016\r\nA pass in the opposition\u0027s half of the pitch",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "107",
+      "Name": "Throw in",
+      "Description": "The pass was a throw-in",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "108",
+      "Name": "Volley",
+      "Description": "The shot was a volley (the ball does not bounce before the shot)",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "109",
+      "Name": "Overhead",
+      "Description": "Note - October 2019: No longer collected as of June 2017\r\nThe shot was an overhead kick",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "110",
+      "Name": "Half Volley",
+      "Description": "Note - October 2019: No longer used\r\nShot on the half volley (hit immediately after the ball bounces)",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "111",
+      "Name": "Diving Header",
+      "Description": "Note - October 2019: No longer used\r\nShot where the player dives to head the ball",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "112",
+      "Name": "Scramble",
+      "Description": "Note - October 2019: No longer used\r\nGoal where there was a scramble for possession of the ball and the defence had an opportunity to clear",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "113",
+      "Name": "Strong",
+      "Description": "The shot was subjectively judged to have been hit strongly by the player",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "114",
+      "Name": "Weak",
+      "Description": "The shot was subjectively judged to have been hit weakly by the player",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "115",
+      "Name": "Rising",
+      "Description": "Note - October 2019: No longer collected as of June 2016\r\nShot was rising in the air",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "116",
+      "Name": "Dipping",
+      "Description": "Note - October 2019: No longer collected as of June 2016\r\nShot was dipping towards the ground",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "117",
+      "Name": "Lob",
+      "Description": "Note - October 2019: No longer collected as of June 2017\r\nThe shot lobbed/attempted to lob the opposition goalkeeper",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "118",
+      "Name": "One Bounce",
+      "Description": "Note - October 2019: No longer used\r\nShot where the ball bounced once on its way towards the goal",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "119",
+      "Name": "Few Bounces",
+      "Description": "Note - October 2019: No longer used\r\nShot where the ball bounced once on its way towards the goal",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "120",
+      "Name": "Swerve Left",
+      "Description": "A shot which swerves to the left - from the perspective of the attacker",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "121",
+      "Name": "Swerve Right",
+      "Description": "A shot which swerves to the right - from the perspective of the attacker",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "122",
+      "Name": "Swerve Moving",
+      "Description": "A shot which swerves, with the ball moving in several/different directions",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "123",
+      "Name": "Keeper Throw",
+      "Description": "The goalkeeper throws out the ball - describes a \u0027Pass\u0027 event",
+      "AssociatedEventIds": "1, 2"
+    },
+    {
+      "QualifierId": "124",
+      "Name": "Goal Kick",
+      "Description": "A goal kick is taken (following an out; not from hands or open play) - describes a \u0027Pass\u0027 event",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "125",
+      "Name": "Free Kick Position X Coordinate",
+      "Description": "String\r\nNote - October 2019: No longer used",
+      "AssociatedEventIds": "126"
+    },
+    {
+      "QualifierId": "127",
+      "Name": "Direction of Play",
+      "Description": "String\r\nThis signifies the actual direction of play in relation to TV cameras. X/Y coordinates are always normalised to Left to Right - possible values: Left to Right or Right to Left\r\n32",
+      "AssociatedEventIds": "128"
+    },
+    {
+      "QualifierId": "129",
+      "Name": "Ten Minute Possession",
+      "Description": "Note - October 2019: No longer used",
+      "AssociatedEventIds": "26"
+    },
+    {
+      "QualifierId": "130",
+      "Name": "Team Formation",
+      "Description": "String\r\nThe formation the team played. The value is the formation ID - check this ID against the corresponding team formation diagram in\r\nAppendix 5 - Formations Explained",
+      "AssociatedEventIds": "34, 40"
+    },
+    {
+      "QualifierId": "131",
+      "Name": "Team Player Formation",
+      "Description": "String/Array - value string\r\nThe position of the players in the formation. Values are in the range 0-11 and should be cross-referenced in conjuction with the Team Formation ID - check this against the corresponding diagram in Appendix 5 - Formations Explained",
+      "AssociatedEventIds": "34, 40"
+    },
+    {
+      "QualifierId": "132",
+      "Name": "Simulation",
+      "Description": "Free kick or card reason; When a player deliberately tries to deceive the referee by winning a free kick which was not a foul or by faking an injury",
+      "AssociatedEventIds": "4, 17"
+    },
+    {
+      "QualifierId": "133",
+      "Name": "Deflection",
+      "Description": "Any attempt which is deflected by an opposition outfield player, when the deflection does not alter the outcome of the attempt. i.e a deflected attempt saved, when the attempt is on target and deflected, but the deflection still results in the ball going on target.",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "134",
+      "Name": "Far Wide Left",
+      "Description": "Note - October 2019: This qualifier is no longer used",
+      "AssociatedEventIds": "135"
+    },
+    {
+      "QualifierId": "136",
+      "Name": "Keeper Touched",
+      "Description": "A goal was scored, but the goalkeeper got a touch on the ball",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "137",
+      "Name": "Keeper Saved",
+      "Description": "The shot was going off target - for example, the shot was going wide or over the goal - but it was collected/saved by the goalkeeper anyway. This can appear with event\r\ntypeId 10, 13 and 15, 458.",
+      "AssociatedEventIds": "10, 13"
+    },
+    {
+      "QualifierId": "138",
+      "Name": "Hit Woodwork",
+      "Description": "Added to any event where the ball hits the post or crossbar - Note: This does not include \u0027Post\u0027 events)",
+      "AssociatedEventIds": "1, 3, 8, 12, 13, 15, 16, 58, 61"
+    },
+    {
+      "QualifierId": "139",
+      "Name": "Own Player",
+      "Description": "The shot was saved by goalkeeper that was deflected by a defender/teammate",
+      "AssociatedEventIds": "10, 15"
+    },
+    {
+      "QualifierId": "140",
+      "Name": "Pass End X",
+      "Description": "String\r\nThe X pitch coordinate for the end point of a pass/offside pass/clearance - a value in the range 0.0-100.0",
+      "AssociatedEventIds": "1, 2, 12"
+    },
+    {
+      "QualifierId": "141",
+      "Name": "Pass End Y",
+      "Description": "String\r\nThe Y pitch coordinate for the end point of a pass/offside pass/clearance - a value in the range 0.0-100.0",
+      "AssociatedEventIds": "1, 2, 12"
+    },
+    {
+      "QualifierId": "142",
+      "Name": "Flag to Checker",
+      "Description": "Note - October 2019: No longer used",
+      "AssociatedEventIds": "143"
+    },
+    {
+      "QualifierId": "144",
+      "Name": "Deleted Event Type",
+      "Description": "String\r\nThis qualifier is used to inform you which match event/action has been deleted. The Qualifier value gives the Event Type ID of the deleted event - for example, a value of \u00271\u0027 would mean that the type of event that was deleted was a \u0027Pass\u0027",
+      "AssociatedEventIds": "43"
+    },
+    {
+      "QualifierId": "145",
+      "Name": "Formation slot",
+      "Description": "String\r\nThe position in the formation assumed by the substitute player coming on. Values are in the range 1-11 and should be cross-referenced in conjuction with the Team Formation ID - check this against the corresponding diagram in\r\nAppendix 5 - Formations Explained",
+      "AssociatedEventIds": "19"
+    },
+    {
+      "QualifierId": "146",
+      "Name": "Blocked X Coordinate",
+      "Description": "String\r\nThe X-coordinate where a shot is blocked or an off target attempt is touched by an opposition player",
+      "AssociatedEventIds": "13, 15"
+    },
+    {
+      "QualifierId": "147",
+      "Name": "Blocked Y Coordinate",
+      "Description": "String\r\nThe Y-coordinate where a shot is blocked or an off target attempt is touched by an opposition player",
+      "AssociatedEventIds": "13, 15"
+    },
+    {
+      "QualifierId": "148",
+      "Name": "Danger",
+      "Description": "Note - October 2019: No longer used",
+      "AssociatedEventIds": "149"
+    },
+    {
+      "QualifierId": "150",
+      "Name": "Outside",
+      "Description": "Note - October 2019: No longer used",
+      "AssociatedEventIds": "151"
+    },
+    {
+      "QualifierId": "152",
+      "Name": "Direct",
+      "Description": "A direct free kick",
+      "AssociatedEventIds": "1, 2, 4"
+    },
+    {
+      "QualifierId": "153",
+      "Name": "Not past goal line",
+      "Description": "An off-target shot (missed shot) that fails to go past the goal line",
+      "AssociatedEventIds": "13"
+    },
+    {
+      "QualifierId": "154",
+      "Name": "Intentional Assist",
+      "Description": "A pass that creates a goal scoring chance. (for example, a cross into the box or a through ball that sends an attacker on goal)",
+      "AssociatedEventIds": "1, 13, 14, 15, 16, 60"
+    },
+    {
+      "QualifierId": "155",
+      "Name": "Chipped",
+      "Description": "A pass which was chipped/played through the air",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "156",
+      "Name": "Lay-off",
+      "Description": "A lay off is a first-time pass played back by a player with their back fully to the opposition Goal, with pressure from an opposition player from behind",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "157",
+      "Name": "Launch",
+      "Description": "A long, high ball which is played from a player\u0027s own half, aimed towards a zone rather than a specific player",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "158",
+      "Name": "Persistent Infringement",
+      "Description": "A card is given to a player for committing persistent fouls",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "159",
+      "Name": "Foul and Abusive Language",
+      "Description": "A card is given to a player for persistent foul and abusive language",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "160",
+      "Name": "Throw-in set piece",
+      "Description": "The shot/pass came from a throw in (followed a set piece)",
+      "AssociatedEventIds": "1, 13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "161",
+      "Name": "Encroachment",
+      "Description": "A card is given for encroachment (to a player who moves within 10 yards of their opponent\u0027s free kick)",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "162",
+      "Name": "Leaving field",
+      "Description": "A card is given to a player for leaving the field without permission",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "163",
+      "Name": "Entering field",
+      "Description": "A card is given to a player for entering the field during play without the referee\u0027s permission",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "164",
+      "Name": "Spitting",
+      "Description": "A card is given to the player for spitting",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "165",
+      "Name": "Professional Foul Last Man",
+      "Description": "A card is given to a player for a deliberate tactical foul",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "166",
+      "Name": "Professional Foul Handball",
+      "Description": "A card is given to the (outfield) player for deliberate handball/using their hand intentionally to keep the ball out of the goal",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "167",
+      "Name": "Out of play",
+      "Description": "The tackle or clearance results in the ball going out of play",
+      "AssociatedEventIds": "7, 12, 65"
+    },
+    {
+      "QualifierId": "168",
+      "Name": "Flick-on",
+      "Description": "A first time pass (played with head or foot) when a player has their back to the opposition goal, intended to help the ball on to a team mate",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "169",
+      "Name": "Leading to attempt",
+      "Description": "A player error led to an opposition shot on goal (not scored)",
+      "AssociatedEventIds": "51"
+    },
+    {
+      "QualifierId": "170",
+      "Name": "Leading to goal",
+      "Description": "A player error led to an opposition goal",
+      "AssociatedEventIds": "51"
+    },
+    {
+      "QualifierId": "171",
+      "Name": "Rescinded Card",
+      "Description": "Note - October 2019: No longer used\r\nThe referee rescinds a card after the match has finished (red card is rescinded/overturned)",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "173",
+      "Name": "Parried safe",
+      "Description": "The goalkeeper saves the shot and parries the ball to safety",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "174",
+      "Name": "Parried danger",
+      "Description": "The goalkeeper saves the shot and parries the ball into a dangerous area (for example, the ball is parried to another opponent)",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "175",
+      "Name": "Fingertip",
+      "Description": "The goalkeeper saves the shot using their fingertips",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "176",
+      "Name": "Caught",
+      "Description": "The goalkeeper saves the shot by catching the ball",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "177",
+      "Name": "Collected",
+      "Description": "The goalkeeper makes a save by collecting the ball (from a shot travelling along the ground)",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "178",
+      "Name": "Standing",
+      "Description": "Player involved in the event is standing.\r\nNote: This can be shown for \u0027Live\u0027 data (for example, for eventTypeIds \u002710\u0027 and \u002758\u0027). However, from June 2020 it can also be added \u0027Post-match\u0027 to all \u0027touch\u0027 events if applicable, but only for some competitions. When added as a post-match qualifier it is only shown once the post-match analysis is complete.",
+      "AssociatedEventIds": "10, 58"
+    },
+    {
+      "QualifierId": "179",
+      "Name": "Diving",
+      "Description": "The goalkeeper makes a save or faces a penalty and dives for the ball.\r\nNote: This can be shown for \u0027Live\u0027 data (for example, for eventTypeIds \u002710\u0027 and \u002758\u0027). However, from June 2020 it can also be added \u0027Post-match\u0027 to all goalleeper \u0027touch\u0027 events if applicable, but only for some competitions. When added as a post-match qualifier it is only shown once the post-match analysis is complete.",
+      "AssociatedEventIds": "10, 58"
+    },
+    {
+      "QualifierId": "180",
+      "Name": "Stooping",
+      "Description": "The goalkeeper makes a save while stooping over",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "181",
+      "Name": "Reaching",
+      "Description": "The goalkeeper makes a save by reaching for the ball",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "182",
+      "Name": "Hands",
+      "Description": "The goalkeeper makes a save with their hand(s)",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "183",
+      "Name": "Feet",
+      "Description": "The goalkeeper makes a save using their foot/feet",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "184",
+      "Name": "Dissent",
+      "Description": "A card or free kick is given for dissent towards a match official - for example, when a player does not obey the referee\u0027s instructions",
+      "AssociatedEventIds": "4, 17"
+    },
+    {
+      "QualifierId": "185",
+      "Name": "Blocked cross",
+      "Description": "The defending player blocks an attempted cross by an opponent",
+      "AssociatedEventIds": "12"
+    },
+    {
+      "QualifierId": "186",
+      "Name": "Scored",
+      "Description": "The goalkeeper faces a penalty and does not save it, resulting in a goal (penalty shot scored)",
+      "AssociatedEventIds": "58"
+    },
+    {
+      "QualifierId": "187",
+      "Name": "Saved",
+      "Description": "The goalkeeper faces a penalty and saves it (penalty shot saved)",
+      "AssociatedEventIds": "58"
+    },
+    {
+      "QualifierId": "188",
+      "Name": "Missed",
+      "Description": "The goalkeeper faces a penalty and the shot went wide or over - it did not require a save (penalty shot missed)",
+      "AssociatedEventIds": "58"
+    },
+    {
+      "QualifierId": "189",
+      "Name": "Not visible",
+      "Description": "The event occurred off camera and was not seen by the analyst (usually due to a replay being shown)",
+      "AssociatedEventIds": "1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 15, 16, 17, 18, 19, 27, 28, 30, 40, 41, 44, 45, 49, 50, 51, 52, 55, 57, 61, 65, 67, 68, 69, 74"
+    },
+    {
+      "QualifierId": "190",
+      "Name": "From shot off target",
+      "Description": "The goalkeeper saves a shot that was not on target - for example, the shot was going wide or over (off target)",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "191",
+      "Name": "Off the ball foul",
+      "Description": "Foul committed by and on a player who is not in possession of the ball",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "192",
+      "Name": "Block by hand",
+      "Description": "An outfield player blocks a shot with their hand",
+      "AssociatedEventIds": "15"
+    },
+    {
+      "QualifierId": "193",
+      "Name": "Goal measure",
+      "Description": "Note - October 2019: No longer used (collected from 2013-2015)\r\nA subjective measure used to rate the quality of the goal (essentially a Goal Rating from 1-5), but it is only used for a limited about of competitions.",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "194",
+      "Name": "Captain",
+      "Description": "String\r\nThe player who is the team captain - the value is the unique ID of the player",
+      "AssociatedEventIds": "34, 40"
+    },
+    {
+      "QualifierId": "195",
+      "Name": "Pull back",
+      "Description": "The player in the opposition\u0027s penalty box reaches the by-line and passes (cuts) the ball backwards towards a teammate",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "196",
+      "Name": "Switch of play",
+      "Description": "Any pass which crosses the centre zone of the pitch and in length is greater than 60 on the y axis of the pitch",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "197",
+      "Name": "Team kit",
+      "Description": "String\r\nThe ID of the kit used by the team",
+      "AssociatedEventIds": "34"
+    },
+    {
+      "QualifierId": "198",
+      "Name": "GK hoof",
+      "Description": "The goalkeeper drops the ball on the ground and kicks it long towards a position/area, rather than a specific player",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "199",
+      "Name": "GK kick from hands",
+      "Description": "The goalkeeper kicks the ball forward, straight out of their hands",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "200",
+      "Name": "Referee stop",
+      "Description": "The referee stops play",
+      "AssociatedEventIds": "27"
+    },
+    {
+      "QualifierId": "201",
+      "Name": "Referee delay",
+      "Description": "Indicates a delay (interruption/stoppage) in play that has been instructed by the referee",
+      "AssociatedEventIds": "27"
+    },
+    {
+      "QualifierId": "202",
+      "Name": "Weather problem",
+      "Description": "Indicates a delay (interruption/stoppage) in play due to adverse weather conditions",
+      "AssociatedEventIds": "27, 75"
+    },
+    {
+      "QualifierId": "203",
+      "Name": "Crowd trouble",
+      "Description": "Indicates a delay (interruption/stoppage) in play due to to crowd trouble",
+      "AssociatedEventIds": "27, 75"
+    },
+    {
+      "QualifierId": "204",
+      "Name": "Fire",
+      "Description": "A fire in the stadium grounds stops or delays play",
+      "AssociatedEventIds": "27"
+    },
+    {
+      "QualifierId": "205",
+      "Name": "Object thrown on pitch",
+      "Description": "Indicates a delay (interruption/stoppage) in play because an object has been thrown onto the pitch",
+      "AssociatedEventIds": "27"
+    },
+    {
+      "QualifierId": "206",
+      "Name": "Spectator on pitch",
+      "Description": "Indicates a delay (interruption/stoppage) in play because a spectator has come onto the pitch",
+      "AssociatedEventIds": "27"
+    },
+    {
+      "QualifierId": "207",
+      "Name": "Awaiting official\u0027s decision",
+      "Description": "Indicates a delay (interruption/stoppage) in play because the referee still has to make a decision before the match can resume",
+      "AssociatedEventIds": "27"
+    },
+    {
+      "QualifierId": "208",
+      "Name": "Referee injury",
+      "Description": "Indicates a delay (interruption/stoppage) in play because the referee/a match official has sustained an injury",
+      "AssociatedEventIds": "27"
+    },
+    {
+      "QualifierId": "209",
+      "Name": "Game end",
+      "Description": "Signifies the related \u0027End\u0027 event (Event Type ID 30) is at the end of the match",
+      "AssociatedEventIds": "30"
+    },
+    {
+      "QualifierId": "210",
+      "Name": "Assist",
+      "Description": "Numeric -possible values:\r\n13, 14, 15, 16\r\nqualifierId detailsqualifierId details\r\nPossible qualifier values:\r\n* 13 - Miss\r\n* 14 - Post\r\n* 15 - Attempt Saved\r\n* 16 - Goal\r\nThe pass assisted a shot (including goals) or a chance missed.",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "211",
+      "Name": "Overrun",
+      "Description": "A player attempting to take on an opponent overhits the ball and it runs away from them out of play or to an opponent",
+      "AssociatedEventIds": "3"
+    },
+    {
+      "QualifierId": "212",
+      "Name": "Length",
+      "Description": "String\r\nThe estimated length (in metres) that the ball has travelled during the associated pass/clearance",
+      "AssociatedEventIds": "1, 12"
+    },
+    {
+      "QualifierId": "213",
+      "Name": "Angle",
+      "Description": "String\r\nThe angle the ball travels at during the associated pass/clearance relative to the direction of play. Value: 0.00 to 6.28 in Radians (can contain values upto 2 decimal points).",
+      "AssociatedEventIds": "1, 12"
+    },
+    {
+      "QualifierId": "214",
+      "Name": "Big chance",
+      "Description": "A shot was subjectively judged by analysts to be an excellent goal-scoring opportunity and the player should have scored - a clear cut chance, such as a \u00271 on 1\u0027. Includes where the shot resulted in a miss, hit post/woodwork, save, or goal.",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "215",
+      "Name": "Individual play",
+      "Description": "The player took a shot and created this chance by themselves. For example, they dribbled to create space for themselves and took a shot.",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "216",
+      "Name": "2nd related event ID",
+      "Description": "String\r\nNote: Used for Major League Soccer (MLS) and German Bundesliga 1 and 2.\r\nIndicates that there was a 2nd assist for a goal, such as a pass to create the opportunity for the player making the assist, to show the second assisting player ID. The value gives the Event ID of the 2nd related event (example: 259) - this will have been previously returned in the feed as the value of eventId.",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "217",
+      "Name": "2nd assisted",
+      "Description": "Indicates that this shot had a significant pass to create the opportunity for the pass which led to a goal",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "218",
+      "Name": "2nd assist",
+      "Description": "The pass was deemed a 2nd assist - it created the opportunity for another player to assist a goal",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "219",
+      "Name": "Players on both posts",
+      "Description": "Indicates that the team defending the corner had players on both posts when the corner was taken\r\nNote:\r\n\u2022 This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. Collection type: Post\r\n\u2022 This is a qualifierId that previously existed and was retired, but has been reinstated (August 2020)",
+      "AssociatedEventIds": "6"
+    },
+    {
+      "QualifierId": "220",
+      "Name": "Player on near post",
+      "Description": "Indicates that the team defending the corner had a player on only the near post when the corner was taken\r\nNote:\r\n\u2022 This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. Collection type: Post\r\n\u2022 This is a qualifierId that previously existed and was retired, but has been reinstated (August 2020)",
+      "AssociatedEventIds": "6"
+    },
+    {
+      "QualifierId": "221",
+      "Name": "Player on far post",
+      "Description": "Indicates that the team defending the corner had a player on only the far post when the corner was taken\r\nNote:\r\n\u2022 This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. Collection type: Post\r\n\u2022 This is a qualifierId that previously existed and was retired, but has been reinstated (August 2020)",
+      "AssociatedEventIds": "6"
+    },
+    {
+      "QualifierId": "222",
+      "Name": "No players on posts",
+      "Description": "Indicates that the team defending the corner had no players on either post when the corner was taken\r\nNote:\r\n\u2022 This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. Collection type: Post\r\n\u2022 This is a qualifierId that previously existed and was retired, but has been reinstated (August 2020)",
+      "AssociatedEventIds": "6"
+    },
+    {
+      "QualifierId": "223",
+      "Name": "In-swinger",
+      "Description": "The corner was crossed into the box swerving towards the goal (in-swinging)\r\nNote: This can be shown for \u0027Live\u0027 data (for example, for eventTypeId \u00271\u0027). However, from June 2020 it can also be added \u0027Post-match\u0027 to all \u0027touch\u0027 events if applicable, but only for some competitions. When added as a post-match qualifier it is only shown once the post-match analysis is complete.",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "224",
+      "Name": "Out-swinger",
+      "Description": "The corner was crossed into the box swerving away from the goal (out-swinging)\r\nNote: This can be shown for \u0027Live\u0027 data (for example, for eventTypeId \u00271\u0027). However, from June 2020 it can also be added \u0027Post-match\u0027 to all \u0027touch\u0027 events if applicable, but only for some competitions. When added as a post-match qualifier it is only shown once the post-match analysis is complete.",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "225",
+      "Name": "Straight",
+      "Description": "The corner was crossed into the box where the ball flight was straight (without swing)\r\nNote: This can be shown for \u0027Live\u0027 data (for example, for eventTypeId \u00271\u0027). However, from June 2020 it can also be added \u0027Post-match\u0027 to all \u0027touch\u0027 events if applicable, but only for some competitions. When added as a post-match qualifier it is only shown once the post-match analysis is complete.",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "226",
+      "Name": "Suspended",
+      "Description": "The game has not finished but is suspended",
+      "AssociatedEventIds": "27"
+    },
+    {
+      "QualifierId": "227",
+      "Name": "Resume",
+      "Description": "String/Array - value string\r\nThe team setup (lineup) for a match that has resumed at a later date after it was initially abandoned/suspended mid-way through the game/during gameplay.",
+      "AssociatedEventIds": "34"
+    },
+    {
+      "QualifierId": "228",
+      "Name": "Own shot blocked",
+      "Description": "The player unintentionally/accidentally blocks an attacking shot from their teammate",
+      "AssociatedEventIds": "61"
+    },
+    {
+      "QualifierId": "229",
+      "Name": "Post match complete",
+      "Description": "Collection has finished, the game has been reviewed, and post-match checks and quality control have been completed",
+      "AssociatedEventIds": "37"
+    },
+    {
+      "QualifierId": "230",
+      "Name": "GK X Coordinate",
+      "Description": "String\r\nThe X-coordinate for the position of the goalkeeper (GK) for the shot\r\nNote: This can be shown for \u0027Live\u0027 data (for example, for eventTypeIds \u002714\u0027 and \u002716\u0027). However, from June 2020 it can also be added \u0027Post-match\u0027 to \u0027Blocked Shot\u0027, \u0027Miss\u0027 (not past the goal line) and all shot events, but only for some competitions. When added as a post-match qualifier it is only shown once the post-match analysis is complete.",
+      "AssociatedEventIds": "14, 16"
+    },
+    {
+      "QualifierId": "231",
+      "Name": "GK Y Coordinate",
+      "Description": "String\r\nThe Y-coordinate for the position of the goalkeeper (GK) for the shot\r\nNote: This can be shown for \u0027Live\u0027 data (for example, for eventTypeIds \u002714\u0027 and \u002716\u0027). However, from June 2020 it can also be added \u0027Post-match\u0027 to \u0027Blocked Shot\u0027, \u0027Miss\u0027 (not past the goal line) and all shot events, but only for some competitions. When added as a post-match qualifier it is only shown once the post-match analysis is complete.",
+      "AssociatedEventIds": "14, 16"
+    },
+    {
+      "QualifierId": "232",
+      "Name": "Unchallenged",
+      "Description": "The goalkeeper smothers the ball and is unchallenged by an opponent",
+      "AssociatedEventIds": "54"
+    },
+    {
+      "QualifierId": "233",
+      "Name": "Opposite related event ID",
+      "Description": "String\r\nUsed for any event where the same event applies to both teams with outcome 1 or 0. This links the two events together - for example, Aerial Duels. The feed will return two instances of the same event, each with a unique event ID, and this qualifier will be attached to each event.\r\nValue: The Event ID of the corresponding opposite related event by the opposition (example: 706 - it will have been returned in the feed as the eventId value.",
+      "AssociatedEventIds": "1, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 27, 28, 41, 44, 45, 50, 54, 58, 67, 69, 74"
+    },
+    {
+      "QualifierId": "234",
+      "Name": "Home Team Possession",
+      "Description": "Note - October 2019: This qualifier is associated with event typeId 66 which is no longer recorded in the feed. We will update this record shortly to confirm if this qualifierId could appear in the output.\r\nPossession % (percentage) in last 5 mins",
+      "AssociatedEventIds": "66"
+    },
+    {
+      "QualifierId": "235",
+      "Name": "Away Team Possession",
+      "Description": "Note - October 2019: This qualifier is associated with event typeId 66 which is no longer recorded in the feed. We will update this record shortly to confirm if this qualifierId could appear in the output.\r\nPossession % (percentage) in last 5 mins",
+      "AssociatedEventIds": "66"
+    },
+    {
+      "QualifierId": "236",
+      "Name": "Blocked pass",
+      "Description": "Assigned to a \u0027Pass\u0027 to indicate it was blocked by an opponent in close proximity. It is similar to an \u0027Interception\u0027 event but the player was already very close to ball, instead of a touch event in the past.",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "237",
+      "Name": "Low",
+      "Description": "Indicates a low goal kick",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "238",
+      "Name": "Fair Play",
+      "Description": "Indicates the ball was deliberately put out of play or returned to the opposition for fair play - for example, as following an injury",
+      "AssociatedEventIds": "1, 61"
+    },
+    {
+      "QualifierId": "239",
+      "Name": "By Wall",
+      "Description": "A block was made by the wall in a free kick situation. It often appears alongside Qualifier IDs 94 (Def Block - indicates shot is blocked by an outfield player), 56 (Zone), and 233 (Opposite related event ID - gives the ID of the corresponding related event, to get the ID of the involved outfield player)",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "240",
+      "Name": "GK Start",
+      "Description": "Automated Qualifier which appears on all goalkeeper (GK) Pass events after the keeper collects ball with their hands and then puts it on the ground",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "241",
+      "Name": "Indirect",
+      "Description": "Indicates that the free kick was indirect",
+      "AssociatedEventIds": "1, 2, 4"
+    },
+    {
+      "QualifierId": "242",
+      "Name": "Obstruction",
+      "Description": "The foul committed was for obstruction",
+      "AssociatedEventIds": "4"
+    },
+    {
+      "QualifierId": "243",
+      "Name": "Unsporting behaviour",
+      "Description": "A card is given to the player for unsporting behaviour",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "244",
+      "Name": "Not Retreating",
+      "Description": "A card is given to the player for not retreating to an appropriate distance away for a set-piece situation, such as a free kick or goal kick",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "245",
+      "Name": "Serious Foul",
+      "Description": "A card is given to a player for committing a serious foul",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "246",
+      "Name": "Drinks Break",
+      "Description": "The game/play is delayed due to a drinks break",
+      "AssociatedEventIds": "27"
+    },
+    {
+      "QualifierId": "247",
+      "Name": "Offside",
+      "Description": "Indicates a contentious referee decision relating to offside - for example, giving or not giving an offside decision",
+      "AssociatedEventIds": "65"
+    },
+    {
+      "QualifierId": "248",
+      "Name": "Goal line",
+      "Description": "Indicates a contentious referee decision relating to the ball crossing the goal line - for example, giving or not giving a goal",
+      "AssociatedEventIds": "65"
+    },
+    {
+      "QualifierId": "249",
+      "Name": "Temp Shot On",
+      "Description": "A shot has occurred but it is pending additional detail qualifiers from Opta",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "250",
+      "Name": "Temp Blocked",
+      "Description": "A block has occurred but it is pending additional detail qualifiers from Opta",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "251",
+      "Name": "Temp Post",
+      "Description": "A shot has hit the post but it is pending additional detail qualifiers from Opta",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "252",
+      "Name": "Temp Missed",
+      "Description": "A shot has missed but it is pending additional detail qualifiers from Opta",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "253",
+      "Name": "Temp Miss Not Passed Goal Line",
+      "Description": "A shot has missed but not gone past the end/goal line but it is pending additional detail qualifiers from Opta",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "254",
+      "Name": "Follows a Dribble",
+      "Description": "A goal followed a dribble by the goalscorer",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "255",
+      "Name": "Open Roof",
+      "Description": "Indicates that the roof of the stadium is open\r\nNote: No longer used",
+      "AssociatedEventIds": "24"
+    },
+    {
+      "QualifierId": "256",
+      "Name": "Air Humidity",
+      "Description": "String\r\nThe air humidity in the stadium\r\nNote: No longer used",
+      "AssociatedEventIds": "24"
+    },
+    {
+      "QualifierId": "257",
+      "Name": "Air Pressure",
+      "Description": "String\r\nThe air pressure in the stadium\r\nNote: No longer used",
+      "AssociatedEventIds": "24"
+    },
+    {
+      "QualifierId": "258",
+      "Name": "Sold Out",
+      "Description": "Dynamic\r\nIndicates whether the match is sold out\r\nNote: No longer used",
+      "AssociatedEventIds": "24"
+    },
+    {
+      "QualifierId": "259",
+      "Name": "Celsius degrees",
+      "Description": "String\r\nThe temperature in degrees celcius\r\nNote: No longer used",
+      "AssociatedEventIds": "24"
+    },
+    {
+      "QualifierId": "260",
+      "Name": "Floodlight",
+      "Description": "Dynamic\r\nIndicates whether the match was played under floodlights\r\nNote: No longer used",
+      "AssociatedEventIds": "24"
+    },
+    {
+      "QualifierId": "261",
+      "Name": "1 on 1 chip",
+      "Description": "Note - October 2019: No longer collected as of June 2017\r\nThe goal was a \u0027one-on-one\u0027 chip, where the scorer chipped the ball over the goalkeeper and into the net",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "262",
+      "Name": "Back heel",
+      "Description": "Note - October 2019: No longer collected as of June 2017\r\nThe goal was scored with a back heel",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "263",
+      "Name": "Direct corner",
+      "Description": "A shot or goal directly from a corner",
+      "AssociatedEventIds": "15, 16"
+    },
+    {
+      "QualifierId": "264",
+      "Name": "Aerial Foul",
+      "Description": "A foul was committed aerially (in or via the air)",
+      "AssociatedEventIds": "4"
+    },
+    {
+      "QualifierId": "265",
+      "Name": "Attempted Tackle",
+      "Description": "A foul was committed via an attempted tackle",
+      "AssociatedEventIds": "4"
+    },
+    {
+      "QualifierId": "266",
+      "Name": "Put Through",
+      "Description": "Note - October 2019: No longer used (collected only for DFL between 2013/14 and 2016/17)\r\nAttacking player has passed/shot the ball past a defending player who attempted to stop the ball. A \u0027Put Through\u0027 is always linked to a \u0027Failed to block\u0027 event on the defending team\u0027s side. This qualifier is assigned to the defending player who should have denied the shot.",
+      "AssociatedEventIds": "1, 13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "267",
+      "Name": "Right Arm",
+      "Description": "Note - October 2019: No longer used (collected in 2013/14 season only)\r\nThe goalkeeper uses their right arm to make the save",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "268",
+      "Name": "Left Arm",
+      "Description": "Note - October 2019: No longer used (collected in 2013/14 season only)\r\nGoalkeeper uses their left arm to make the save",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "269",
+      "Name": "Both Arms",
+      "Description": "Note - October 2019: No longer used (collected in 2013/14 season only)\r\nGoalkeeper uses both of their arms to make the save",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "270",
+      "Name": "Right Leg",
+      "Description": "Note - October 2019: No longer used (collected in 2013/14 season only)\r\nGoalkeeper uses their right leg to make the save",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "271",
+      "Name": "Left Leg",
+      "Description": "Note - October 2019: No longer used (collected in 2013/14 season only)\r\nGoalkeeper uses their left leg to make the save",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "273",
+      "Name": "Hit Right Post",
+      "Description": "The shot hit the right post following a save",
+      "AssociatedEventIds": "10, 13, 15, 16"
+    },
+    {
+      "QualifierId": "274",
+      "Name": "Hit Left Post",
+      "Description": "The shot hit the left post following a save",
+      "AssociatedEventIds": "10, 13, 15, 16"
+    },
+    {
+      "QualifierId": "275",
+      "Name": "Hit Bar",
+      "Description": "The shot hit the crossbar following a save",
+      "AssociatedEventIds": "10, 13, 15, 16"
+    },
+    {
+      "QualifierId": "276",
+      "Name": "Out on sideline",
+      "Description": "The shot missed/was off-target and went out on the sideline for a throw in. Note: In this context the accompanying \u0027Blocked\u0027 Qualifier IDs (147, 153) indicate where the ball goes out on the touchline.",
+      "AssociatedEventIds": "13"
+    },
+    {
+      "QualifierId": "277",
+      "Name": "Minutes",
+      "Description": "String\r\nThe number of minutes of injury time given by the referee",
+      "AssociatedEventIds": "70, 75"
+    },
+    {
+      "QualifierId": "278",
+      "Name": "Tap",
+      "Description": "The ball was tapped to a teammate (for example, from kick-off or a free kick)",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "279",
+      "Name": "Kick Off",
+      "Description": "String (S or G)\r\nIndicates the event was a starting pass/kick off - this is to enable exclusion from passing %\r\nS = kick-off to start a period (first half, second half, first half extra-time, second half extra-time)\r\nG = kick-off after a goal",
+      "AssociatedEventIds": "1, 13"
+    },
+    {
+      "QualifierId": "280",
+      "Name": "Fantasy Assist Type",
+      "Description": "String - possible values:\r\nqualifierId detailsqualifierId details\r\nPossible qualifier values:\r\n* PASS_LOST\r\n* BLOCKED_SHOT\r\n* ATTEMPT_SAVED\r\n* POST\r\n* FREE_KICK_WON\r\n* HANDBALL_WON\r\n* OWN_GOAL\r\n* PENALTY_WON\r\nThe type of Fantasy Assist for the goal",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "281",
+      "Name": "Fantasy Assisted By",
+      "Description": "String\r\nThe player credited with making the Fantasy Assist - the value is the unique ID (UUID) of the player",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "282",
+      "Name": "Fantasy Assist Team",
+      "Description": "String\r\nThe team (contestant) credited with making the Fantasy Assist - the value is the unique ID (UUID) of the team",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "283",
+      "Name": "Coach ID",
+      "Description": "String\r\nThe ID of the team coach",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "284",
+      "Name": "Duel",
+      "Description": "Note - October 2019: No longer used (collected for DFL competitions only between 2013/14 and 2016/17 seasons)\r\nIndicates the blocked shot/cross is a duel",
+      "AssociatedEventIds": "10, 12, 15"
+    },
+    {
+      "QualifierId": "285",
+      "Name": "Defensive",
+      "Description": "Indicates a defensive dual",
+      "AssociatedEventIds": "3, 4, 7, 10, 12, 44, 45, 50, 67, 69, 74"
+    },
+    {
+      "QualifierId": "286",
+      "Name": "Offensive",
+      "Description": "Indicates an offensive duel",
+      "AssociatedEventIds": "1, 3, 4, 7, 13, 14, 15, 16, 44, 45, 50, 67"
+    },
+    {
+      "QualifierId": "287",
+      "Name": "Over-arm",
+      "Description": "Indicates an over-arm throw out of the ball by the goalkeeper",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "288",
+      "Name": "Out of Play Secs",
+      "Description": "Note - October 2019: This qualifier is associated with event typeId 66 which is no longer recorded in the feed. We will update this record shortly to confirm if this qualifierId could appear in the output.\r\nAmount of time the ball was out of play in the last 5 minutes",
+      "AssociatedEventIds": "66"
+    },
+    {
+      "QualifierId": "289",
+      "Name": "Denied goal-scoring opp",
+      "Description": "The foul committed by a player denies a goal-scoring opportunity",
+      "AssociatedEventIds": "4, 17"
+    },
+    {
+      "QualifierId": "290",
+      "Name": "Coach types",
+      "Description": "String/Array - value string - in the range 1-61:\r\nqualiferId detailsqualiferId details\r\nPossible qualifier values:\r\n* 1 - Manager\r\n* 2 - Assistant Manager\r\n* 3 - Head of Football\r\n* 4 - Chairman\r\n* 5 - Vice President\r\n* 6 - Supervisory Board\r\n* 7 - Director, Supervisory Board\r\n* 8 - Director, Advisory Board\r\n* 9 - Consultant\r\n* 10 - Goalkeeper Trainer\r\n* 11 - Fans Coordinator\r\n* 12 - Finances\r\n* 13 - Director\r\n* 14 - Office Direction\r\n* 15 - Fitness Trainer\r\n* 16 - Director, Team\r\n* 17 - Player Organisor\r\n* 18 - Team Doctor\r\n* 19 - Marketing\r\n* 20 - Press Relations\r\n* 21 - President\r\n* 22 - Physio\r\n* 23 - Physio (Female)\r\n* 24 - Scout\r\n* 25 - Head of Sports\r\n* 35 - 2nd Chairman\r\n* 27 - Director, Administrative\r\n* 28 - Director, Board\r\n* 29 - Director, Head of Board\r\n* 30 - Kit Manager\r\n* 31 - Event Manager\r\n* 32 - Masseur\r\n* 33 - Academy (Youth) Director\r\n* 34 - Reserve (Amateur) Manager\r\n* 36 - Team Manager\r\n* 37 - Organisation and technical\r\n* 38 - Director, Deputy Head of Board\r\n* 39 - Rehab trainer\r\n* 40 - Shareholders board - Director\r\n* 41 - Coordination trainer\r\n* 42 - Head of organisation\r\n* 43 - Member of shareholders board\r\n* 44 - Osteopath\r\n* 45 - Athletic trainer\r\n* 46 - Mental coach\r\n* 47 - Merchandising\r\n* 48 - Internist\r\n* 49 - Head of amateur football\r\n* 50 - Assistant team director\r\n* 51 - Head of Professional Sports\r\n* 52 - Director, Sport\r\n* 53 - Board Director, Sport\r\n* 54 - Team Manager\r\n* 55 - Sports Manager\r\n* 56 - Chief of Professional Football\r\n* 57 - First Official\r\n* 59 - Other Official\r\n* 58 - Second Official\r\n* 60 - Manager On Bench\r\n* 61 - Analyst\r\nGives the IDs of all the coach types and roles involved in the coach setup.",
+      "AssociatedEventIds": "71"
+    },
+    {
+      "QualifierId": "291",
+      "Name": "Other Ball Contact Type",
+      "Description": "Note - October 2019: No longer used (collected in 2013/14 season)\r\nThis is an automated extra event for DFL. It comes with a tackle or an interception and indicates if the player who made the tackle/interception retained the ball after this action or if the tackle/interception was a single ball touch (other ball contact with event type \u0027Interception\u0027 (8), type \u0027Defensive Clearance\u0027, or type \u0027Tackle Retained Ball\u0027).",
+      "AssociatedEventIds": "61, 73"
+    },
+    {
+      "QualifierId": "292",
+      "Name": "Detailed Position ID",
+      "Description": "String - possible values:\r\n1, 2, 3, 4, 5, 6, 7, 8, 9, 10\r\nqualifierId detailsqualifierId details\r\nPossible qualifier values:\r\n* 1 - Goalkeeper\r\n* 2 - Wing Back\r\n* 3 - Full Back\r\n* 4 - Central Defender\r\n* 5 - Defensive Midfielder\r\n* 6 - Attacking Midfielder\r\n* 7 - Central Midfielder\r\n* 8 - Winger\r\n* 9 - Striker\r\n* 10 - Second Striker\r\nIndicates the detailed position that the substitute player comes on in",
+      "AssociatedEventIds": "19"
+    },
+    {
+      "QualifierId": "293",
+      "Name": "Position Side ID",
+      "Description": "String - possible values:\r\n1, 2, 3, 4, 5, 6, 7, 458\r\nqualifierId detailsqualifierId details\r\nPossible qualifier values:\r\n* 1 - Left\r\n* 2 - Right\r\n* 3 - Centre\r\n* 4 - Left/Centre\r\n* 5 - Centre/Right\r\n* 6 - Left/Centre/Right\r\n* 7 - Left/Right\r\nIndicates the side of the pitch that the substitute player comes on in when they assume their position",
+      "AssociatedEventIds": "19"
+    },
+    {
+      "QualifierId": "294",
+      "Name": "Shove/Push",
+      "Description": "The foul is given for a shove/push",
+      "AssociatedEventIds": "4"
+    },
+    {
+      "QualifierId": "295",
+      "Name": "Shirt Pull/Holding",
+      "Description": "The foul is given given for shirt pulling/holding",
+      "AssociatedEventIds": "4"
+    },
+    {
+      "QualifierId": "296",
+      "Name": "Elbow/Violent Conduct",
+      "Description": "The foul is given for elbowing or violent conduct",
+      "AssociatedEventIds": "4"
+    },
+    {
+      "QualifierId": "297",
+      "Name": "Follows Shot Rebound",
+      "Description": "An offside pass that follows a rebounded shot - the player who followed-up after a rebound to make a pass is ruled offside",
+      "AssociatedEventIds": "2"
+    },
+    {
+      "QualifierId": "298",
+      "Name": "Follows Shot Blocked",
+      "Description": "An offside pass that follows a blocked shot - the player who followed-up after the blocked shot to make a pass is ruled offside",
+      "AssociatedEventIds": "2"
+    },
+    {
+      "QualifierId": "299",
+      "Name": "Clock Affecting",
+      "Description": "Indicates that the delay has affected the match clock",
+      "AssociatedEventIds": "27, 28"
+    },
+    {
+      "QualifierId": "300",
+      "Name": "Solo Run",
+      "Description": "Shows that the goal came from a solo run made by the player",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "301",
+      "Name": "Shot from cross",
+      "Description": "Shows that the attempt came from a shot that came from a cross (the attempt was saved)",
+      "AssociatedEventIds": "15"
+    },
+    {
+      "QualifierId": "302",
+      "Name": "Checks complete/Live collection checks complete",
+      "Description": "Data/live data collection has ended and he initial post-match checks have been completed",
+      "AssociatedEventIds": "37"
+    },
+    {
+      "QualifierId": "303",
+      "Name": "Floodlight failure",
+      "Description": "Shows that the delay is due to a floodlight failure",
+      "AssociatedEventIds": "27"
+    },
+    {
+      "QualifierId": "304",
+      "Name": "Ball In Play",
+      "Description": "The player is off the pitch but the ball is in play",
+      "AssociatedEventIds": "77"
+    },
+    {
+      "QualifierId": "305",
+      "Name": "Ball Out of Play",
+      "Description": "The ball is out of play due to the player being off the pitch",
+      "AssociatedEventIds": "77"
+    },
+    {
+      "QualifierId": "306",
+      "Name": "Kit change",
+      "Description": "The player is off the pitch for a kit change",
+      "AssociatedEventIds": "77"
+    },
+    {
+      "QualifierId": "307",
+      "Name": "Phase of possession ID",
+      "Description": "String\r\nNote - October 2019: No longer used (collected only for DFL between 2013/14 and 2016/17)\r\nThe ID for the phase of possession for the DFL",
+      "AssociatedEventIds": "1, 2, 3, 4, 7, 8, 10, 11, 12, 13, 14, 15, 16, 41, 42, 50, 54, 57, 61, 74"
+    },
+    {
+      "QualifierId": "308",
+      "Name": "Goes to Extra Time",
+      "Description": "Indicates that the match will go to extra time and an additional period will be played",
+      "AssociatedEventIds": "30"
+    },
+    {
+      "QualifierId": "309",
+      "Name": "Goes to Penalties",
+      "Description": "Indicates that the match will go to penalties and an additional period will be played",
+      "AssociatedEventIds": "30"
+    },
+    {
+      "QualifierId": "310",
+      "Name": "Player goes out",
+      "Description": "The player goes off/leaves the pitch",
+      "AssociatedEventIds": "77"
+    },
+    {
+      "QualifierId": "311",
+      "Name": "Player comes back",
+      "Description": "The player comes back onto the pitch",
+      "AssociatedEventIds": "77"
+    },
+    {
+      "QualifierId": "312",
+      "Name": "Phase of possession start",
+      "Description": "String\r\nNote - October 2019: No longer used (collected only for DFL between 2013/14 and 2016/17)\r\nIndicates that possession has started for DFL",
+      "AssociatedEventIds": "3, 7, 8, 10, 11, 54, 74"
+    },
+    {
+      "QualifierId": "313",
+      "Name": "Illegal Restart",
+      "Description": "The foul is given for an illegal restart of play",
+      "AssociatedEventIds": "4"
+    },
+    {
+      "QualifierId": "314",
+      "Name": "End of Offside",
+      "Description": "The foul is given for a shot hitting an offside player",
+      "AssociatedEventIds": "13, 15"
+    },
+    {
+      "QualifierId": "315",
+      "Name": "Related Event Player ID",
+      "Description": "String\r\nNote: This qualifier is no longer used.\r\nThe ID of the player who performed the related event",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "316",
+      "Name": "Passed Penalty",
+      "Description": "The player chose to pass the ball to a teammate when taking a penalty instead of attempting a direct shot on goal",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "317",
+      "Name": "Penalty Set Piece",
+      "Description": "The shot or chance missed came from a situation where a penalty was taken and not directly shot at goal or scored",
+      "AssociatedEventIds": "13, 14, 15, 16, 60"
+    },
+    {
+      "QualifierId": "319",
+      "Name": "Captain change",
+      "Description": "Indicates that the team has changed their captain",
+      "AssociatedEventIds": "40"
+    },
+    {
+      "QualifierId": "323",
+      "Name": "Follows a Rebound",
+      "Description": "Note - October 2019: This qualifier is no longer used\r\nShot follows another shot and is from the resulting rebound",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "324",
+      "Name": "Follows a Take On",
+      "Description": "Note - October 2019: This qualifier is no longer used\r\nShot follows a successful take-on",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "325",
+      "Name": "Abandonment To Follow",
+      "Description": "Attached to \u0027End\u0027 event (typeId 30), this will flag when the game is about to be abandoned by Opta\u0027s collection system, rather than appearing as though the match has normally ended",
+      "AssociatedEventIds": "30, 32, 34, 36, 40, 71"
+    },
+    {
+      "QualifierId": "328",
+      "Name": "First Touch",
+      "Description": "The shot was attempted by the player first time/on their first touch, without another touch to control the ball",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "329",
+      "Name": "VAR - Goal Awarded",
+      "Description": "The VAR has been asked to look at a goal that was awarded by the referee. Note: This was previously named \u0022VAR - Goal\u0022",
+      "AssociatedEventIds": "65"
+    },
+    {
+      "QualifierId": "330",
+      "Name": "VAR - Penalty Awarded",
+      "Description": "The VAR has been asked to look at a penalty decision that was awarded by the referee",
+      "AssociatedEventIds": "65"
+    },
+    {
+      "QualifierId": "331",
+      "Name": "VAR - Penalty Not Awarded",
+      "Description": "The VAR has been asked to look at a penalty decision that was originally not awarded by the referee",
+      "AssociatedEventIds": "65"
+    },
+    {
+      "QualifierId": "332",
+      "Name": "VAR - (Red) Card Upgrade",
+      "Description": "The VAR has been asked to look at an event where a red card was not originally awarded by the referee. Note: This was previously named \u0022VAR - Red Card\u0022",
+      "AssociatedEventIds": "65"
+    },
+    {
+      "QualifierId": "333",
+      "Name": "VAR - Mistaken Identity",
+      "Description": "The VAR has been asked to clarify a circumstance of mistaken identity",
+      "AssociatedEventIds": "65"
+    },
+    {
+      "QualifierId": "334",
+      "Name": "VAR - Other",
+      "Description": "The VAR has been asked to look at another situation",
+      "AssociatedEventIds": "65"
+    },
+    {
+      "QualifierId": "335",
+      "Name": "Referee Decision Confirmed",
+      "Description": "The decision has been confirmed",
+      "AssociatedEventIds": "65"
+    },
+    {
+      "QualifierId": "336",
+      "Name": "Referee Decision Cancelled",
+      "Description": "The decision has been cancelled",
+      "AssociatedEventIds": "65"
+    },
+    {
+      "QualifierId": "338",
+      "Name": "Follows a Rebound Event ID",
+      "Description": "Reference to the previous shot this has followed",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "341",
+      "Name": "VAR - Goal Not Awarded",
+      "Description": "The VAR has been asked to look at an event/shot that was not originally awarded as a goal by the referee (new - 16 April 2018)",
+      "AssociatedEventIds": "342"
+    },
+    {
+      "QualifierId": "343",
+      "Name": "Review",
+      "Description": "This ID is attached to the event that most closely relates to the situation being investigated by the VAR. It might be a shot, goal, foul, aerial, pass, take-on etc. and can be attached to almost any event type (released 16 April 2018)\r\nPossible values: 1, 2, 3 (\r\n1 = under review, 2 = reviewed, 3 = event added post review)",
+      "AssociatedEventIds": "344"
+    },
+    {
+      "QualifierId": "345",
+      "Name": "Overhit cross",
+      "Description": "Indicates when a cross clearly went over the intended target area\r\n1 (may appear only with qualifierId 2)",
+      "AssociatedEventIds": "346"
+    },
+    {
+      "QualifierId": "347",
+      "Name": "Next event Throw-In",
+      "Description": "Indicates that the next event in a game will be a throw-in",
+      "AssociatedEventIds": "5"
+    },
+    {
+      "QualifierId": "348",
+      "Name": "Penalty taker ID",
+      "Description": "String\r\nValue is the ID of the player that took the penalty. After a penalty is awarded, we collect the ID of the penalty taker before the kick is taken. This qualifier is only included in the Foul event of the attacking team (outcome = 1)\r\n4 (qualifierId 9)",
+      "AssociatedEventIds": "349"
+    },
+    {
+      "QualifierId": "353",
+      "Name": "Second (2nd) opposite related event ID",
+      "Description": "This qualifier links a second opposite related event to an action, and provides more detail about an action during the game. For example, if a penalty is saved, instead of only linking the offensive \u0027Penalty Taken\u0027 event to the defensive \u0027Penalty Saved\u0027 action (event\r\ntypeId 58) we can also link it to a \u0027Penalty Faced\u0027 action (event typeId 10).\r\nNote: Applicable from 19 March 2019. Qualifier ID 233 is unchanged.\r\nVarious (see qualifierId 233, eg typeId 10, 15, 58)",
+      "AssociatedEventIds": "354"
+    },
+    {
+      "QualifierId": "355",
+      "Name": "Entering referee review area",
+      "Description": "Added to a card event (typeId 17) where a yellow card was issued for a person entering the referee review area - this caution relates to a VAR decision. A qualifierId of 31 (yellow card) will also be present.",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "356",
+      "Name": "Excessive usage of review signal",
+      "Description": "Added to a card event (typeId 17) where a yellow card was issued for a person excessively using the review signal - this caution relates to a VAR decision. A qualifierId of 31 (yellow card) will also be present.",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "357",
+      "Name": "Entering video operations room",
+      "Description": "Added to a card event (typeId 17) where a red card was issued for a person entering the video operations room - this relates to a VAR decision. A qualifierId of 33 (red card) will also be present.",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "358",
+      "Name": "Official body: Reviewed and confirmed",
+      "Description": "Added if a goal event (typeId 16) has been reviewed post-match by an official body, only where the goalscorer remains unchanged. It can also be added to assist events.",
+      "AssociatedEventIds": "16, 1"
+    },
+    {
+      "QualifierId": "359",
+      "Name": "Official body: Reviewed and changed",
+      "Description": "Added if a goal event (typeId 16) has been reviewed post-match by an official body, only where the goalscorer is changed. It can also be added to assist events.",
+      "AssociatedEventIds": "16, 1"
+    },
+    {
+      "QualifierId": "361",
+      "Name": "Incorrect out of play decision",
+      "Description": "Added when our analysts are very clear that the ball has gone out of play for either a goal kick or a corner, but the match official has given the opposite decision.",
+      "AssociatedEventIds": "5, 6"
+    },
+    {
+      "QualifierId": "362",
+      "Name": "Viral",
+      "Description": "Numeric - possible values:\r\n1, 2, 3, 4, 5\r\nqualifierId detailsqualifierId details\r\nPossible qualifier values - one of the following:\r\n* 1 - Player\r\n* 2 - Referee\r\n* 3 - Fans\r\n* 4 - Manager\r\n* 5 - Extraordinary circumstances\r\nInforms customers* that something interesting has happened during the game which they may want to take a closer look at. The value gives the category the viral qualifier falls into.\r\n*Note: It is intended to help customers who use Opta data to aid with video clipping workflows. Some viral content will not be linked to a specific event collected by our analysts (eg an interesting event among the crowd) - in these situations our analysts will add the viral qualifier to the nearest on-pitch event. Examples of viral content could include: exceptional skill on a goal eg overhead kick, a player reacting poorly to being substituted, a manager and coach making the same signals on the touchline, a fan \u0022tifo\u0022 display\r\nAll Event Type IDs",
+      "AssociatedEventIds": "363"
+    },
+    {
+      "QualifierId": "364",
+      "Name": "VAR Delay",
+      "Description": "Used with a \u0027Start delay\u0027 event (typeId 27)",
+      "AssociatedEventIds": "27"
+    },
+    {
+      "QualifierId": "365",
+      "Name": "Reviewed event ID",
+      "Description": "Used with a \u0027Contentious referee decision\u0027 event (typeId 65), which should also have a linked event ID number to the specific event that is under review",
+      "AssociatedEventIds": "65"
+    },
+    {
+      "QualifierId": "374",
+      "Name": "Goal shot timestamp",
+      "Description": "Specifies the actual time of the shot for all goal events - the events will continue to have the timestamp of the goal itself\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. Collection type: Post",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "375",
+      "Name": "Goal shot game clock",
+      "Description": "The match time of the shot for all goal events - the events will continue to have the match time of the goal itself\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. Collection type: Post",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "376",
+      "Name": "Low GK intervention",
+      "Description": "Denotes a low-level (height) intervention by the Goalkeeper - for example, the Goalkeeper touched the ball below hip height.\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. Collection type: Post\r\nVarious goalkeeper events, such as 10, 11, 41, 52",
+      "AssociatedEventIds": "377"
+    },
+    {
+      "QualifierId": "378",
+      "Name": "High GK intervention",
+      "Description": "Denotes a high-level (height) intervention by the Goalkeeper - for example, the Goalkeeper touched the ball above shoulder height\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. Collection type: Post\r\nVarious goalkeeper events, such as 10, 11, 41, 5",
+      "AssociatedEventIds": "380"
+    },
+    {
+      "QualifierId": "381",
+      "Name": "Fumble",
+      "Description": "A goalkeeper attempts to catch the ball when making a save but drops the ball in error\r\nNote: New from 24 August 2020. Collection type: Live",
+      "AssociatedEventIds": "10"
+    },
+    {
+      "QualifierId": "383",
+      "Name": "Touch type control",
+      "Description": "A player made a touch on the ball - control type. The player\u0027s intention when making a tackle or interception: keep ball close in order to touch it again\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. Collection type: Post",
+      "AssociatedEventIds": "7, 8, 10, 11"
+    },
+    {
+      "QualifierId": "384",
+      "Name": "Touch type pass",
+      "Description": "A player made a touch on the ball - a pass. The player\u0027s intention when making a tackle or interception: direct ball towards teammate\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. Collection type: Post",
+      "AssociatedEventIds": "7, 8"
+    },
+    {
+      "QualifierId": "385",
+      "Name": "Touch type clearance",
+      "Description": "A player made a touch on the ball - a clearance. The player\u0027s intention when making a tackle or interception: direct ball away from intended receiver/area\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. Collection type: Post",
+      "AssociatedEventIds": "7, 8"
+    },
+    {
+      "QualifierId": "386",
+      "Name": "Driven cross",
+      "Description": "Any cross which is struck hard and straight\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. Collection type: Post",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "387",
+      "Name": "Floated cross",
+      "Description": "A straight cross that is in the air for a long period of time - a cross stood up to the back post\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. Collection type: Post",
+      "AssociatedEventIds": "1"
+    },
+    {
+      "QualifierId": "388",
+      "Name": "Jumping",
+      "Description": "Added to all \u0027touch\u0027 events if applicable but only for some competitions, and only \u0027post-match\u0027.\r\nNote: New from June 2020. This is a \u0027post-match\u0027 qualifier which means it is only shown once the post-match analysis is complete.",
+      "AssociatedEventIds": "61, 73"
+    },
+    {
+      "QualifierId": "389",
+      "Name": "Sliding",
+      "Description": "Added to save events and temp saves (10 \u0026 63) for all T12\u002B games. It can also be added \u0027Post-match\u0027 to all \u0027touch\u0027 events.\r\nNote: New from June 2020. When added as a post-match qualifier it will be shown once the post-match analysis is complete.",
+      "AssociatedEventIds": "7, 10, 11, 12, 13, 14, 15, 16, 63"
+    },
+    {
+      "QualifierId": "390",
+      "Name": "Causing player",
+      "Description": "The ID of the player who conceded the penalty\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. New from 24 August 2020. Collection type: Post",
+      "AssociatedEventIds": "13, 14, 16"
+    },
+    {
+      "QualifierId": "391",
+      "Name": "Mis-hit",
+      "Description": "An attempt where the offensive player hits the ball poorly which sends the ball in an unintended direction.\r\nNote: New from 24 August 2020. Collection type: Live",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "392",
+      "Name": "Reckless offence",
+      "Description": "Card reasons updated to match with Official IFAB reasons - a player is shown a card for committing a foul in a reckless manner\r\nNote: New from 24 August 2020. Collection type: Live",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "393",
+      "Name": "Tactical Foul",
+      "Description": "Card reasons updated to match with Official IFAB reasons - a player is shown a card which interferes with or stops a promising attack, except where the referee awards a penalty kick for an offence which was an attempt to play the ball\r\nNote: New from 24 August 2020. Collection type: Live",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "394",
+      "Name": "Corner not taken",
+      "Description": "A corner was awarded but the referee blew the whistle before it could be taken\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. New from 24 August 2020. Collection type: Post",
+      "AssociatedEventIds": "6"
+    },
+    {
+      "QualifierId": "395",
+      "Name": "GK x coordinate time of goal",
+      "Description": "The x-coordinate of the Goalkeeper position at the time of the goal/when the ball crosses the line\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. New from 24 August 2020. Collection type: Post",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "396",
+      "Name": "GK y coordinate time of goal",
+      "Description": "The y-coordinate of the Goalkeeper position at the time of the goal/when the ball crosses the line\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. New from 24 August 2020. Collection type: Post",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "397",
+      "Name": "Blocked clearance",
+      "Description": "Added on \u0027Clearance\u0027 events and \u0027Blocked Pass\u0027 events. It would have been previously collected as \u0027Ball touch\u0027 (\r\n61). Note: New from June 2020",
+      "AssociatedEventIds": "12, 74"
+    },
+    {
+      "QualifierId": "398",
+      "Name": "GK Challenge",
+      "Description": "Goalkeeper Challenge. Added on \u0027Foul\u0027 events, an exclusive option that is collected only for very rare exceptions. Note: New from June 2020",
+      "AssociatedEventIds": "4"
+    },
+    {
+      "QualifierId": "399",
+      "Name": "Intended tackle target",
+      "Description": "Identifies which player was the intended target of an attempted tackle. Tier 14 and 15\r\nNote: This qualifier will only be visible if the match is re-analysed within 24 hours of the match end time and date. New from 24 August 2020. Collection type: Post",
+      "AssociatedEventIds": "83"
+    },
+    {
+      "QualifierId": "406",
+      "Name": "Collection complete",
+      "Description": "Phase 5 (Millisecond timestamps and control touches) post-match collection has been completed. Please note these collected competitions are subject to different post match SLAs.\r\nNote: This qualifier will only be visible for coverage tier 14 or 15 matches. New from 28 September 2020. Collection type: Post",
+      "AssociatedEventIds": "37"
+    },
+    {
+      "QualifierId": "436",
+      "Name": "Pre-Review Event Type",
+      "Description": "We are adding a new Event type_id (84, Deleted After Review) in order that the Contentious Referee Decision can be linked to it for all VAR cases.\r\nThere will also be this new qualifier added, the value of which indicates the type_id of the Event before it was deleted after review. (Added March 2021)",
+      "AssociatedEventIds": "84"
+    },
+    {
+      "QualifierId": "458",
+      "Name": "Not assisted",
+      "Description": "Instead of not adding any assist related qualifier we will be adding a \u201Cnot assisted\u201D qualifier to indicate that there was no assist to the attempt.",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "459",
+      "Name": "Event type review",
+      "Description": "Event type review is a qualifier which is used to identify a potential data points which may not have been coded live but may change after review.",
+      "AssociatedEventIds": "1, 3, 8, 13, 14, 15, 61"
+    },
+    {
+      "QualifierId": "464",
+      "Name": "Take on space",
+      "Description": "Space refers to take-ons when the attacking is trying to dribble past an opponent player in attempt to move into an empty space behind them, but must be going sideways, or backwards in direction (not towards the opposition Goal).",
+      "AssociatedEventIds": "465"
+    },
+    {
+      "QualifierId": "467",
+      "Name": "Defensive 1 v 1",
+      "Description": "Player ID of the opposing team\u2019s defensive player\r\nTake on: Defensive 1 v 1 is an attempted dribble which is stopped by a defensive player who prevents the attacker from progressing past them and forces the attacker to either abruptly end the take on or perform a different action without making a tackle (includes attempted dribbles which are stopped due to a foul by the defensive player).",
+      "AssociatedEventIds": "468"
+    },
+    {
+      "QualifierId": "472",
+      "Name": "Fantasy assist ID",
+      "Description": "Event ID\r\nLink to the identify the fantasy assist event",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "474",
+      "Name": "Related error 2 ID",
+      "Description": "Event ID\r\nLink to identify an additional error leading to the shot/goal",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "476",
+      "Name": "New start time",
+      "Description": "Entry timestamp\r\nExpected new start time of the match",
+      "AssociatedEventIds": "75"
+    },
+    {
+      "QualifierId": "478",
+      "Name": "Officially announced",
+      "Description": "Source of delay information as an official announcement",
+      "AssociatedEventIds": "75"
+    },
+    {
+      "QualifierId": "479",
+      "Name": "Estimated",
+      "Description": "Source of delay information as an estimation",
+      "AssociatedEventIds": "75"
+    },
+    {
+      "QualifierId": "484",
+      "Name": "Dubious scorer",
+      "Description": "When a goalscorer decision is under review",
+      "AssociatedEventIds": "16"
+    },
+    {
+      "QualifierId": "485",
+      "Name": "Advantage played",
+      "Description": "The card has been shown with a delay after the offence as the referee did not interrupt the game and signaled advantage",
+      "AssociatedEventIds": "17"
+    },
+    {
+      "QualifierId": "487",
+      "Name": "Panenka",
+      "Description": "A qualifier added to penalty attempts if a \u201CPanenka\u201D technique is used by the penalty taker.\r\nNote:This can only appear when the event also has the \u201CPenalty\u201D qualifier (ID 9).",
+      "AssociatedEventIds": "13, 14, 15, 16"
+    },
+    {
+      "QualifierId": "488",
+      "Name": "8-Second Violation",
+      "Description": "This violation occurs when a goalkeeper holds the ball for 8 seconds or longer without releasing it into play.\r\nAccording to the new IFAB rule, if this happens, the opposing team is awarded a corner kick as a penalty for time-wasting.\r\nNote: New from 14 June 2025",
+      "AssociatedEventIds": "6"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="CLAUDE.md" />
+  </Folder>
+  <Project Path="AiHighlightsMcpServer/AiHighlightsMcpServer.csproj" />
+  <Project Path="AiHighlightsWinFormsUi/AiHighlightsWinFormsUi.csproj" />
+  <Project Path="UnitTests/UnitTests.csproj" Id="74cfbe70-1ebf-4a6b-8da4-cbaec6750d81" />
+</Solution>

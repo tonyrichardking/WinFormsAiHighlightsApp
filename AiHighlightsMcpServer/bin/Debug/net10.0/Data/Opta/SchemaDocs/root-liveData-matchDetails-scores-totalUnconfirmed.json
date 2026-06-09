@@ -1,0 +1,19 @@
+﻿{
+  "Nesting": "root-liveData-matchDetails-scores-totalUnconfirmed",
+  "Description": "Optional. Root element of the fields related to the total unconfirmed goals - this element is optional (it may not always be returned in the feed).\nNote: This is a temporary element for only Tier 13 matches, designed to offer a quick way to access score updates. It appears at the point our analysts initially collect a goal event, significantly shortening the time you receive score updates.\nOnce a goal and goal scorer have been collected, the totalUnconfirmed element is created in the \u003Cscores\u003E node. Once all goal details are entered into the database the \u0022score\u0022 element increments by one (1) and \u0027totalUnconfirmed\u0027 is removed.\nBy triggering goal updates earlier than previously there is an increased risk that once the goal has been logged it will either be disallowed or a goal scorer may have been misidentified. These clarifications can take a number of seconds to become clear and could result in information which is later updated. Ignore this if you only want to use the other \u0027scores\u0027 attributes",
+  "Required": false,
+  "attributes": [
+    {
+      "Attribute": "home",
+      "Description": "Required. The total unconfirmed goals of the home team",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "away",
+      "Description": "Required. The total unconfirmed goals of the away team",
+      "Required": true,
+      "Type": "Integer"
+    }
+  ]
+}

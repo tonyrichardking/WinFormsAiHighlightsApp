@@ -1,0 +1,25 @@
+﻿{
+  "Nesting": "root-liveData-event-qualifier_items",
+  "Description": "Required . The set of qualifications that explain and add depth to the events.\nNote: This might not be present for some events",
+  "Required": true,
+  "attributes": [
+    {
+      "Attribute": "id",
+      "Description": "Required. The unique ID (UUID) of this qualifier within Opta\u0027s entire database of all events and games. Example: 1967623354",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "qualifierId",
+      "Description": "Required - if the element is present. The ID for the type of qualifier - use in conjunction (cross-reference) with typeId values (event element), to get information about the event. See: Event Types and Qualifier Types",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "value",
+      "Description": "Optional. Value of the qualifier - if more than one value is available, the values will be returned in a comma-separated list. This could be a string of text (eg CT), boolean, or in the case of a player-related event/qualifier the \u0022value\u0022 contains the alphanumeric related player UUIDs (if unknown, the value is 0 or null).",
+      "Required": false,
+      "Type": "String"
+    }
+  ]
+}

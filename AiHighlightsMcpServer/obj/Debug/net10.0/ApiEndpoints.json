@@ -1,0 +1,97 @@
+[
+  {
+    "ContainingType": "OllamaMcpWebServer.Controllers.AiChatController",
+    "Method": "GetModels",
+    "RelativePath": "AiChat/getModels",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [],
+    "EndpointName": "GetModels"
+  },
+  {
+    "ContainingType": "OllamaMcpWebServer.Controllers.AiChatController",
+    "Method": "GetOptions",
+    "RelativePath": "AiChat/getOptions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [],
+    "EndpointName": "GetOptions"
+  },
+  {
+    "ContainingType": "OllamaMcpWebServer.Controllers.AiChatController",
+    "Method": "GetSystemPrompts",
+    "RelativePath": "AiChat/getSystemPrompts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [],
+    "EndpointName": "GetSystemPrompts"
+  },
+  {
+    "ContainingType": "OllamaMcpWebServer.Controllers.AiChatController",
+    "Method": "GetTools",
+    "RelativePath": "AiChat/getTools",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [],
+    "EndpointName": "GetTools"
+  },
+  {
+    "ContainingType": "OllamaMcpWebServer.Controllers.AiChatController",
+    "Method": "RunPrompt",
+    "RelativePath": "AiChat/runPrompt",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "prompt",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [],
+    "EndpointName": "RunPrompt"
+  },
+  {
+    "ContainingType": "OllamaMcpWebServer.Controllers.AiChatController",
+    "Method": "SetModel",
+    "RelativePath": "AiChat/setModel",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "param",
+        "Type": "OllamaMcpWebServer.Controllers.AiChatController\u002BputParameter",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [],
+    "EndpointName": "SetModel"
+  },
+  {
+    "ContainingType": "OllamaMcpWebServer.Controllers.AiChatController",
+    "Method": "SetSystemPrompt",
+    "RelativePath": "AiChat/setSystemPrompt",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "param",
+        "Type": "OllamaMcpWebServer.Controllers.AiChatController\u002BputParameter",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [],
+    "EndpointName": "SetSystemPrompt"
+  }
+]

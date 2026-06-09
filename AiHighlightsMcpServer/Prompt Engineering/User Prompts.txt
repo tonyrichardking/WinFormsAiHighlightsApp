@@ -1,0 +1,13 @@
+﻿Which teams are playing in the soccer match with id?
+
+When was the first goal in the match scored?
+
+Which player scored the first goal in the match?
+
+Where was the match played?
+
+Who scored the goals?
+
+What were the key events in the match?
+
+What was the final score?

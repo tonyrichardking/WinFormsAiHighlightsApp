@@ -1,0 +1,43 @@
+﻿{
+  "Nesting": "root-matchInfo-tournamentCalendar_items",
+  "Description": "Required. Root element of the fields related to a tournament calendar. Value (XML only): String giving the tournament calendar name",
+  "Required": true,
+  "attributes": [
+    {
+      "Attribute": "id",
+      "Description": "Required. Unique ID (UUID) of the tournament calendar",
+      "Required": true,
+      "Type": "String (Alphanumeric - UUID)"
+    },
+    {
+      "Attribute": "ocId",
+      "Description": "Optional. Unique Opta Core tournament calendar ID. Returned only if the feed is queried by Opta Core legacy ID; the attribute is not present otherwise. Empty string if no such value exists.",
+      "Required": false,
+      "Type": "String"
+    },
+    {
+      "Attribute": "opId",
+      "Description": "Optional. Unique Opta tournament calendar ID. Returned only if the feed is queried by Opta legacy ID; the attribute is not present otherwise. Empty string if no such value exists.",
+      "Required": false,
+      "Type": "String"
+    },
+    {
+      "Attribute": "startDate",
+      "Description": "Required. The start date (UTC) of the tournament calendar",
+      "Required": true,
+      "Type": "Date - in the format: YYYY-MM-DDZ"
+    },
+    {
+      "Attribute": "endDate",
+      "Description": "Required. The end date (UTC) of the tournament calendar",
+      "Required": true,
+      "Type": "Date - in the format: YYYY-MM-DDZ"
+    },
+    {
+      "Attribute": "name (JSON only)",
+      "Description": "Required. Name of the tournament calendar",
+      "Required": true,
+      "Type": "String"
+    }
+  ]
+}

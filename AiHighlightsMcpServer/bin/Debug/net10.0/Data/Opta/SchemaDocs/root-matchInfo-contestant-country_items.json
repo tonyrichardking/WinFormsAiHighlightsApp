@@ -1,0 +1,19 @@
+﻿{
+  "Nesting": "root-matchInfo-contestant-country_items",
+  "Description": "Optional. Root element of the fields related to a contestant - this element is optional (it may not always be returned in the feed). Value (XML only): String giving the country name",
+  "Required": false,
+  "attributes": [
+    {
+      "Attribute": "id",
+      "Description": "Required. Unique ID (UUID) of the country the contestant is from",
+      "Required": true,
+      "Type": "String (Alphanumeric - UUID)"
+    },
+    {
+      "Attribute": "name (JSON only)",
+      "Description": "Required. Name of the country",
+      "Required": true,
+      "Type": "String"
+    }
+  ]
+}

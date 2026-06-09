@@ -1,0 +1,19 @@
+﻿{
+  "Nesting": "root-liveData-matchDetails-scores-ft",
+  "Description": "Required. Root element of the fields related to the full-time (second half) scores",
+  "Required": true,
+  "attributes": [
+    {
+      "Attribute": "home",
+      "Description": "Required. The full-time score of the home team",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "away",
+      "Description": "Required. The full-time score of the away team",
+      "Required": true,
+      "Type": "Integer"
+    }
+  ]
+}

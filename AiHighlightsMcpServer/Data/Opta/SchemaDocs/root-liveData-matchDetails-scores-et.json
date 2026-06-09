@@ -1,0 +1,19 @@
+﻿{
+  "Nesting": "root-liveData-matchDetails-scores-et",
+  "Description": "Optional. Root element of the fields related to the extra half scores.",
+  "Required": false,
+  "attributes": [
+    {
+      "Attribute": "home",
+      "Description": "Required. The extra-time score of the home team",
+      "Required": true,
+      "Type": "Integer"
+    },
+    {
+      "Attribute": "away",
+      "Description": "Required. The extra-time score of the away team",
+      "Required": true,
+      "Type": "Integer"
+    }
+  ]
+}
