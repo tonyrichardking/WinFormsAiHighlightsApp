@@ -5,8 +5,6 @@ using System.Globalization;
 using System.Text.Json;
 using TestServices;
 using static ContentExtraction.Ma3JsonClasses;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 namespace ContentExtraction
 {
     /// <summary>
@@ -14,32 +12,6 @@ namespace ContentExtraction
     /// </summary>
     public class SportsFeedProcessorToolHelpers
     {
-        // https://stackoverflow.com/a/19140420
-        public static class xJsonHelper
-        {
-            public static object Deserialize(string json)
-            {
-                return ToObject(JToken.Parse(json));
-            }
-
-            public static object ToObject(JToken token)
-            {
-                switch (token.Type)
-                {
-                    case JTokenType.Object:
-                        return token.Children<JProperty>()
-                                    .ToDictionary(prop => prop.Name,
-                                                  prop => ToObject(prop.Value));
-
-                    case JTokenType.Array:
-                        return token.Select(ToObject).ToList();
-
-                    default:
-                        return ((JValue)token).Value;
-                }
-            }
-        }
-
         public static class JsonHelper
         {
             public static object Deserialize(string json)
@@ -293,49 +265,7 @@ namespace ContentExtraction
             return jsonString;
         }
 
-        /*
-
-        internal static List<Dictionary<string, string>> ReadSportFeedAttributesForNestingAndAttributeName(string nesting, List<string> wantedAttributes)
-        {
-            string feedFilePath = @"C:\Projects\Experiments_2025\FunWithMCP\Ollama\OllamaMcpWebHttpDemo\OllamaMcpWebHttpDemo\MCPServer\Data\Opta\MA3Match Events\2_OptaEventsMA3_ManUnited-NottForest.json";
-
-            List<Dictionary<string, string>> attributeValues = readSportFeedAttributes(feedFilePath, nesting, wantedAttributes);
-
-            return attributeValues;
-        }
-
-        */
-
         // private helper methods returning Json strings for specific items based on nesting and id
-
-        private static List<Dictionary<string, string>> readSportFeedAttributes(string filePath, string nesting, List<string> wantedAttributes)
-        {
-            object resultJson = readSportFeedItemsForNesting(filePath, nesting);
-            string jsonString = JsonSerializer.Serialize(resultJson, new JsonSerializerOptions { WriteIndented = true });
-            var jsonDicts = JsonSerializer.Deserialize<List<Dictionary<string, object>>>(jsonString);
-
-            List<Dictionary<string, string>> attributeValues = new List<Dictionary<string, string>>();
-            foreach (var jsonDict in jsonDicts)
-            {
-                // collect the wanted attributes and their values if they exist and write into the attributeValues dictionary
-                Dictionary<string, string> wantedAttributeValues = new Dictionary<string, string>();
-                foreach (var attribute in wantedAttributes)
-                {
-                    if (jsonDict.ContainsKey(attribute) && jsonDict[attribute] != null)
-                    {
-                        var unwrapped = Unwrap(jsonDict[attribute]);
-                        wantedAttributeValues[attribute] = unwrapped?.ToString();
-                    }
-                    else
-                    {
-                        wantedAttributeValues[attribute] = null;
-                    }
-                }
-                attributeValues.Add(wantedAttributeValues);
-            }
-
-            return attributeValues;
-        }
 
         private static string readSportFeedItemsJsonText(string filePath, string nesting)
         {

@@ -83,20 +83,6 @@ namespace WinFormsApp1
             Application.Run(MainForm);
         }
 
-        public static void StartFFplay(string videoFilePath)
-        {
-            Process process = new Process();
-
-            process.StartInfo.FileName = videoFilePath;                 // Specify the path to your .bat file
-            process.StartInfo.UseShellExecute = false;                  // Do not use the shell to start the process
-            process.StartInfo.RedirectStandardOutput = true;            // Redirect output if needed
-            process.StartInfo.CreateNoWindow = true;                    // Do not create a window
-
-            process.Start(); // Start the process
-            string output = process.StandardOutput.ReadToEnd();         // Read the output if redirected
-            process.WaitForExit();                                      // Wait for the process to finish
-        }
-
         // https://stackoverflow.com/questions/2196097/elegant-log-window-in-winforms-c-sharp
         public static void LogToForm(string message)
         {

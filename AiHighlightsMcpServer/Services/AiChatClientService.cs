@@ -83,20 +83,6 @@ public class AiChatClientService : IAsyncDisposable
                 { "Sports", getSportsPrompt() }
             };
 
-    public static List<string> AvailableCommands = new List<string>
-            {
-                "commands - Show commands",
-                "exit - Exit the application",
-                "quit - Exit the application",
-                "model - Change the Ollama model",
-                "think - Toggle Thinking",
-                "temp - Set the LLMs temperature",
-                "tools - Toggle use tools on/off",
-                "function - Toggle function call display on/off",
-                "system - Change the system prompt. System messages give the model instructions about formality, technical language, or industry-specific terms.",
-                "history - Show the chat history",
-            };
-
     public static IList<McpClientTool>? AvailableTools { get; private set; }
 
     public static List<string>? AvailableModels { get; private set; }
@@ -115,7 +101,6 @@ public class AiChatClientService : IAsyncDisposable
         public string Vendor { get; set; }
         public bool SupportsTools { get; set; }
         public bool SupportsThinking { get; set; }
-        public object? SupportedThoughtLevels { get; set; }
         public bool IsLocalOllama { get; set; }
 
         public McpModel(string name, string vendor, string description, bool supportsFunctionInvocation, bool supportsThinking, bool isLocalOllama)
@@ -297,17 +282,6 @@ public class AiChatClientService : IAsyncDisposable
         SetModel(chosenModel);
         useTools = theChosenModel.SupportsTools;
         (chatClient, chatOptions) = buildChatClient(ollamaEndPoint, AvailableTools, theChosenModel, useTools, thinking, llmTemperature);
-    }
-
-    public string GetPromptMessage()
-    {
-        return ($"" +
-            $"\n- Using {theChosenModel.ToString()}." +
-            $"\n- Use thinking is set to {thinking}." +
-            $"\n- Temperature is set to {(llmTemperature.HasValue ? llmTemperature.Value.ToString() : "null")}." +
-            $"\n- Tool usage is set to {useTools}." +
-            $"\n- Show function invocation is set to {showFunctionInvocation}." +
-            $"\n- System Prompt is set to '{systemPrompt.Key}'.");
     }
 
     public static McpModel GetOllamaModelForName(string model)

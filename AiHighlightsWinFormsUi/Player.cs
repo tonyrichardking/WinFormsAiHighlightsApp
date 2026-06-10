@@ -7,24 +7,6 @@ namespace WinFormsApp1
 {
     public class Player
     {
-        public static void xPlayVideo(string videoFilePath)
-        {
-            var ffplayProcess = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "ffplay",
-                    Arguments = videoFilePath,
-                    //RedirectStandardError = true,
-                    //RedirectStandardOutput = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = false
-                }
-            };
-
-            ffplayProcess.Start();
-        }
-
         public static void PlayVideoFromShell(string videoFilePath)
         {
             Program.LogToForm("Playing video from shell: " + videoFilePath);
