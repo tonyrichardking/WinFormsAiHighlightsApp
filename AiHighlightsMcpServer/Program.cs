@@ -1,12 +1,8 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.EventLog;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using TestServices;
-using WindowsService.Services;
 
 namespace WebApplication1
 {
@@ -45,7 +41,7 @@ namespace WebApplication1
             // IHostedService is specifically designed for background tasks that run independently of user
             // interactions. It allows applications to perform operations like data processing, scheduled jobs,
             // or handling system events in the background.
-            builder.Services.AddHostedService<SystemConfigurationService>();
+            //builder.Services.AddHostedService<SystemConfigurationService>();
 
             // The Singleton design pattern ensures that a class has only one instance throughout the application's
             // lifetime. This is useful for shared resources like configuration settings or logging services
