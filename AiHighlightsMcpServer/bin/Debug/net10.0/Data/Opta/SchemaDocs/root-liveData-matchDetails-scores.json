@@ -1,6 +1,0 @@
-﻿{
-  "Nesting": "root-liveData-matchDetails-scores",
-  "Description": "Required. Root element of the fields related to scores\nAttributes list is empty (element only)\n\u003Cht\u003E\u003Cht\u003E",
-  "Required": true,
-  "attributes": []
-}
