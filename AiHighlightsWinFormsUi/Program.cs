@@ -14,7 +14,7 @@ namespace WinFormsApp1
 
         public static Form1 MainForm { get; private set; }
 
-        public static string exampleClipDefinitionJson { get; private set; }
+        public static string ExampleClipDefinitionJson { get; private set; }
 
         public class HghlightsDefinition()
         {
@@ -68,7 +68,7 @@ namespace WinFormsApp1
                 Detail = "Benjamin Šeško. scores Man U's first goal."
             });
 
-            exampleClipDefinitionJson = JsonSerializer.Serialize(Highlights, new JsonSerializerOptions() { WriteIndented = true });
+            ExampleClipDefinitionJson = JsonSerializer.Serialize(Highlights, new JsonSerializerOptions() { WriteIndented = true });
 
             // -----------------------------------------------------------
 

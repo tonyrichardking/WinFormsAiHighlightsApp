@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging.EventLog;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using AiHighlightsMcpServer.Services;
 using TestServices;
 
 namespace WebApplication1
@@ -47,6 +48,10 @@ namespace WebApplication1
             // lifetime. This is useful for shared resources like configuration settings or logging services
             builder.Services.AddSingleton<Ma3FeedDataProviderService>();
             builder.Services.AddSingleton<AiChatClientService>();
+
+            var sidecarPath = builder.Configuration["MediaSidecarPath"];
+            if (!string.IsNullOrWhiteSpace(sidecarPath) && File.Exists(sidecarPath))
+                builder.Services.AddSingleton(MediaTimeMapper.FromSidecarFile(sidecarPath));
 
             // If you have an MCP client hosted service you want to run in the same process, enable it.
             // builder.Services.AddHostedService<TestMcpClientHostedService>();
@@ -98,7 +103,7 @@ namespace WebApplication1
                 })
                 //.WithHttpTransport(options =>
                 //{
-                //    // Common options — adjust names to match your ModelContextProtocol package's option model:
+                //    // Common options ï¿½ adjust names to match your ModelContextProtocol package's option model:
                 //    // - BasePath or PathBase: the request path segment the MCP endpoint listens on
                 //    // - ListenUrls/Address: optional; we configured Kestrel above via UseUrls
                 //    options.PathBase = "/mcp"; // requests will be POSTed to http://localhost:5252/mcp (change as needed)

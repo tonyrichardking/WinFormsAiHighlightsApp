@@ -134,7 +134,7 @@ namespace WinFormsApp1
                 File.Delete(file);
             }
 
-            SubClipper.MakeClips(sourceVideoFilePath, Program.OutputClipDirPath, Program.exampleClipDefinitionJson);
+            SubClipper.MakeClips(sourceVideoFilePath, Program.OutputClipDirPath, Program.ExampleClipDefinitionJson);
             SubClipper.AssembleClips(Directory.GetFiles(Program.OutputClipDirPath, "*.mp4").ToList(), Program.OutputHighlightsDirPath);
         }
 
