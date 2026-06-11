@@ -31,7 +31,7 @@ public class MediaTimeMapConfig
     /// real elapsed seconds. Measure using a media player.
     /// Periods not listed here are treated as zero-duration stubs (e.g. ET when not played).
     /// </summary>
-    public Dictionary<int, int> PeriodDurationsSeconds { get; set; } = new();
+    public Dictionary<int, int> MediaPeriodDurationsMapSeconds { get; set; } = new();
 
     /// <summary>
     /// The Opta timeMin value at which each period's clock begins.
@@ -39,7 +39,7 @@ public class MediaTimeMapConfig
     ///   P1 = 0, P2 = 45, ET first half (P3) = 90, ET second half (P4) = 105, Penalties (P5) = 120
     /// Override here if your feed uses a different convention.
     /// </summary>
-    public Dictionary<int, int> PeriodStartMinutes { get; set; } = new()
+    public Dictionary<int, int> OptaPeriodStartMapMinutes { get; set; } = new()
     {
         { 1,   0 },
         { 2,  45 },
@@ -92,7 +92,7 @@ public class MediaTimeMapper
     /// <param name="timeSec">Opta timeSec (0–59)</param>
     public MediaTimecode OptaToMediaTime(int period, int timeMin, int timeSec)
     {
-        if (!_config.PeriodStartMinutes.TryGetValue(period, out int periodStartMinute))
+        if (!_config.OptaPeriodStartMapMinutes.TryGetValue(period, out int periodStartMinute))
             throw new ArgumentOutOfRangeException(nameof(period), $"Unknown period: {period}");
 
         // Opta offset in seconds from the start of this period
@@ -128,7 +128,7 @@ public class MediaTimeMapper
     {
         int total = 0;
         for (int p = 1; p < period; p++)
-            total += _config.PeriodDurationsSeconds.GetValueOrDefault(p, 0);
+            total += _config.MediaPeriodDurationsMapSeconds.GetValueOrDefault(p, 0);
         return total;
     }
 
