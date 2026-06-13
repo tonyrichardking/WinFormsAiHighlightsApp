@@ -2,6 +2,7 @@
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
+using System.Text.Json;
 using System.Xml.Linq;
 using static ContentExtraction.Ma3JsonClasses;
 using static ContentExtraction.SportsFeedProcessorToolHelpers;
@@ -145,12 +146,18 @@ namespace MCPServer.MCPTools
 
         [McpServerTool(Name = "readSportFeed"), Description("Takes as parameters " +
             "1. a Nesting value string in the form 'level1-level2-...',  " +
-            "2. (optional, default null) a list of the names of the attributes that should be returned, " +
-            "3. (optional, default null) a Dictionary<string, object> containing values for these attributes if they exist, " +
-            "and returns either a list of Dictionary<string, object> that contain the bindings for the wanted attributes, " +
-            "or a message for the AI assistantindicating that filtering is required for large results.")]
-        public static async Task<object> ReadSportFeed(string nesting, Dictionary<string, object>? bindings = null, List<string>? wantedAttributes = null)
+            "2. (optional, default \"\") a JSON string encoding a Dictionary<string, object> of attribute name/value pairs to filter by, " +
+            "3. (optional, default null) a list of the names of the attributes that should be returned, " +
+            "and returns either a list of Dictionary<string, object> that contain the wanted attributes, " +
+            "or a message for the AI assistant indicating that filtering is required for large results.")]
+        public static async Task<object> ReadSportFeed(string nesting, string bindingsJson = "", List<string>? wantedAttributes = null)
         {
+            // Deserialise the bindings JSON string supplied by the model.
+            // Empty string means no filter (equivalent to the previous null default).
+            Dictionary<string, object>? bindings = string.IsNullOrWhiteSpace(bindingsJson)
+                ? null
+                : JsonSerializer.Deserialize<Dictionary<string, object>>(bindingsJson);
+
             // TODO: don't want these baked into the code
             if (bindings == null && (nesting == "root-liveData" || nesting == "root-liveData-event_items" || nesting == "root-liveData-event-qualifier_items"))
             {
@@ -165,15 +172,9 @@ namespace MCPServer.MCPTools
             List<Dictionary<string, object>>? result = SportsFeedProcessorToolHelpers.FilterHelpers.FilterByAttribute(deserializedObjects, bindings, wantedAttributes, 200);
 
             Console.WriteLine("\n******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************");
-            Console.WriteLine($"\n Parameter nesting = {nesting}, Item Count = {result?.Count}");
 
-            string bindingsMessage = bindings == null
-                ? "null"
-                : string.Join(",", System.Linq.Enumerable.Select(bindings.Values, v => v?.ToString() ?? ""));
-                
-            string wantedAttributesMessage = wantedAttributes == null
-                ? "null"
-                : string.Join(",", wantedAttributes);
+            string bindingsMessage = string.IsNullOrWhiteSpace(bindingsJson) ? "null" : bindingsJson;
+            string wantedAttributesMessage = wantedAttributes == null ? "null" : string.Join(",", wantedAttributes);
 
             Console.WriteLine($"\n Parameter nesting = {nesting}, Item Count = {result?.Count}, " +
                 $"bindings = {bindingsMessage}, " +
