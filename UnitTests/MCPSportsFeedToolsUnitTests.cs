@@ -41,7 +41,7 @@ namespace UnitTests
                 = SportsFeedProcessorTools.ReadSportFeed(
                     "root-liveData-event_items",
                     bindingsJson: """{"typeId": 16}""",
-                    wantedAttributes: new List<string> { "typeId", "playerName", "timeMin", "timeSec", "periodId" }).Result;
+                    wantedAttributesJson: """["typeId","playerName","timeMin","timeSec","periodId"]""").Result;
 
             Assert.IsNotNull(wantedItems);
         }
@@ -49,8 +49,8 @@ namespace UnitTests
         [TestMethod]
         public void TestSportFeedQueries()
         {
-            var wantedLiveDataEventAttributes = new List<string> { "playerName", "timeMin", "timeSec", "periodId" };
-            const string liveDataEventBindingsJson = """{"typeId": "16"}""";
+            const string liveDataEventBindingsJson       = """{"typeId": "16"}""";
+            const string wantedLiveDataEventAttributesJson = """["playerName","timeMin","timeSec","periodId"]""";
 
             // liveData unfiltered
             object sportFeedLiveData = SportsFeedProcessorTools.ReadSportFeed("root-liveData").Result;
@@ -59,11 +59,11 @@ namespace UnitTests
 
             // liveData filtered
             object sportFeedLiveDataFiltered
-                = SportsFeedProcessorTools.ReadSportFeed("root-liveData", bindingsJson: liveDataEventBindingsJson, wantedAttributes: wantedLiveDataEventAttributes).Result;
+                = SportsFeedProcessorTools.ReadSportFeed("root-liveData", bindingsJson: liveDataEventBindingsJson, wantedAttributesJson: wantedLiveDataEventAttributesJson).Result;
             object sportFeedLiveDataEventFiltered
-                = SportsFeedProcessorTools.ReadSportFeed("root-liveData-event_items", bindingsJson: liveDataEventBindingsJson, wantedAttributes: wantedLiveDataEventAttributes).Result;
+                = SportsFeedProcessorTools.ReadSportFeed("root-liveData-event_items", bindingsJson: liveDataEventBindingsJson, wantedAttributesJson: wantedLiveDataEventAttributesJson).Result;
             object sportFeedLiveDataQualifiersFiltered
-                = SportsFeedProcessorTools.ReadSportFeed("root-liveData-event-qualifier_items", bindingsJson: liveDataEventBindingsJson, wantedAttributes: wantedLiveDataEventAttributes).Result;
+                = SportsFeedProcessorTools.ReadSportFeed("root-liveData-event-qualifier_items", bindingsJson: liveDataEventBindingsJson, wantedAttributesJson: wantedLiveDataEventAttributesJson).Result;
 
             // liveData-matchDetails
             object sportFeedLiveDataMatchDetails = SportsFeedProcessorTools.ReadSportFeed("root-liveData-matchDetails").Result;

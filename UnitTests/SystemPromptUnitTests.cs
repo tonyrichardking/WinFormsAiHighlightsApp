@@ -62,7 +62,26 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public async Task TestSystemPrompt()
+        public async Task TestTextPrompt()
+        {
+            await theAiChatClientService.InitialiseApi();
+            AiChatController chatController = new AiChatController(theAiChatClientService);
+
+            var actionResult = await chatController.RunPrompt("Hello.  Please introduce yourself");
+
+            // LLM responses are non-deterministic so we assert structure, not content.
+            var okResult = actionResult as Microsoft.AspNetCore.Mvc.OkObjectResult;
+            Assert.IsNotNull(okResult, "Expected an OkObjectResult from the controller");
+
+            var responseText = okResult.Value as string;
+            Assert.IsFalse(string.IsNullOrWhiteSpace(responseText),
+                "Expected a non-empty text response from the model");
+
+            Debug.WriteLine($"\nResponse:\n{responseText}");
+        }
+
+        [TestMethod]
+        public async Task TestStructuredPrompt()
         {
             string json = ExampleStructuredRequestJson.json;
 
