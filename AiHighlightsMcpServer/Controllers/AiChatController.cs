@@ -12,7 +12,7 @@
     [Route("[controller]")]
     public class AiChatController : ControllerBase
     {
-        public class putParameter 
+        public class PutParameter 
         { 
             public string Value { get; set; }
         }
@@ -71,7 +71,7 @@
 
         // PUT: aiChat/setModel?model=MODEL_NAME
         [HttpPut("setModel", Name = "SetModel")]
-        public async Task<IActionResult> SetModel([FromBody] putParameter param)
+        public async Task<IActionResult> SetModel([FromBody] PutParameter param)
         {
             aiChatService.SetModelByName(param.Value);
             return Ok();
@@ -79,7 +79,7 @@
 
         // PUT: aiChat/setSystemPrompt?prompt=PROMPT_NAME
         [HttpPut("setSystemPrompt", Name = "SetSystemPrompt")]
-        public async Task<IActionResult> SetSystemPrompt([FromBody] putParameter param)
+        public async Task<IActionResult> SetSystemPrompt([FromBody] PutParameter param)
         {
             aiChatService.SetSystemPromptByName(param.Value);
             return Ok();

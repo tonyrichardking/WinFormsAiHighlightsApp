@@ -15,6 +15,7 @@ using AiHighlightsWinFormsUi;
 using OllamaMcpWebServer.Controllers;
 using System.Diagnostics;
 using System.Text.Json;
+using static OllamaMcpWebServer.Controllers.AiChatController;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -25,8 +26,7 @@ namespace UnitTests
     public class SystemPromptUnitTests
     {
         AiChatClientService theAiChatClientService = new AiChatClientService();
-
-        AiChatClient theAiChatClient = new AiChatClient(new HttpClient() { BaseAddress = new Uri("http://localhost:11190/aiChat/") });
+        AiChatController theAiChatController;
 
         //------------------------------------------------------------------------------
         [ClassCleanup]
@@ -52,6 +52,11 @@ namespace UnitTests
             {
                 Assert.Inconclusive("MCP server not reachable on :11190 — start it before running integration tests.");
             }
+
+
+            await theAiChatClientService.InitialiseApi();
+            theAiChatController = new AiChatController(theAiChatClientService);
+            var modelResult = await theAiChatController.SetModel(new PutParameter { Value = "Claude" });     // gpt-oss:latest
         }
 
         //------------------------------------------------------------------------------
@@ -64,10 +69,7 @@ namespace UnitTests
         [TestMethod]
         public async Task TestTextPrompt()
         {
-            await theAiChatClientService.InitialiseApi();
-            AiChatController chatController = new AiChatController(theAiChatClientService);
-
-            var actionResult = await chatController.RunPrompt("Hello.  Please introduce yourself");
+            var actionResult = await theAiChatController.RunPrompt("Hello.  Please introduce yourself");
 
             // LLM responses are non-deterministic so we assert structure, not content.
             var okResult = actionResult as Microsoft.AspNetCore.Mvc.OkObjectResult;
@@ -89,10 +91,7 @@ namespace UnitTests
                 JsonSerializer.Deserialize<StructuredPromptRequest>(json)
                 ?? throw new InvalidOperationException("Empty payload.");
 
-            await theAiChatClientService.InitialiseApi();
-            AiChatController chatController = new AiChatController(theAiChatClientService);
-
-            var actionResult = await chatController.RunStructuredPrompt(structuredRequest);
+            var actionResult = await theAiChatController.RunStructuredPrompt(structuredRequest);
 
             // LLM responses are non-deterministic so we assert structure, not content.
             var okResult = actionResult as Microsoft.AspNetCore.Mvc.OkObjectResult;

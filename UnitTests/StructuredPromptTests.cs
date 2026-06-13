@@ -200,7 +200,7 @@ public class AiChatControllerTests
     public async Task SetModel_ReturnsOk()
     {
         var (controller, _) = MakeController();
-        var result = await controller.SetModel(new AiChatController.putParameter { Value = "llama3.2:latest" });
+        var result = await controller.SetModel(new AiChatController.PutParameter { Value = "llama3.2:latest" });
 
         Assert.IsInstanceOfType<OkResult>(result);
     }
@@ -209,7 +209,7 @@ public class AiChatControllerTests
     public async Task SetModel_PassesModelNameToService()
     {
         var (controller, stub) = MakeController();
-        await controller.SetModel(new AiChatController.putParameter { Value = "deepseek-r1:latest" });
+        await controller.SetModel(new AiChatController.PutParameter { Value = "deepseek-r1:latest" });
 
         Assert.AreEqual("deepseek-r1:latest", stub.LastSetModelName);
     }
@@ -222,7 +222,7 @@ public class AiChatControllerTests
     public async Task SetSystemPrompt_ReturnsOk()
     {
         var (controller, _) = MakeController();
-        var result = await controller.SetSystemPrompt(new AiChatController.putParameter { Value = "Sports" });
+        var result = await controller.SetSystemPrompt(new AiChatController.PutParameter { Value = "Sports" });
 
         Assert.IsInstanceOfType<OkResult>(result);
     }
@@ -231,7 +231,7 @@ public class AiChatControllerTests
     public async Task SetSystemPrompt_PassesPromptNameToService()
     {
         var (controller, stub) = MakeController();
-        await controller.SetSystemPrompt(new AiChatController.putParameter { Value = "Helpful" });
+        await controller.SetSystemPrompt(new AiChatController.PutParameter { Value = "Helpful" });
 
         Assert.AreEqual("Helpful", stub.LastSetSystemPromptName);
     }
