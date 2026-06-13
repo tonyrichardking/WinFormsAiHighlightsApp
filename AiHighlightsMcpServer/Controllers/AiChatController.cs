@@ -1,8 +1,11 @@
 ﻿namespace OllamaMcpWebServer.Controllers
 {
     using MCPServer.MCPTools;
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
+    using ModelContextProtocol.Protocol;
     using ModelContextProtocol.Server;
+    using System.Net.NetworkInformation;
     using TestServices;
 
     [ApiController]
@@ -14,9 +17,9 @@
             public string Value { get; set; }
         }
 
-        private readonly AiChatClientService aiChatService;
+        private readonly IAiChatClientService aiChatService;
 
-        public AiChatController(AiChatClientService aiChatService)
+        public AiChatController(IAiChatClientService aiChatService)
         {
             this.aiChatService = aiChatService;
         }
@@ -80,6 +83,18 @@
         {
             aiChatService.SetSystemPromptByName(param.Value);
             return Ok();
+        }
+
+        // POST: MdcApi/runQuery
+        [EnableCors]
+        [HttpPost("runStructuredPrompt", Name = "RunStructuredPrompt")]
+        public async Task<IActionResult> RunStructuredPrompt([FromBody] StructuredPromptRequest structuredPromptRequest)
+        {
+            string result = await aiChatService.RunStructuredPrompt(structuredPromptRequest);
+
+            //return new RunQueryPlayersResponseDto.Root { errorMessage = ConfigurationNotFinishedErrorMessage };
+
+            return Ok(result);
         }
     }
 }

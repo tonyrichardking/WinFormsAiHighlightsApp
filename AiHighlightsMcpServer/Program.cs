@@ -47,7 +47,7 @@ namespace WebApplication1
             // The Singleton design pattern ensures that a class has only one instance throughout the application's
             // lifetime. This is useful for shared resources like configuration settings or logging services
             builder.Services.AddSingleton<Ma3FeedDataProviderService>();
-            builder.Services.AddSingleton<AiChatClientService>();
+            builder.Services.AddSingleton<IAiChatClientService, AiChatClientService>();
 
             var sidecarPath = builder.Configuration["MediaSidecarPath"];
             if (!string.IsNullOrWhiteSpace(sidecarPath) && File.Exists(sidecarPath))

@@ -6,12 +6,13 @@
 using Anthropic;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol.Client;
+using OllamaMcpWebServer.Controllers;
 using OllamaSharp;
 using OllamaSharp.Models;
 using System.Text;
 using ChatRole = Microsoft.Extensions.AI.ChatRole;
 
-public class AiChatClientService : IAsyncDisposable
+public class AiChatClientService : IAiChatClientService, IAsyncDisposable
 {
     public AiChatClientService()
     {
@@ -122,6 +123,11 @@ public class AiChatClientService : IAsyncDisposable
     #endregion
 
     #region public methods
+
+    public async Task<string> RunStructuredPrompt(StructuredPromptRequest structuredPromptRequest)
+    {
+        return await RunPrompt(structuredPromptRequest.StructuredPrompt.UserPrompt.UserInput);
+    }
 
     /// <summary>
     /// Main prompt loop method. Takes an API call as a string, sends it to the model, and returns the response as a string. 
