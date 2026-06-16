@@ -189,7 +189,7 @@ namespace ContentExtraction
         {
             // read the schema index Json and return it as a string.
 
-            string filePath = @"C:\Projects\Experiments_2025\FunWithMCP\Ollama\ContentExtraction\5. OptaMA3Map\EventMap.json";
+            string filePath = AppPaths.EventMapPath;
 
             string jsonString = File.ReadAllText(filePath, System.Text.Encoding.UTF8);
 
@@ -213,7 +213,7 @@ namespace ContentExtraction
         {
             // read the schema index Json and return it as a string.
 
-            string filePath = @"C:\Projects\Experiments_2025\FunWithMCP\Ollama\ContentExtraction\5. OptaMA3Map\QualifierMap.json";
+            string filePath = AppPaths.QualifierMapPath;
             string jsonString = File.ReadAllText(filePath, System.Text.Encoding.UTF8);
 
             return jsonString;
@@ -223,7 +223,7 @@ namespace ContentExtraction
         {
             // read the schema index Json and return it as a string.
 
-            string filePath = @"C:\Projects\Experiments_2025\FunWithMCP\Ollama\ContentExtraction\5. OptaMA3Map\SchemaIndex.json";
+            string filePath = AppPaths.SchemaIndexPath;
 
             string jsonString = File.ReadAllText(filePath, System.Text.Encoding.UTF8);
 
@@ -236,8 +236,7 @@ namespace ContentExtraction
             // e.g. root-matchInfo-contestant-item -> <schema document directory>/root-matchInfo-contestant-item.json,
             // read the Json and return it as a string.
 
-            string filePath =
-                Path.Combine(@"C:\Projects\Experiments_2025\FunWithMCP\Ollama\ContentExtraction\4. OptaMa3SchemaDocs", nesting) + ".json";
+            string filePath = Path.Combine(AppPaths.SchemaDocsDir, nesting) + ".json";
 
             string jsonString = File.ReadAllText(filePath, System.Text.Encoding.UTF8);
 
@@ -246,21 +245,14 @@ namespace ContentExtraction
 
         internal static string readSportFeedForNesting(string nesting)
         {
-            string feedFilePath = @"C:\Projects\Experiments_2026\FunWithAiSoccerHighlights\ManU v Brighton Media\MA3 Manchester United vs Brighton & Hove Albion.json";
-
-            // why is this resource inaccessible due to it' protection level? It's public and the file path is correct. For now, hardcode the file path here instead of using the Resource reference.
-            //string feedFilePath1 = Resource.Filepath_MA3_ManU_v_Brighton;
-
-            string jsonString = readSportFeedItemsJsonText(feedFilePath, nesting);
+            string jsonString = readSportFeedItemsJsonText(AppPaths.FeedFilePath, nesting);
 
             return jsonString;
         }
 
         internal static string readSportFeedForNestingAndId(string nesting, object id)
         {
-            string feedFilePath = @"C:\Projects\Experiments_2025\FunWithMCP\Ollama\OllamaMcpWebHttpDemo\OllamaMcpWebHttpDemo\MCPServer\Data\Opta\MA3Match Events\2_OptaEventsMA3_ManUnited-NottForest.json";
-
-            string jsonString = readSportFeedItemJsonText(feedFilePath, nesting, id);
+            string jsonString = readSportFeedItemJsonText(AppPaths.FeedFilePath, nesting, id);
 
             return jsonString;
         }

@@ -2,6 +2,7 @@ using AiHighlightsWinFormsUi;
 using System.Text;
 using System.Text.Json;
 using static System.Net.Mime.MediaTypeNames;
+using AiHighlightsMcpServer.Prompt_Engineering;
 
 namespace WinFormsApp1
 {
@@ -140,7 +141,7 @@ namespace WinFormsApp1
 
         private void btnPlayHighlights_Click(object sender, EventArgs e)
         {
-            Player.PlayVideoFromShell(@"C:\Projects\Experiments_2026\FunWithAiSoccerHighlights\Run_FFPlay.bat");
+            Player.PlayVideoFromShell(Program.FfPlayBatPath);
         }
 
         private async void btnStartChat_Click(object sender, EventArgs e)
@@ -158,15 +159,47 @@ namespace WinFormsApp1
 
         private async void TxtInput_KeyDown(object? sender, KeyEventArgs e)
         {
+            string text = txtInput.Text.Trim();
+
             if (e.KeyCode == Keys.Enter && !e.Shift)
             {
                 e.SuppressKeyPress = true;
 
-                string text = txtInput.Text.Trim();
                 AppendUserMessageToChatOutput(text);
                 txtInput.Clear();
 
                 string completion = await theAiChatClient.SendMessageAsync("runPrompt", text);
+                AppendAssistantMessageToChatOutput(completion);
+            }
+            // if shift key is pressed send a StructuredPromptRequest
+            else if (e.KeyCode == Keys.Enter && e.Shift)
+            {
+                e.SuppressKeyPress = true;
+
+                AppendUserMessageToChatOutput(text);
+                txtInput.Clear();
+
+                var structuredPrompt = new StructuredPromptRequest
+                {
+                    StructuredPrompt = new StructuredPrompt
+                    {
+                        Metadata = new Metadata
+                        {
+                            CreatedDateTime = DateTime.UtcNow,
+                            Guid = Guid.NewGuid()
+                        },
+                        OriginalPrompt = text,
+                        CuratedPrompt = new CuratedPrompt
+                        {
+                            Directive = $"Solve the following question.  {text}",
+                            Context = "This is in the context of a soccer sports match.",
+                            OutputFormat = "Use a plain text list. Format the output as first name, last name, team, position, period, match time in hours:mins:secs.",
+                            Examples = "'Fred Bloggs; Manchester United; Centre Forward; 1st half, 1:15:30",
+                            AssistantFeedback = "Do not feed back any reasoning"
+                        }
+                    }
+                };
+                string completion = await theAiChatClient.SendMessageAsync("runStructuredPrompt", structuredPrompt);
                 AppendAssistantMessageToChatOutput(completion);
             }
         }

@@ -3,13 +3,14 @@
 // https://learn.microsoft.com/en-gb/dotnet/ai/
 //
 
+using AiHighlightsMcpServer.Prompt_Engineering;
 using Anthropic;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol.Client;
-using OllamaMcpWebServer.Controllers;
 using OllamaSharp;
 using OllamaSharp.Models;
 using System.Text;
+using System.Text.Json;
 using ChatRole = Microsoft.Extensions.AI.ChatRole;
 
 public class AiChatClientService : IAiChatClientService, IAsyncDisposable
@@ -126,7 +127,9 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
 
     public async Task<string> RunStructuredPrompt(StructuredPromptRequest structuredPromptRequest)
     {
-        return await RunPrompt(structuredPromptRequest.StructuredPrompt.UserPrompt.UserInput);
+        string structuredPromptJson = PromptUtils.StructuredJsonToTagDelimited(structuredPromptRequest);
+
+        return await RunPrompt(structuredPromptJson);
     }
 
     /// <summary>
@@ -343,11 +346,9 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
         }
     }
 
-
     private static string getSportsPrompt()
     {
-        string prompt = File.ReadAllText(@"C:\Projects\Experiments_2026\FunWithAiSoccerHighlights\WinFormsAiHighlightsApp\AiHighlightsMcpServer\Prompt Engineering\Claude\System Prompt for Claude v2.txt");     
-        //string prompt = Resources.System_Prompt_for_Claude_v2;
+        string prompt = File.ReadAllText(AppPaths.SystemPromptPath);
 
         return prompt;
     }

@@ -44,14 +44,23 @@ namespace WebApplication1
             // or handling system events in the background.
             //builder.Services.AddHostedService<SystemConfigurationService>();
 
+            // Populate AppPaths from configuration before registering services that depend on them.
+            var paths = builder.Configuration.GetSection("Paths");
+            AppPaths.FeedFilePath      = paths["FeedFilePath"]      ?? "";
+            AppPaths.EventMapPath      = paths["EventMapPath"]      ?? "";
+            AppPaths.QualifierMapPath  = paths["QualifierMapPath"]  ?? "";
+            AppPaths.SchemaIndexPath   = paths["SchemaIndexPath"]   ?? "";
+            AppPaths.SchemaDocsDir     = paths["SchemaDocsDir"]     ?? "";
+            AppPaths.SystemPromptPath  = paths["SystemPromptPath"]  ?? "";
+            AppPaths.MediaSidecarPath  = paths["MediaSidecarPath"]  ?? "";
+
             // The Singleton design pattern ensures that a class has only one instance throughout the application's
             // lifetime. This is useful for shared resources like configuration settings or logging services
             builder.Services.AddSingleton<Ma3FeedDataProviderService>();
             builder.Services.AddSingleton<IAiChatClientService, AiChatClientService>();
 
-            var sidecarPath = builder.Configuration["MediaSidecarPath"];
-            if (!string.IsNullOrWhiteSpace(sidecarPath) && File.Exists(sidecarPath))
-                builder.Services.AddSingleton(MediaTimeMapper.FromSidecarFile(sidecarPath));
+            if (!string.IsNullOrWhiteSpace(AppPaths.MediaSidecarPath) && File.Exists(AppPaths.MediaSidecarPath))
+                builder.Services.AddSingleton(MediaTimeMapper.FromSidecarFile(AppPaths.MediaSidecarPath));
 
             // If you have an MCP client hosted service you want to run in the same process, enable it.
             // builder.Services.AddHostedService<TestMcpClientHostedService>();

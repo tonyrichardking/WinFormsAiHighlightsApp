@@ -1,4 +1,5 @@
 using AiHighlightsWinFormsUi;
+using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -6,9 +7,10 @@ namespace WinFormsApp1
 {
     internal static class Program
     {
-        public const string SourceVideoFilePath = @"C:\Projects\Experiments_2026\FunWithAiSoccerHighlights\ManU v Brighton Media\ManU v Brighton 854x480 GOP25.mp4";
-        public const string OutputClipDirPath = @"C:\Projects\Experiments_2026\FunWithAiSoccerHighlights\Clips";
-        public const string OutputHighlightsDirPath = @"C:\Projects\Experiments_2026\FunWithAiSoccerHighlights\Highlights";
+        public static string SourceVideoFilePath    { get; private set; } = "";
+        public static string OutputClipDirPath      { get; private set; } = "";
+        public static string OutputHighlightsDirPath { get; private set; } = "";
+        public static string FfPlayBatPath          { get; private set; } = "";
 
         public static AiChatClient TheAiChatClient { get; private set; }
 
@@ -36,6 +38,17 @@ namespace WinFormsApp1
         [STAThread]
         static void Main()
         {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false)
+                .Build();
+
+            var paths = config.GetSection("Paths");
+            SourceVideoFilePath     = paths["SourceVideoFilePath"]     ?? "";
+            OutputClipDirPath       = paths["OutputClipDirPath"]       ?? "";
+            OutputHighlightsDirPath = paths["OutputHighlightsDirPath"] ?? "";
+            FfPlayBatPath           = paths["FfPlayBatPath"]           ?? "";
+
             // build example clip definition data
 
             HghlightsDefinition Highlights = new HghlightsDefinition()

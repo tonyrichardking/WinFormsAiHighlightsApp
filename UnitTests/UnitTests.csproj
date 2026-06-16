@@ -9,8 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AiHighlightsMcpServer\AiHighlightsMcpServer.csproj" />
     <ProjectReference Include="..\AiHighlightsWinFormsUi\AiHighlightsWinFormsUi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\AiHighlightsMcpServer\appsettings.json" Link="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
