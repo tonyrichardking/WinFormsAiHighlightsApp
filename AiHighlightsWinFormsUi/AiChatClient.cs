@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using AiHighlightsMcpServer.Prompt_Engineering;
 
 namespace AiHighlightsWinFormsUi
 {
@@ -11,7 +12,7 @@ namespace AiHighlightsWinFormsUi
             this.httpClient = httpClient;
         }
 
-        public async Task<string> SendMessageAsync(string endPoint, string message)
+        public async Task<string> SendMessageAsync(string endPoint, object message)
         {
             string request = null;
             string httpVerb = null;
@@ -26,8 +27,13 @@ namespace AiHighlightsWinFormsUi
                     httpVerb = "GET";
                     break;
                 case "runPrompt":
-                    request = $"{endPoint}?prompt={Uri.EscapeDataString(message)}";
+                    request = $"{endPoint}?prompt={Uri.EscapeDataString(message?.ToString() ?? "")}";
                     httpVerb = "GET";
+                    break;
+                case "runStructuredPrompt":
+                    // create a POST request with the structured prompt as JSON in the body
+                    request = $"{endPoint}";
+                    httpVerb = "POST";
                     break;
                 case "setModel":
                 case "setSystemPrompt":
@@ -50,6 +56,18 @@ namespace AiHighlightsWinFormsUi
             {
                 var json = JsonSerializer.Serialize(new { Value = message });
                 using var response = await httpClient.PutAsync(request, new StringContent(json, Encoding.UTF8, "application/json"));
+                response.EnsureSuccessStatusCode();
+                result = await response.Content.ReadAsStringAsync();
+            }
+            else if (httpVerb == "POST")
+            {
+                var json = JsonSerializer.Serialize(message);
+                using var response = await httpClient.PostAsync(request, new StringContent(json, Encoding.UTF8, "application/json"));
+                response.EnsureSuccessStatusCode();
+                result = await response.Content.ReadAsStringAsync();
+            } else if (httpVerb == "DELETE") 
+            {
+                using var response = await httpClient.DeleteAsync(request);
                 response.EnsureSuccessStatusCode();
                 result = await response.Content.ReadAsStringAsync();
             }

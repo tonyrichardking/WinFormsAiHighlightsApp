@@ -1,0 +1,17 @@
+{
+    "structuredPrompt": {
+        "metadata": {
+            "dateTime": "2026-06-12T11:50:35Z",
+            "messageGuid": "035E5253-E7B2-41A8-81D3-7BA70AC889AA",
+            "sequence": 1
+        },
+        "originalPrompt": "Who scored the first goal?",       
+        "curatedPrompt": {
+            "directive": "Solve the following question.  Which player scored the first goal?",
+            "context": "This is in the context of a soccer sports match.",          
+            "outputFormat": "Use a plain text list. Format the output as first name, last name, team, position, period, match time in hours:mins:secs.",
+            "examples": "'Fred Bloggs; Manchester United; Centre Forward; 1st half, 1:15:30",
+            "assistantFeedback": "Feed back all the reasoning used to obtain a result"
+        }
+    }
+}

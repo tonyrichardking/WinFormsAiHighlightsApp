@@ -1,0 +1,86 @@
+{
+    "curatedPromptSchema": {
+        "metadata": {
+            "name": "Metadata Central Prompt Schema",
+            "version": "1",
+            "id": "8C432B3B-1FB0-4999-B5E9-32890A748371",
+            "lastFileUpdateDateTime": "2026-06-13T00:00:00Z",
+            "originalFileCreateDateTime": "2026-06-13T00:00:00Z",
+            "contentChecksum": "2F3D5775-59D0-4B9A-AAE0-9286D4CE3C33"
+        },
+        "content": {
+            "mandatory_Instructions_To_AI_Assistant": {
+                "overview": "This file must be read using a tool, understood, and acted on by an AI Assistant prior to executing every User Prompt",
+                "notes": "This is a prototype for discussion only",
+                "purpose": [
+                    "The purpose of this file is to bridge the semantic gap between language used by different classes of user, and that of the AI Assistant",
+                    "It provides pre-defined 'Curated Prompts' that are chosen by the AI Assistant according to the User Prompt and are appended to the User Prompt",
+                    "There currently are two classes of target user:",
+                    "1. Human users unskilled in writing AI prompts, but who can describe their requirements well enough for the Assistant to select appropriate 'Curated Prompts' from this file",
+                    "2. Software clients who directly reference one or more Curated Prompts using identifiers, and may or may not provide a supplementary natural language prompt"
+                ],
+                "use": [
+                    "The AI Assistant reads the User Prompt then consults this file to clarify the intent of the User, and from this selects one or more 'Curated Prompts'",
+                    "This selection is done by using the curatedPrompts 'description' property to choose the curatedPrompts that most closely match the Users requirements",
+                    "A 'Curated Prompt' is text that augments the User Prompt",
+                    "A 'Curated Prompt' can be either a request or a format",
+                    "A context is the problem that the AI Assistant must solve, or action that it must take to provide a response",
+                    "A format is how the completion is returned, e.g., concise plain text, verbose plain text, image, structured data, etc",
+                    "The final Prompt that the AI Assistant executes is the original User Prompt prepended to a compilation of the selected supplementaryPromptText values with explanatory text to glue them together"
+                ]
+            },
+            "mapping": {
+                "mandatory_Instruction_To_AI_Assistant": "The AI Assistant must consult each 'description' property in the curatedPrompts arrays to discover the one or more items that match the User Prompt most closely.",
+                "curatedPrompts": {
+                    "responseFormats": [
+                        {
+                            "name": "assistantFeedback",
+                            "format": "Plain text.",
+                            "purpose": "Focus on facts, logical order, clarity, and conciseness."
+                        },
+                        {
+                            "name": "expositoryText",
+                            "format": "Plain text.",
+                            "purpose": "Focus on facts, logical order, clarity, and conciseness."
+                        },
+                        {
+                            "name": "descriptiveText",
+                            "format": "Plain text.",
+                            "purpose": "Create a picture through imagery to help the reader visualize scenes, emotions, or experiences."
+                        },
+                        {
+                            "name": "tabular",
+                            "format": "A table",
+                            "purpose": "Row ordering reflects data content, e.g., temporal, magnitude, similarity.  Columns reflect main data properties. UserPrompt provides further guidance."
+                        },
+                        {
+                            "name": "spreadsheet",
+                            "format": "A spreadsheet in .csv format unless indicated otherwise in the user prompt.",
+                            "purpose": "Row ordering reflects data content, e.g., temporal, magnitude, similarity.  Columns reflect main data properties. UserPrompt provides further guidance."
+                        },
+                        {
+                            "name": "ffMpegSubclipping",
+                            "format": "Json.",
+                            "purpose": "Times in hh:mm:ss format of in and out-points of subclips"
+                        },
+                        {
+                            "name": "curatorSubclipping",
+                            "format": "Json.",
+                            "purpose": "Timecodes in SMPTE hh:mm:ss:ff format of in-and out-points of subclips"
+                        },
+                        {
+                            "name": "soccerSpatioTemporal",
+                            "format": "Json.",
+                            "purpose": "Progress of ball towards opposition goal measured in average speed/number of passes. UserPrompt provides further guidance."
+                        },
+                        {
+                            "name": "soccerSpatioTemporal",
+                            "format": "Json.",
+                            "purpose": "Sequences of play extracted and transformed into graph data for loading into Neo4j,"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

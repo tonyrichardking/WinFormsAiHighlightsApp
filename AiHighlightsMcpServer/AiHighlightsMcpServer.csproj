@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\..\..\Users\tking\Downloads\StructuredPromptRequest.cs" Link="Controllers\Dtos\StructuredPromptRequest.cs" />
+    <Compile Include="..\..\..\..\..\Users\tking\Downloads\StructuredPromptRequest.cs" Link="Prompt Engineering\Dtos\StructuredPromptRequest.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,7 +63,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Dtos\" />
+    <Folder Include="Prompt Engineering\Dtos\" />
   </ItemGroup>
 
 </Project>

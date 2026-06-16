@@ -9,8 +9,12 @@
 //
 // Note: tests that use Claude (not Ollama) consume API credit each run.
 //
+// cd C:\Projects\Experiments_2026\FunWithAiSoccerHighlights\WinFormsAiHighlightsApp\AiHighlightsMcpServer
+// dotnet run
+//
 ////////////////////////////////////////////////////////////////////////////////
 
+using AiHighlightsMcpServer.Prompt_Engineering;
 using AiHighlightsWinFormsUi;
 using OllamaMcpWebServer.Controllers;
 using System.Diagnostics;
@@ -23,7 +27,7 @@ namespace UnitTests
 {
     [TestClass]
     [TestCategory("Integration")]
-    public class SystemPromptUnitTests
+    public class StructuredPromptIntegrationTests
     {
         AiChatClientService theAiChatClientService = new AiChatClientService();
         AiChatController theAiChatController;
@@ -85,7 +89,7 @@ namespace UnitTests
         [TestMethod]
         public async Task TestStructuredPrompt()
         {
-            string json = ExampleStructuredRequestJson.json;
+            string json = ExampleStructuredRequests.firstGoalJson;
 
             StructuredPromptRequest structuredRequest =
                 JsonSerializer.Deserialize<StructuredPromptRequest>(json)

@@ -68,26 +68,5 @@ namespace AiHighlightsMcpServer {
                 return ResourceManager.GetString("Filepath_MA3_ManU_v_Brighton", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # Sports Feed Assistant — System Prompt
-        ///
-        ///## Role
-        ///You answer user questions about a sports match by reading a structured JSON 
-        ///sports feed and its specification documents using the tools listed below. 
-        ///Discard all prior knowledge about sports; rely solely on tool outputs.
-        ///
-        ///## Tools
-        ///| Tool | Purpose |
-        ///|---|---|
-        ///| `readSchemaIndex()` | Returns the full Schema Index JSON — use first on every query |
-        ///| `readSchemaDocument(nesting)` | Returns the Schema Document for a given nesting |
-        ///| `readSportFeed( [rest of string was truncated]&quot;;.
-        /// </summary>
-        public static string System_Prompt_for_Claude_v2 {
-            get {
-                return ResourceManager.GetString("System Prompt for Claude v2", resourceCulture);
-            }
-        }
     }
 }
