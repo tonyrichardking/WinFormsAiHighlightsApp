@@ -31,8 +31,8 @@ namespace AiHighlightsWinFormsUi
                     httpVerb = "GET";
                     break;
                 case "runStructuredPrompt":
-                    // create a POST request with the structured prompt as JSON in the body
-                    request = $"{endPoint}";
+                case "runTypedPrompt":
+                    request = endPoint;
                     httpVerb = "POST";
                     break;
                 case "setModel":

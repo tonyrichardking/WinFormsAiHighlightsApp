@@ -171,7 +171,7 @@ namespace WinFormsApp1
                 string completion = await theAiChatClient.SendMessageAsync("runPrompt", text);
                 AppendAssistantMessageToChatOutput(completion);
             }
-            // if shift key is pressed send a StructuredPromptRequest
+            // Shift+Enter: typed prompt — returns a structured GoalScorer result
             else if (e.KeyCode == Keys.Enter && e.Shift)
             {
                 e.SuppressKeyPress = true;
@@ -179,27 +179,8 @@ namespace WinFormsApp1
                 AppendUserMessageToChatOutput(text);
                 txtInput.Clear();
 
-                var structuredPrompt = new StructuredPromptRequest
-                {
-                    StructuredPrompt = new StructuredPrompt
-                    {
-                        Metadata = new Metadata
-                        {
-                            CreatedDateTime = DateTime.UtcNow,
-                            Guid = Guid.NewGuid()
-                        },
-                        OriginalPrompt = text,
-                        CuratedPrompt = new CuratedPrompt
-                        {
-                            Directive = $"Solve the following question.  {text}",
-                            Context = "This is in the context of a soccer sports match.",
-                            OutputFormat = "Use a plain text list. Format the output as first name, last name, team, position, period, match time in hours:mins:secs.",
-                            Examples = "'Fred Bloggs; Manchester United; Centre Forward; 1st half, 1:15:30",
-                            AssistantFeedback = "Do not feed back any reasoning"
-                        }
-                    }
-                };
-                string completion = await theAiChatClient.SendMessageAsync("runStructuredPrompt", structuredPrompt);
+                var typedRequest = new TypedPromptRequest(text, "GoalScorer");
+                string completion = await theAiChatClient.SendMessageAsync("runTypedPrompt", typedRequest);
                 AppendAssistantMessageToChatOutput(completion);
             }
         }
