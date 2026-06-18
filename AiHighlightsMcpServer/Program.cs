@@ -1,8 +1,7 @@
+using AiHighlightsMcpServer.Services;
 using Microsoft.Extensions.Logging.EventLog;
-using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using AiHighlightsMcpServer.Services;
 using TestServices;
 
 namespace WebApplication1
@@ -87,10 +86,11 @@ namespace WebApplication1
                 });
 
                 // Register the Swagger generator, defining one or more Swagger documents
+                // Broken when updated OpenApi package
                 builder.Services.AddSwaggerGen(c =>
                 {
                     // The c.SwaggerDoc and c.SwaggerEndpoint names must agree.  Nobody tells you this!
-                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "MdcApi", Version = "v1" });
+                    //c.SwaggerDoc("v1", new OpenApiInfo { Title = "MdcApi", Version = "v1" });
 
                     // https://stackoverflow.com/questions/46071513/swagger-error-conflicting-schemaids-duplicate-schemaids-detected-for-types-a-a#47306578
                     c.SchemaGeneratorOptions = new SchemaGeneratorOptions { SchemaIdSelector = type => type.FullName };

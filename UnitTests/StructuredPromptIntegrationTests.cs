@@ -85,28 +85,6 @@ namespace UnitTests
 
             Debug.WriteLine($"\nResponse:\n{responseText}");
         }
-
-        [TestMethod]
-        public async Task TestStructuredPrompt()
-        {
-            string json = ExampleStructuredRequests.firstGoalJson;
-
-            StructuredPromptRequest structuredRequest =
-                JsonSerializer.Deserialize<StructuredPromptRequest>(json)
-                ?? throw new InvalidOperationException("Empty payload.");
-
-            var actionResult = await theAiChatController.RunStructuredPrompt(structuredRequest);
-
-            // LLM responses are non-deterministic so we assert structure, not content.
-            var okResult = actionResult as Microsoft.AspNetCore.Mvc.OkObjectResult;
-            Assert.IsNotNull(okResult, "Expected an OkObjectResult from the controller");
-
-            var responseText = okResult.Value as string;
-            Assert.IsFalse(string.IsNullOrWhiteSpace(responseText),
-                "Expected a non-empty text response from the model");
-
-            Debug.WriteLine($"\nResponse:\n{responseText}");
-        }
     }
 }
 

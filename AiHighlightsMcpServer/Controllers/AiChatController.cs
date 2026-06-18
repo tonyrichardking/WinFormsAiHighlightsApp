@@ -61,11 +61,19 @@
             return Ok(result);
         }
 
+        // The shape you want back. With structured output, this record IS the spec —
+        // the framework derives a JSON schema from it and deserialises into it, so
+        // there's no hand-authored JSON and no casing footgun: the type is the contract.
+        public record GoalScorer(string PlayerName, string Team, int Period, int TimeMin, int TimeSec);
+
+        public record GoalsResult(GoalScorer[] Goals);
+
         // GET: aiChat/runPrompt?prompt=hello
         [HttpGet("runPrompt", Name = "RunPrompt")]
         public async Task<IActionResult> RunPrompt([FromQuery] string prompt)
         {
-            string result = await aiChatService.RunPrompt(prompt);
+            string result = await aiChatService.RunPromptUnderTest(prompt);
+            //string result = await aiChatService.RunDebugPrompt(prompt);
 
             return Ok(result);
         }
@@ -89,9 +97,9 @@
         // POST: MdcApi/runQuery
         [EnableCors]
         [HttpPost("runStructuredPrompt", Name = "RunStructuredPrompt")]
-        public async Task<IActionResult> RunStructuredPrompt([FromBody] StructuredPromptRequest structuredPromptRequest)
+        public async Task<IActionResult> RunStructuredPrompt([FromBody] string prompt)
         {
-            string result = await aiChatService.RunStructuredPrompt(structuredPromptRequest);
+            string result = await aiChatService.RunPromptUnderTest(prompt);
 
             //return new RunQueryPlayersResponseDto.Root { errorMessage = ConfigurationNotFinishedErrorMessage };
 

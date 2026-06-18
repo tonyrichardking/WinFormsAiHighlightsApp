@@ -123,22 +123,166 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
 
     #endregion
 
-    #region public methods
+    #region prompt loops
 
-    public async Task<string> RunStructuredPrompt(StructuredPromptRequest structuredPromptRequest)
+    //public record GoalScorer(string PlayerName, string Team, int Period, int TimeMin, int TimeSec);
+    public record GoalScorer(string PlayerName, string Team, int Period, int TimeMin, int TimeSec);
+
+    public async Task<string> RunPromptUnderTest(string testPrompt)
     {
-        string structuredPromptJson = PromptUtils.StructuredJsonToTagDelimited(structuredPromptRequest);
+        // https://source.dot.net/#Microsoft.Extensions.AI/ChatCompletion/ChatClientStructuredOutputExtensions.cs
+        // https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.chatclientstructuredoutputextensions?view=net-11.0-pp&viewFallbackFrom=net-10.0
+        // https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.chatclientstructuredoutputextensions.getresponseasync?view=net-11.0-pp&viewFallbackFrom=net-10.0
+        // https://github.com/openai/openai-dotnet/blob/main/examples/Chat/Example06_StructuredOutputs.cs
+        // https://bartwullems.blogspot.com/2025/08/microsoftextensionsaipart-vistructured.html
 
-        return await RunPrompt(structuredPromptJson);
+        //string structuredPromptJson = PromptUtils.StructuredJsonToTagDelimited(structuredPromptRequest);
+
+        //return await RunWorkInProgressPrompt(testPrompt);
+
+        var result = await RunWorkInProgressPrompt<GoalScorer>(testPrompt);
+
+        return result.PlayerName;
     }
 
     /// <summary>
-    /// Main prompt loop method. Takes an API call as a string, sends it to the model, and returns the response as a string. 
-    /// The API call can be a user message or a command to change the system prompt, toggle tool usage, or toggle thinking.
+    /// Runs a prompt with the full tool loop enabled, but captures the model's final
+    /// answer as a strongly-typed T via a terminal "submit_result" tool rather than by
+    /// parsing prose. The model uses the normal feed tools to gather data, then calls
+    /// submit_result exactly once with the structured payload.
     /// </summary>
-    /// <param name="apiCall">The API call or user message to send to the model.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the model's response as a string.</returns>
-    public async Task<string> RunPrompt(string apiCall)
+    public async Task<T?> RunWorkInProgressPrompt<T>(string apiCall)
+    {
+        try
+        {
+            // The terminal tool. Its delegate parameter is T, so Microsoft.Extensions.AI
+            // generates the JSON schema from T and deserialises the model's call straight
+            // into a T. The delegate just captures it via closure.
+            T? captured = default;
+            bool didCapture = false;
+
+            var submitTool = AIFunctionFactory.Create(
+                (T result) => { captured = result; didCapture = true; return "received"; },
+                name: "submit_result",
+                description: "Return the final answer. After gathering the data with the other " +
+                             "tools, call this exactly once with the complete result. Reply with no prose.");
+
+            // Add it to THIS call's tool set without mutating the shared AvailableTools.
+            var toolsForThisCall = new List<AITool>(AvailableTools) { submitTool };
+
+            // Temperature 0 for determinism. Note: plain buildChatOptions, no GetResponseAsync<T>,
+            // so nothing constrains the response shape and the tool loop runs normally.
+            //var options = buildChatOptions(AvailableTools, 0);   // 0 = temperature
+            var options = buildChatOptions(toolsForThisCall, 0);   // 0 = temperature
+
+            // Copy history for context but don't pollute the shared transcript.
+            var messages = new List<ChatMessage>(ChatHistory)
+            {
+                new ChatMessage(ChatRole.User, apiCall),
+                new ChatMessage(ChatRole.User,
+                    "When you have the data you need, return your answer by calling submit_result " +
+                    "exactly once. Do not write any prose.")
+            };
+
+            // Plain, non-generic call. The function-invocation loop executes submit_result's
+            // delegate when the model calls it, so the typed payload lands in `captured`.
+            ChatResponse response = await chatClient.GetResponseAsync(messages, options);
+
+            if (didCapture)
+            {
+                return captured;
+            }
+
+            // Model finished without calling submit_result — surface why, same un-concealing move.
+            Console.WriteLine("=== RunWorkInProgressPrompt<T>: submit_result never called ===");
+            Console.WriteLine($"FinishReason : {response.FinishReason}");
+            Console.WriteLine($"Raw .Text    : {response.Text}");
+            return default;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"RunWorkInProgressPrompt error: {ex.Message}");
+            return default;
+        }
+    }
+
+    /// <summary>
+    /// Runs a prompt and coerces the model's final answer into a strongly-typed T,
+    /// rather than returning free-form text. Tools stay available, so the model can
+    /// still query the feed (readSportFeedEvents, EventMap, etc.) before producing the
+    /// result — only the FINAL turn is shaped to T. Use this for machine-consumed
+    /// results that drive the editor; keep RunPrompt for interactive, human chat.
+    /// </summary>
+    public async Task<T?> RunTypedPrompt<T>(string apiCall)
+    {
+        // https://source.dot.net/#Microsoft.Extensions.AI/ChatCompletion/ChatClientStructuredOutputExtensions.cs
+        // https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.chatclientstructuredoutputextensions?view=net-11.0-pp&viewFallbackFrom=net-10.0
+        // https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.chatclientstructuredoutputextensions.getresponseasync?view=net-11.0-pp&viewFallbackFrom=net-10.0
+
+        string jsonSchema = """
+            {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "properties": {
+                    "playerName": {
+                        "type": "string",
+                        "description": "The name of the player who scored the goal."
+                    },
+                    "team": {
+                        "type": "string",
+                        "description": "The team to which the player belongs."
+                    }
+                },
+                "required": ["playerName", "team"]
+            }
+            """;
+
+        try
+        {
+            // Temperature 0: we want the same answer every time, not creative variation.
+            // Tools still included so the model can gather the facts it needs first.
+            var options = buildChatOptions(AvailableTools, 0);   // 0 = temperature
+
+            // Copy the history for context but DON'T mutate the shared ChatHistory:
+            // a machine query shouldn't pollute the human-facing transcript, and we
+            // don't append the raw JSON answer back into it either.
+            var messages = new List<ChatMessage>(ChatHistory)
+            {
+                new ChatMessage(ChatRole.User, apiCall)
+            };
+
+            // GetResponseAsync<T> builds a JSON schema from T, runs the (tool-enabled)
+            // exchange, and deserialises the final message into T.
+            // NOTE: exact overload/parameter names vary across Microsoft.Extensions.AI
+            // versions — confirm against intellisense in your version.
+            ChatResponse<T> response = await chatClient.GetResponseAsync<T>(messages, options, useJsonSchemaResponseFormat: true);
+
+            response.TryGetResult(out T? result);
+
+            if (result is null)
+            {
+                // Didn't bind to T — inspect what actually came back.
+                Console.WriteLine("=== RunStructured<T> failed to bind result ===");
+                Console.WriteLine($"FinishReason : {response.FinishReason}");
+                Console.WriteLine($"Raw .Text    : {response.Text}");
+                Console.WriteLine("--- full message trace ---");
+                foreach (var m in response.Messages)
+                    Console.WriteLine($"[{m.Role}] {m.Text}");
+                return default;
+            }
+
+            // TryGetResult is the safe accessor: false means the model's output didn't
+            // fit the schema, rather than throwing.
+            return result;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"RunStructured error: {ex.Message}");
+            return default;   // surface failures however suits your pipeline
+        }
+    }
+
+    public async Task<string> RunOriginalPrompt(string apiCall)
     {
         // System messages give the model instructions about the assistant. A prompt can have only one system message, and it must be the first message.
         // User messages include prompts from the user and show examples, historical prompts, or contain instructions for the assistant.
@@ -216,6 +360,10 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
             return ($"Error: {ex.Message}");
         }
     }
+
+    #endregion
+
+    #region public methods
 
     public async Task<string> InitialiseApi()
     {
@@ -337,7 +485,7 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
             // this is implemented in buildChatClient
             // Configured using the ANTHROPIC_API_KEY, ANTHROPIC_AUTH_TOKEN and ANTHROPIC_BASE_URL environment variables
             // defaultMaxOutputTokens: 300, claude-opus-4-6", claude-haiku-4-5-20251001
-            IChatClient chatClient = client.AsIChatClient(defaultModelId: "claude-haiku-4-5-20251001", defaultMaxOutputTokens: 300) 
+            IChatClient chatClient = client.AsIChatClient(defaultModelId: "claude-haiku-4-5-20251001", defaultMaxOutputTokens: 300)
                 .AsBuilder()
                 .UseFunctionInvocation()
                 .Build();
@@ -405,12 +553,14 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
         return (sb.ToString(), ollamaApiClient, availableModels, availableTools, theChosenModel);
     }
 
-    private static ChatOptions buildChatOptions(IList<McpClientTool> tools, float? temperature)
+    private static ChatOptions buildChatOptions(IEnumerable<AITool> tools, float? temperature, string jsonSchema = null)
     {
         ChatOptions chatOptions = new ChatOptions
         {
             Temperature = temperature,
-            Tools = [.. tools]
+            Tools = [.. tools],
+            MaxOutputTokens = 1028,
+            ResponseFormat = jsonSchema is not null ? ChatResponseFormat.ForJsonSchema(JsonDocument.Parse(jsonSchema).RootElement) : null
         };
 
         return (chatOptions);
