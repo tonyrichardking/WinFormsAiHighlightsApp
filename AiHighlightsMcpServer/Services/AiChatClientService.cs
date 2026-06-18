@@ -125,24 +125,9 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
 
     #region prompt loops
 
-    //public record GoalScorer(string PlayerName, string Team, int Period, int TimeMin, int TimeSec);
-    public record GoalScorer(string PlayerName, string Team, int Period, int TimeMin, int TimeSec);
-
-    public async Task<string> RunPromptUnderTest(string testPrompt)
+    public async Task<T?> RunPromptUnderTest<T>(string prompt)
     {
-        // https://source.dot.net/#Microsoft.Extensions.AI/ChatCompletion/ChatClientStructuredOutputExtensions.cs
-        // https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.chatclientstructuredoutputextensions?view=net-11.0-pp&viewFallbackFrom=net-10.0
-        // https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.chatclientstructuredoutputextensions.getresponseasync?view=net-11.0-pp&viewFallbackFrom=net-10.0
-        // https://github.com/openai/openai-dotnet/blob/main/examples/Chat/Example06_StructuredOutputs.cs
-        // https://bartwullems.blogspot.com/2025/08/microsoftextensionsaipart-vistructured.html
-
-        //string structuredPromptJson = PromptUtils.StructuredJsonToTagDelimited(structuredPromptRequest);
-
-        //return await RunWorkInProgressPrompt(testPrompt);
-
-        var result = await RunWorkInProgressPrompt<GoalScorer>(testPrompt);
-
-        return result.PlayerName;
+        return await RunWorkInProgressPrompt<T>(prompt);
     }
 
     /// <summary>

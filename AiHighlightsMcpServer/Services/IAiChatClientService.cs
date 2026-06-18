@@ -10,7 +10,7 @@ using AiHighlightsMcpServer.Prompt_Engineering;
 /// </summary>
 public interface IAiChatClientService
 {
-    Task<string> RunPromptUnderTest(string testPrompt);
+    Task<T?> RunPromptUnderTest<T>(string prompt);
     Task<T?> RunTypedPrompt<T>(string prompt);
     Task<string> RunOriginalPrompt(string apiCall);
     void SetModelByName(string modelName);

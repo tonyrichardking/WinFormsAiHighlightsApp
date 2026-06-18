@@ -4,17 +4,14 @@
     using MCPServer.MCPTools;
     using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
-    using ModelContextProtocol.Protocol;
-    using ModelContextProtocol.Server;
-    using System.Net.NetworkInformation;
-    using TestServices;
+    using System.Text.Json;
 
     [ApiController]
     [Route("[controller]")]
     public class AiChatController : ControllerBase
     {
-        public class PutParameter 
-        { 
+        public class PutParameter
+        {
             public string Value { get; set; }
         }
 
@@ -29,56 +26,46 @@
         [HttpGet("getSystemPrompts", Name = "GetSystemPrompts")]
         public async Task<IActionResult> GetSystemPrompts()
         {
-            Dictionary<string, string> result = AiChatClientService.AvailableSystemPrompts;
-
-            return Ok(result);
+            return Ok(AiChatClientService.AvailableSystemPrompts);
         }
 
         // GET: aiChat/getModels
         [HttpGet("getModels", Name = "GetModels")]
         public async Task<IActionResult> GetModels()
         {
-            List<string> result = AiChatClientService.AvailableModels;
-
-            return Ok(result);
+            return Ok(AiChatClientService.AvailableModels);
         }
 
         // GET: aiChat/getTools
         [HttpGet("getTools", Name = "GetTools")]
         public async Task<IActionResult> GetTools()
         {
-            List<string> result = AiChatClientService.AvailableTools.Select(t => t.Name).ToList();
-
-            return Ok(result);
+            return Ok(AiChatClientService.AvailableTools.Select(t => t.Name).ToList());
         }
 
         // GET: aiChat/getOptions
         [HttpGet("getOptions", Name = "GetOptions")]
         public async Task<IActionResult> GetOptions()
         {
-            string result = AiChatClientService.GetOptions();
-
-            return Ok(result);
+            return Ok(AiChatClientService.GetOptions());
         }
 
-        // The shape you want back. With structured output, this record IS the spec —
-        // the framework derives a JSON schema from it and deserialises into it, so
-        // there's no hand-authored JSON and no casing footgun: the type is the contract.
-        public record GoalScorer(string PlayerName, string Team, int Period, int TimeMin, int TimeSec);
-
-        public record GoalsResult(GoalScorer[] Goals);
+        // GET: aiChat/getResultTypes
+        [HttpGet("getResultTypes", Name = "GetResultTypes")]
+        public IActionResult GetResultTypes()
+        {
+            return Ok(SoccerResultTypeCatalog.Descriptions);
+        }
 
         // GET: aiChat/runPrompt?prompt=hello
         [HttpGet("runPrompt", Name = "RunPrompt")]
         public async Task<IActionResult> RunPrompt([FromQuery] string prompt)
         {
-            string result = await aiChatService.RunPromptUnderTest(prompt);
-            //string result = await aiChatService.RunDebugPrompt(prompt);
-
+            string result = await aiChatService.RunOriginalPrompt(prompt);
             return Ok(result);
         }
 
-        // PUT: aiChat/setModel?model=MODEL_NAME
+        // PUT: aiChat/setModel
         [HttpPut("setModel", Name = "SetModel")]
         public async Task<IActionResult> SetModel([FromBody] PutParameter param)
         {
@@ -86,7 +73,7 @@
             return Ok();
         }
 
-        // PUT: aiChat/setSystemPrompt?prompt=PROMPT_NAME
+        // PUT: aiChat/setSystemPrompt
         [HttpPut("setSystemPrompt", Name = "SetSystemPrompt")]
         public async Task<IActionResult> SetSystemPrompt([FromBody] PutParameter param)
         {
@@ -94,16 +81,35 @@
             return Ok();
         }
 
-        // POST: MdcApi/runQuery
+        // POST: aiChat/runTypedPrompt
+        // Body: { "prompt": "...", "resultType": "GoalScorer" }
         [EnableCors]
-        [HttpPost("runStructuredPrompt", Name = "RunStructuredPrompt")]
-        public async Task<IActionResult> RunStructuredPrompt([FromBody] string prompt)
+        [HttpPost("runTypedPrompt", Name = "RunTypedPrompt")]
+        public async Task<IActionResult> RunTypedPrompt([FromBody] TypedPromptRequest request)
         {
-            string result = await aiChatService.RunPromptUnderTest(prompt);
+            object? result = request.ResultType switch
+            {
+                "GoalScorer"           => await aiChatService.RunPromptUnderTest<GoalScorer>(request.Prompt),
+                "GoalList"             => await aiChatService.RunPromptUnderTest<GoalList>(request.Prompt),
+                "MatchEvent"           => await aiChatService.RunPromptUnderTest<MatchEvent>(request.Prompt),
+                "MatchEventList"       => await aiChatService.RunPromptUnderTest<MatchEventList>(request.Prompt),
+                "HighlightSegment"     => await aiChatService.RunPromptUnderTest<HighlightSegment>(request.Prompt),
+                "HighlightSegmentList" => await aiChatService.RunPromptUnderTest<HighlightSegmentList>(request.Prompt),
+                "PlayerAppearance"     => await aiChatService.RunPromptUnderTest<PlayerAppearance>(request.Prompt),
+                "PlayerList"           => await aiChatService.RunPromptUnderTest<PlayerList>(request.Prompt),
+                _ => null
+            };
 
-            //return new RunQueryPlayersResponseDto.Root { errorMessage = ConfigurationNotFinishedErrorMessage };
+            if (result is null && !SoccerResultTypeCatalog.Descriptions.ContainsKey(request.ResultType))
+            {
+                return BadRequest(new
+                {
+                    error   = $"Unknown resultType '{request.ResultType}'.",
+                    validTypes = SoccerResultTypeCatalog.Descriptions.Keys
+                });
+            }
 
-            return Ok(result);
+            return Ok(JsonSerializer.Serialize(result));
         }
     }
 }
