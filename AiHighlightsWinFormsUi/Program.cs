@@ -12,9 +12,9 @@ namespace WinFormsApp1
         public static string OutputHighlightsDirPath { get; private set; } = "";
         public static string FfPlayBatPath          { get; private set; } = "";
 
-        public static AiChatClient TheAiChatClient { get; private set; }
+        public static ChatClientApi TheAiChatClient { get; private set; }
 
-        public static Form1 MainForm { get; private set; }
+        public static UiForm MainForm { get; private set; }
 
         public static string ExampleClipDefinitionJson { get; private set; }
 
@@ -85,13 +85,13 @@ namespace WinFormsApp1
 
             // -----------------------------------------------------------
 
-            AiChatClient TheAiChatClient = new AiChatClient(new HttpClient() { BaseAddress = new Uri("http://localhost:11190/aiChat/") });
+            ChatClientApi TheAiChatClient = new ChatClientApi(new HttpClient() { BaseAddress = new Uri("http://localhost:11190/aiChat/") });
 
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            MainForm = new Form1(TheAiChatClient);          
+            MainForm = new UiForm(TheAiChatClient);          
 
             Application.Run(MainForm);
         }

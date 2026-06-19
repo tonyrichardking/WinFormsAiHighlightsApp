@@ -4,10 +4,17 @@ using AiHighlightsMcpServer.Prompt_Engineering;
 
 namespace AiHighlightsWinFormsUi
 {
-    public class AiChatClient
+    /// <summary>
+    /// ChatClientApi is a class that provides methods to send HTTP requests to an AI chat server. 
+    /// It supports various endpoints for retrieving system prompts, models, tools, and options, 
+    /// as well as running prompts and structured prompts. The class uses an HttpClient instance 
+    /// to perform GET, POST, PUT, and DELETE requests based on the specified endpoint and message. 
+    /// It serializes messages to JSON when necessary and ensures successful responses from the server.
+    /// </summary>
+    public class ChatClientApi
     {
         public HttpClient httpClient;
-        public AiChatClient(HttpClient httpClient)
+        public ChatClientApi(HttpClient httpClient)
         {
             this.httpClient = httpClient;
         }
