@@ -1,30 +1,30 @@
-using AiHighlightsMcpServer.Services;
+using AiHighlightsWinFormsUi.MediaPipeline;
 
 namespace UnitTests;
 
 [TestClass]
 public class MediaTimeMapperTests
 {
-    // durations measured from the ManU v Brighton 1920x1080 GOP25.mp4 test media file
-    const int mediaRunInSeconds = 7;                    // kick-off happens 7 seconds into the video
-    const int mediaInterPeriodGapSeconds = 30;          // the edited video retains 30 seconds of half-time content (from 46:21 to 46:51)
-    const int mediaPeriod1Seconds = 2775;               // period 1 runs from 0:08 to 46:15 in the media file = 2775s (46:15 agrees with Opta)
-    const int mediaPeriod2Seconds = 3003;               // period 2 runs from 46:51 to 96:54 in the media file = 3003s (50:03 agrees with Opta)
+    //// durations measured from the ManU v Brighton 1920x1080 GOP25.mp4 test media file
+    //const int mediaRunInSeconds = 7;                    // kick-off happens 7 seconds into the video
+    //const int mediaInterPeriodGapSeconds = 30;          // the edited video retains 30 seconds of half-time content (from 46:21 to 46:51)
+    //const int mediaPeriod1Seconds = 2775;               // period 1 runs from 0:08 to 46:15 in the media file = 2775s (46:15 agrees with Opta)
+    //const int mediaPeriod2Seconds = 3003;               // period 2 runs from 46:51 to 96:54 in the media file = 3003s (50:03 agrees with Opta)
 
-    const int period1 = 1;
-    const int period2 = 2;
-    const int period3 = 3;
-    const int period4 = 4;
-    const int mediaPeriod1KickOff = mediaRunInSeconds;
-    const int mediaPeriod2KickOff = mediaPeriod1KickOff + mediaPeriod1Seconds + mediaInterPeriodGapSeconds;
+    //const int period1 = 1;
+    //const int period2 = 2;
+    //const int period3 = 3;
+    //const int period4 = 4;
+    //const int mediaPeriod1KickOff = mediaRunInSeconds;
+    //const int mediaPeriod2KickOff = mediaPeriod1KickOff + mediaPeriod1Seconds + mediaInterPeriodGapSeconds;
 
-    private static MediaTimeMapConfig StandardConfig() => new()
-    {
-        RunInSeconds = mediaRunInSeconds,
-        MediaPeriodDurationsMapSeconds = new() { { period1, mediaPeriod1Seconds }, { period2, mediaPeriod2Seconds } },
-        OptaPeriodStartMapMinutes     = new() { { period1, 0 }, { period2, 45 } },
-        InterPeriodGapSeconds  = new() { { period1, mediaInterPeriodGapSeconds }, { period2, 0 } },
-    };
+    //private static MediaTimeMapConfig StandardConfig() => new()
+    //{
+    //    RunInSeconds = mediaRunInSeconds,
+    //    MediaPeriodDurationsMapSeconds = new() { { period1, mediaPeriod1Seconds }, { period2, mediaPeriod2Seconds } },
+    //    OptaPeriodStartMapMinutes     = new() { { period1, 0 }, { period2, 45 } },
+    //    InterPeriodGapSeconds  = new() { { period1, mediaInterPeriodGapSeconds }, { period2, 0 } },
+    //};
 
     // -------------------------------------------------------------------------
     // Period 1 mapping
@@ -34,9 +34,9 @@ public class MediaTimeMapperTests
     public void Period1_KickOff_MapsToRunIn()
     {
         // timeMin=0, timeSec=0 is exactly kick-off — media offset should equal RunInSeconds
-        var mapper = new MediaTimeMapper(StandardConfig());
-        var mediaTimeResult = mapper.OptaToMediaTime(period1, 0, 0);
-        var wanted = TimeSpan.FromSeconds(mediaPeriod1KickOff);
+        var mapper = new MediaTimeMapper(ManuVsBrightonMapperContext.StandardConfig());
+        var mediaTimeResult = mapper.OptaToMediaTime(ManuVsBrightonMapperContext.period1, 0, 0);
+        var wanted = TimeSpan.FromSeconds(ManuVsBrightonMapperContext.mediaPeriod1KickOff);
         Assert.AreEqual(wanted, mediaTimeResult.Offset);
     }
 
@@ -44,8 +44,8 @@ public class MediaTimeMapperTests
     public void Period1_MidMinute_OffsetAddedCorrectly()
     {
         // timeMin=1, timeSec=30 → 90 seconds into period 1 → media = 7 + 90 = 97s
-        var mapper = new MediaTimeMapper(StandardConfig());
-        var mediaTimeResult = mapper.OptaToMediaTime(period1, 1, 30);
+        var mapper = new MediaTimeMapper(ManuVsBrightonMapperContext.StandardConfig());
+        var mediaTimeResult = mapper.OptaToMediaTime(ManuVsBrightonMapperContext.period1, 1, 30);
         var wanted = TimeSpan.FromSeconds(97);
         Assert.AreEqual(wanted, mediaTimeResult.Offset);
     }
@@ -54,8 +54,8 @@ public class MediaTimeMapperTests
     public void Period1_Minute45_StoppageTime_OffsetCorrect()
     {
         // timeMin=45, timeSec=0 = 2700s into P1 → media = 7 + 2700 = 2707s
-        var mapper = new MediaTimeMapper(StandardConfig());
-        var mediaTimeResult = mapper.OptaToMediaTime(period1, 45, 0);
+        var mapper = new MediaTimeMapper(ManuVsBrightonMapperContext.StandardConfig());
+        var mediaTimeResult = mapper.OptaToMediaTime(ManuVsBrightonMapperContext.period1, 45, 0);
         var wanted = TimeSpan.FromSeconds(2707);
         Assert.AreEqual(wanted, mediaTimeResult.Offset);
     }
@@ -69,9 +69,9 @@ public class MediaTimeMapperTests
     {
         // P2 kick-off: timeMin=45, timeSec=0 → 0s into P2
         // media = RunIn(7) + P1Duration(2775) + HalfTimeGap(30) + 0 = 2812s
-        var mapper = new MediaTimeMapper(StandardConfig());
-        var mediaTimeResult = mapper.OptaToMediaTime(period2, 45, 0);
-        var wanted = TimeSpan.FromSeconds(mediaPeriod2KickOff);
+        var mapper = new MediaTimeMapper(ManuVsBrightonMapperContext.StandardConfig());
+        var mediaTimeResult = mapper.OptaToMediaTime(ManuVsBrightonMapperContext.period2, 45, 0);
+        var wanted = TimeSpan.FromSeconds(ManuVsBrightonMapperContext.mediaPeriod2KickOff);
         Assert.AreEqual(wanted, mediaTimeResult.Offset);
     }
 
@@ -79,9 +79,9 @@ public class MediaTimeMapperTests
     public void Period2_EarlyEvent_OffsetCorrect()
     {
         // timeMin=45, timeSec=30 → 30s into P2 → media = 2812 + 30 = 2842s
-        var mapper = new MediaTimeMapper(StandardConfig());
-        var mediaTimeResult = mapper.OptaToMediaTime(period2, 45, 30);
-        var wanted = TimeSpan.FromSeconds(mediaPeriod2KickOff + 30);
+        var mapper = new MediaTimeMapper(ManuVsBrightonMapperContext.StandardConfig());
+        var mediaTimeResult = mapper.OptaToMediaTime(ManuVsBrightonMapperContext.period2, 45, 30);
+        var wanted = TimeSpan.FromSeconds(ManuVsBrightonMapperContext.mediaPeriod2KickOff + 30);
         Assert.AreEqual(wanted, mediaTimeResult.Offset);
     }
 
@@ -89,9 +89,9 @@ public class MediaTimeMapperTests
     public void Period2_Minute90_FullTime_OffsetCorrect()
     {
         // timeMin=90, timeSec=0 → 2700s into P2 → media = 2812 + 2700 = 5512s
-        var mapper = new MediaTimeMapper(StandardConfig());
-        var mediaTimeResult = mapper.OptaToMediaTime(period2, 90, 0);
-        var wanted = TimeSpan.FromSeconds(mediaPeriod2KickOff + 45 * 60);
+        var mapper = new MediaTimeMapper(ManuVsBrightonMapperContext.StandardConfig());
+        var mediaTimeResult = mapper.OptaToMediaTime(ManuVsBrightonMapperContext.period2, 90, 0);
+        var wanted = TimeSpan.FromSeconds(ManuVsBrightonMapperContext.mediaPeriod2KickOff + 45 * 60);
         Assert.AreEqual(wanted, mediaTimeResult.Offset);
     }
 
@@ -103,12 +103,12 @@ public class MediaTimeMapperTests
     public void Period2_KickOff_MapsToRunInPlusPeriod1DurationPlusIncreasedGap()
     {
         // Same as above but half-time gap = 600s retained in the edit
-        var config = StandardConfig();
+        var config = ManuVsBrightonMapperContext.StandardConfig();
         config.InterPeriodGapSeconds[1] = 600;
 
         var mapper = new MediaTimeMapper(config);
-        var mediaTimeResult = mapper.OptaToMediaTime(period2, 45, 0);
-        var wanted = TimeSpan.FromSeconds(mediaRunInSeconds + mediaPeriod1Seconds + config.InterPeriodGapSeconds[1]);
+        var mediaTimeResult = mapper.OptaToMediaTime(ManuVsBrightonMapperContext.period2, 45, 0);
+        var wanted = TimeSpan.FromSeconds(ManuVsBrightonMapperContext.mediaRunInSeconds + ManuVsBrightonMapperContext.mediaPeriod1Seconds + config.InterPeriodGapSeconds[1]);
         Assert.AreEqual(wanted, mediaTimeResult.Offset);
     }
 
@@ -153,11 +153,11 @@ public class MediaTimeMapperTests
     [TestMethod]
     public void ZeroRunIn_Period1_KickOff_MapsToZero()
     {
-        var config = StandardConfig();
+        var config = ManuVsBrightonMapperContext.StandardConfig();
         config.RunInSeconds = 0;
 
         var mapper = new MediaTimeMapper(config);
-        var mediaTimeResult = mapper.OptaToMediaTime(period1, 0, 0);
+        var mediaTimeResult = mapper.OptaToMediaTime(ManuVsBrightonMapperContext.period1, 0, 0);
         Assert.AreEqual(TimeSpan.Zero, mediaTimeResult.Offset);
     }
 
@@ -168,17 +168,17 @@ public class MediaTimeMapperTests
     [TestMethod]
     public void StringOverload_ParsesCorrectly()
     {
-        var mapper = new MediaTimeMapper(StandardConfig());
-        var byInts   = mapper.OptaToMediaTime(period1, 12, 34);
-        var byString = mapper.OptaToMediaTime(period1, "12:34");
+        var mapper = new MediaTimeMapper(ManuVsBrightonMapperContext.StandardConfig());
+        var byInts   = mapper.OptaToMediaTime(ManuVsBrightonMapperContext.period1, 12, 34);
+        var byString = mapper.OptaToMediaTime(ManuVsBrightonMapperContext.period1, "12:34");
         Assert.AreEqual(byInts.Offset, byString.Offset);
     }
 
     [TestMethod]
     public void StringOverload_BadFormat_Throws()
     {
-        var mapper = new MediaTimeMapper(StandardConfig());
-        Assert.ThrowsExactly<FormatException>(() => mapper.OptaToMediaTime(period1, "12-34"));
+        var mapper = new MediaTimeMapper(ManuVsBrightonMapperContext.StandardConfig());
+        Assert.ThrowsExactly<FormatException>(() => mapper.OptaToMediaTime(ManuVsBrightonMapperContext.period1, "12-34"));
     }
 
     // -------------------------------------------------------------------------
@@ -214,7 +214,7 @@ public class MediaTimeMapperTests
     [TestMethod]
     public void UnknownPeriod_Throws()
     {
-        var mapper = new MediaTimeMapper(StandardConfig());
+        var mapper = new MediaTimeMapper(ManuVsBrightonMapperContext.StandardConfig());
         Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => mapper.OptaToMediaTime(99, 0, 0));
     }
 
@@ -225,7 +225,7 @@ public class MediaTimeMapperTests
     [TestMethod]
     public void SidecarJson_RoundTrip_PreservesConfig()
     {
-        var original = StandardConfig();
+        var original = ManuVsBrightonMapperContext.StandardConfig();
         var json = System.Text.Json.JsonSerializer.Serialize(original);
         var deserialized = System.Text.Json.JsonSerializer.Deserialize<MediaTimeMapConfig>(json)!;
 

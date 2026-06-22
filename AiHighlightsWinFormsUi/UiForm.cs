@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using static System.Net.Mime.MediaTypeNames;
 using AiHighlightsMcpServer.Prompt_Engineering;
+using AiHighlightsWinFormsUi.MediaPipeline;
 
 namespace WinFormsApp1
 {
@@ -143,7 +144,7 @@ namespace WinFormsApp1
 
         private void btnPlayHighlights_Click(object sender, EventArgs e)
         {
-            Player.PlayVideoFromShell(Program.FfPlayBatPath);
+            MediaPlayer.PlayVideoFromShell(Program.FfPlayBatPath);
         }
 
         //private async void btnStartChat_Click(object sender, EventArgs e)

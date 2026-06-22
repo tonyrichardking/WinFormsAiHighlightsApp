@@ -194,7 +194,7 @@ public class TypedPromptControllerTests
 
 [TestClass]
 [TestCategory("Integration")]
-public class TypedPromptIntegrationTests
+public class TypedPromptTests
 {
     private AiChatClientService theService = new AiChatClientService();
     private AiChatController    theController;
@@ -225,7 +225,7 @@ public class TypedPromptIntegrationTests
         var json  = actionResult.Value as string;
         Assert.IsFalse(string.IsNullOrWhiteSpace(json), "Response JSON should not be empty");
 
-        var scorer = JsonSerializer.Deserialize<GoalScorer>(json!,
+        var scorer = JsonSerializer.Deserialize<MatchEvent>(json!,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         Assert.IsNotNull(scorer, "Response should deserialise to GoalScorer");

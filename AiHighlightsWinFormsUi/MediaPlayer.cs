@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WinFormsApp1
 {
-    public class Player
+    public class MediaPlayer
     {
         public static void PlayVideoFromShell(string videoFilePath)
         {

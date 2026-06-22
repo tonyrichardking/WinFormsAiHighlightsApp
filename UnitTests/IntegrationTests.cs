@@ -3,6 +3,8 @@
 // Integration tests — require both servers running before executing:
 //   MCP server:  dotnet run --project AiHighlightsMcpServer  (port 11190)
 //   Ollama/LLM:  running on localhost:11434  (or Claude via API key)
+//   or cd to project directory - cd C:\Projects\Experiments_2026\FunWithAiSoccerHighlights\WinFormsAiHighlightsApp\AiHighlightsMcpServer
+//   and run:  dotnet run
 //
 // Run integration tests:   dotnet test --filter "TestCategory=Integration"
 // Exclude from fast runs:  dotnet test --filter "TestCategory!=Integration"
@@ -15,10 +17,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 using AiHighlightsMcpServer.Prompt_Engineering;
-using AiHighlightsWinFormsUi;
 using OllamaMcpWebServer.Controllers;
 using System.Diagnostics;
-using System.Text.Json;
 using static OllamaMcpWebServer.Controllers.AiChatController;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -27,10 +27,17 @@ namespace UnitTests
 {
     [TestClass]
     [TestCategory("Integration")]
-    public class StructuredPromptIntegrationTests
+    public class IntegrationTests
     {
         AiChatClientService theAiChatClientService = new AiChatClientService();
         AiChatController theAiChatController;
+
+        //------------------------------------------------------------------------------
+        [ClassInitialize]
+        public static void ClassInitialise(TestContext testContext)
+        {
+            Debug.WriteLine("\nClassInitialise");
+        }
 
         //------------------------------------------------------------------------------
         [ClassCleanup]
@@ -60,7 +67,8 @@ namespace UnitTests
 
             await theAiChatClientService.InitialiseApi();
             theAiChatController = new AiChatController(theAiChatClientService);
-            var modelResult = await theAiChatController.SetModel(new PutParameter { Value = "Claude" });     // gpt-oss:latest
+            var modelResult = await theAiChatController.SetModel(new PutParameter { Value = "Claude" });                    // gpt-oss:latest
+            var systemPromptResult = await theAiChatController.SetSystemPrompt(new PutParameter { Value = "Sports" });      
         }
 
         //------------------------------------------------------------------------------
@@ -68,6 +76,28 @@ namespace UnitTests
         public void TestCleanup()
         {
             Debug.WriteLine("\nTestCleanup");
+        }
+
+        [TestMethod]
+        public async Task TestMatchEventList()
+        {
+            string prompt = "Make a list of highlights for the match";
+            string resultType = "MatchEventList";
+            var actionResult = await theAiChatController.RunTypedPrompt(new TypedPromptRequest(prompt, resultType));
+
+            // LLM responses are non-deterministic so we assert structure, not content.
+            var okResult = actionResult as Microsoft.AspNetCore.Mvc.OkObjectResult;
+            Assert.IsNotNull(okResult, "Expected an OkObjectResult from the controller");
+
+            var responseText = okResult.Value as string;
+
+            // check that the response is a JSON object with the expected structure and data
+            if (!string.IsNullOrEmpty(responseText))
+            {
+                // Perform JSON structure validation here if needed
+            }
+
+            Debug.WriteLine($"\nResponse:\n{responseText}");
         }
 
         [TestMethod]

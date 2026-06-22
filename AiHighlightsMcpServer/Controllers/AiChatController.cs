@@ -1,6 +1,7 @@
 ﻿namespace OllamaMcpWebServer.Controllers
 {
     using AiHighlightsMcpServer.Prompt_Engineering;
+    using AiHighlightsMcpServer.Services;
     using MCPServer.MCPTools;
     using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
@@ -89,12 +90,8 @@
         {
             object? result = request.ResultType switch
             {
-                "GoalScorer"           => await aiChatService.RunPromptUnderTest<GoalScorer>(request.Prompt),
-                "GoalList"             => await aiChatService.RunPromptUnderTest<GoalList>(request.Prompt),
                 "MatchEvent"           => await aiChatService.RunPromptUnderTest<MatchEvent>(request.Prompt),
                 "MatchEventList"       => await aiChatService.RunPromptUnderTest<MatchEventList>(request.Prompt),
-                "HighlightSegment"     => await aiChatService.RunPromptUnderTest<HighlightSegment>(request.Prompt),
-                "HighlightSegmentList" => await aiChatService.RunPromptUnderTest<HighlightSegmentList>(request.Prompt),
                 "PlayerAppearance"     => await aiChatService.RunPromptUnderTest<PlayerAppearance>(request.Prompt),
                 "PlayerList"           => await aiChatService.RunPromptUnderTest<PlayerList>(request.Prompt),
                 _ => null

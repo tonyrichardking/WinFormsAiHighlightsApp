@@ -47,9 +47,6 @@
     <Content Update="EtlSources.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="MdcQuerysetV10.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Update="MdcStartupManagementV1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

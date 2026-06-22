@@ -57,10 +57,8 @@ namespace WebApplication1
             // lifetime. This is useful for shared resources like configuration settings or logging services
             builder.Services.AddSingleton<Ma3FeedDataProviderService>();
             builder.Services.AddSingleton<IAiChatClientService, AiChatClientService>();
-
-            if (!string.IsNullOrWhiteSpace(AppPaths.MediaSidecarPath) && File.Exists(AppPaths.MediaSidecarPath))
-                builder.Services.AddSingleton(MediaTimeMapper.FromSidecarFile(AppPaths.MediaSidecarPath));
-
+            //builder.Services.AddSingleton<SoccerMatchInfoService>();
+            
             // If you have an MCP client hosted service you want to run in the same process, enable it.
             // builder.Services.AddHostedService<TestMcpClientHostedService>();
 

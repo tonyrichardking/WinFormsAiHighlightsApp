@@ -164,9 +164,12 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
             var messages = new List<ChatMessage>(ChatHistory)
             {
                 new ChatMessage(ChatRole.User, apiCall),
+                // Require the model to call submit_result with a JSON object that contains a top-level "result" property.
+                // Provide a precise example to reduce ambiguity.
                 new ChatMessage(ChatRole.User,
-                    "When you have the data you need, return your answer by calling submit_result " +
-                    "exactly once. Do not write any prose.")
+                    "When you have the data you need, call submit_result exactly once with a single argument " +
+                    "object containing a top-level property named \"result\".  Do NOT write any prose. " +
+                    "Example: submit_result({\"result\": {\"playerName\": \"Alice\", \"team\": \"Home\"}})" )
             };
 
             // Plain, non-generic call. The function-invocation loop executes submit_result's
@@ -609,3 +612,46 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
 
     #endregion
 }
+
+
+/*
+
+
+            var submitTool = AIFunctionFactory.Create(
+                (System.Collections.Generic.IDictionary<string, object> args) =>
+                {
+                    // Log the raw function-call arguments to inspect what the model provided.
+                    var json = System.Text.Json.JsonSerializer.Serialize(args, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+                    Console.WriteLine("submit_result called with args:\n" + json);
+
+                    if (args != null && args.TryGetValue("result", out var payload) && payload != null)
+                    {
+                        try
+                        {
+                            string payloadJson;
+                            if (payload is System.Text.Json.JsonElement je)
+                            {
+                                payloadJson = je.GetRawText();
+                            }
+                            else
+                            {
+                                payloadJson = System.Text.Json.JsonSerializer.Serialize(payload);
+                            }
+
+                            captured = System.Text.Json.JsonSerializer.Deserialize<T>(payloadJson);
+                            didCapture = true;
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("Failed to deserialize payload to T: " + e);
+                        }
+                    }
+
+                    return "received";
+                },
+                name: "submit_result",
+                description: "Return the final answer. After gathering the data with the other " +
+                             "tools, call this exactly once with the complete result. Reply with no prose.");
+
+
+ */

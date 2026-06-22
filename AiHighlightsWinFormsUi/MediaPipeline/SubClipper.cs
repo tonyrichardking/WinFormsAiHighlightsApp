@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Text.Json;
+using WinFormsApp1;
 
-namespace WinFormsApp1
+namespace AiHighlightsWinFormsUi.MediaPipeline
 {
     public class SubClipper
     {
