@@ -66,7 +66,7 @@ namespace UnitTests
 
 
             await theAiChatClientService.InitialiseApi();
-            theAiChatController = new AiChatController(theAiChatClientService);
+            theAiChatController = new AiChatController(theAiChatClientService, new StubSoccerMatchInfoService());
             var modelResult = await theAiChatController.SetModel(new PutParameter { Value = "Claude" });                    // gpt-oss:latest
             var systemPromptResult = await theAiChatController.SetSystemPrompt(new PutParameter { Value = "Sports" });      
         }

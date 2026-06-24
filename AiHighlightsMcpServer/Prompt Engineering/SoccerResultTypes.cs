@@ -18,7 +18,7 @@ namespace AiHighlightsMcpServer.Prompt_Engineering
     /// <summary>
     /// A player who appeared in the match.
     /// </summary>
-    public record PlayerAppearance(string PlayerName, string Team, string Position, int ShirtNumber);
+    public record PlayerAppearance(string PlayerName, string Team); //, string Position, int ShirtNumber); MA3 feed doesn't provide position or shirt number.
 
     /// <summary>
     /// A list of players matching the user's query — starters, substitutes, a whole team, etc.

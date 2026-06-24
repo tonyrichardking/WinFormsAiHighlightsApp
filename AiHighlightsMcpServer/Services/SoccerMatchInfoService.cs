@@ -2,28 +2,40 @@
 
 namespace AiHighlightsMcpServer.Services
 {
-    /// Server-side. Turns a free-text prompt into grounded, match-time events.
-    /// Media-agnostic: no mapper, no padding, no FFmpeg — those now live client-side
-    /// (eventually Curator-side), because they need the specific media file + its sidecar.
-    /// NOTE: "HighlightReel" is now a misnomer — it no longer builds a reel. Consider
-    /// renaming to MatchEventService / EventQueryService.
-    public class SoccerMatchInfoService
+    public interface ISoccerMatchInfoService
     {
-        private readonly AiChatClientService _chat;
+        Task<MatchEvent?> FindEventAsync(string prompt);
+        Task<MatchEventList?> FindEventsAsync(string prompt);
+        Task<PlayerAppearance?> FindPlayerAsync(string prompt);
+        Task<PlayerList?> FindPlayersAsync(string prompt);
+    }
 
-        public SoccerMatchInfoService(AiChatClientService chat) => _chat = chat;
+    /// Server-side. Turns a free-text prompt into grounded, match-time events and players.
+    /// Media-agnostic: no mapper, no padding, no FFmpeg — those live client-side.
+    public class SoccerMatchInfoService : ISoccerMatchInfoService
+    {
+        private readonly IAiChatClientService _chat;
 
-        /// Prompt → match-time events. Returns null if nothing matched, so the
-        /// controller can distinguish "no results" from an empty-but-valid call.
+        public SoccerMatchInfoService(IAiChatClientService chat) => _chat = chat;
+
+        public async Task<MatchEvent?> FindEventAsync(string prompt)
+            => await _chat.RunWorkInProgressPrompt<MatchEvent>(prompt);
+
+        /// Returns null if nothing matched so the controller can distinguish "no results"
+        /// from an empty-but-valid response.
         public async Task<MatchEventList?> FindEventsAsync(string prompt)
         {
-            var events = await _chat.RunWorkInProgressPrompt<MatchEventList>(prompt);
-            if (events is null || events.Events.Length == 0)
-            {
-                return null;
-            }
+            var result = await _chat.RunWorkInProgressPrompt<MatchEventList>(prompt);
+            return result is null || result.Events.Length == 0 ? null : result;
+        }
 
-            return events;
+        public async Task<PlayerAppearance?> FindPlayerAsync(string prompt)
+            => await _chat.RunWorkInProgressPrompt<PlayerAppearance>(prompt);
+
+        public async Task<PlayerList?> FindPlayersAsync(string prompt)
+        {
+            var result = await _chat.RunWorkInProgressPrompt<PlayerList>(prompt);
+            return result is null || result.Players.Length == 0 ? null : result;
         }
     }
 }

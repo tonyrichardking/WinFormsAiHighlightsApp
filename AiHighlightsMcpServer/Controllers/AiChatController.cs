@@ -17,10 +17,12 @@
         }
 
         private readonly IAiChatClientService aiChatService;
+        private readonly ISoccerMatchInfoService _matchInfo;
 
-        public AiChatController(IAiChatClientService aiChatService)
+        public AiChatController(IAiChatClientService aiChatService, ISoccerMatchInfoService matchInfo)
         {
             this.aiChatService = aiChatService;
+            _matchInfo = matchInfo;
         }
 
         // GET: aiChat/getSystemPrompts
@@ -83,28 +85,28 @@
         }
 
         // POST: aiChat/runTypedPrompt
-        // Body: { "prompt": "...", "resultType": "GoalScorer" }
+        // Body: { "prompt": "...", "resultType": "MatchEventList" }
         [EnableCors]
         [HttpPost("runTypedPrompt", Name = "RunTypedPrompt")]
         public async Task<IActionResult> RunTypedPrompt([FromBody] TypedPromptRequest request)
         {
-            object? result = request.ResultType switch
-            {
-                "MatchEvent"           => await aiChatService.RunPromptUnderTest<MatchEvent>(request.Prompt),
-                "MatchEventList"       => await aiChatService.RunPromptUnderTest<MatchEventList>(request.Prompt),
-                "PlayerAppearance"     => await aiChatService.RunPromptUnderTest<PlayerAppearance>(request.Prompt),
-                "PlayerList"           => await aiChatService.RunPromptUnderTest<PlayerList>(request.Prompt),
-                _ => null
-            };
-
-            if (result is null && !SoccerResultTypeCatalog.Descriptions.ContainsKey(request.ResultType))
+            if (!SoccerResultTypeCatalog.Descriptions.ContainsKey(request.ResultType))
             {
                 return BadRequest(new
                 {
-                    error   = $"Unknown resultType '{request.ResultType}'.",
+                    error      = $"Unknown resultType '{request.ResultType}'.",
                     validTypes = SoccerResultTypeCatalog.Descriptions.Keys
                 });
             }
+
+            object? result = request.ResultType switch
+            {
+                "MatchEvent"       => await _matchInfo.FindEventAsync(request.Prompt),
+                "MatchEventList"   => await _matchInfo.FindEventsAsync(request.Prompt),
+                "PlayerAppearance" => await _matchInfo.FindPlayerAsync(request.Prompt),
+                "PlayerList"       => await _matchInfo.FindPlayersAsync(request.Prompt),
+                _                  => null
+            };
 
             return Ok(JsonSerializer.Serialize(result));
         }

@@ -1,6 +1,7 @@
 ﻿using ContentExtraction;
 using ModelContextProtocol.Protocol;
 using ModelContextProtocol.Server;
+using OpenAI.Assistants;
 using System.ComponentModel;
 using System.Text.Json;
 using System.Xml.Linq;
@@ -94,22 +95,6 @@ namespace MCPServer.MCPTools
             return jsonString;
         }
 
-        // ******************************************************************************
-
-        //[McpServerTool(Name = "readSportFeed"), Description("Takes a Nesting value string in the form 'level1-level2-...' and returns the corresponding section of the sports feed as textual Json")]
-        //public static async Task<object> ReadSportFeed(string nesting)
-        //{
-        //    string jsonString = SportsFeedProcessorToolHelpers.readSportFeedForNesting(nesting);
-        //    var deserializedJson = SportsFeedProcessorToolHelpers.JsonHelper.Deserialize(jsonString);
-
-        //    Console.WriteLine("\n******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************");
-        //    Console.WriteLine($"\n Parameter nesting = {nesting}, Length = {jsonString.Length}");
-
-        //    return deserializedJson;  // jsonString;
-        //}
-
-        // ******************************************************************************
-
         [McpServerTool(Name = "probeSportFeed"), Description("takes a Nesting value string in the form 'root-level1-level2-...' " +
             "and returns a message for the AI assistant indicating whether or not filtering is required for the call to ReadSportFeed.")]
         public static async Task<object> ProbeSportFeed(string nesting)
@@ -152,6 +137,10 @@ namespace MCPServer.MCPTools
             "or a message for the AI assistant indicating that filtering is required for large results.")]
         public static async Task<object> ReadSportFeed(string nesting, string bindingsJson = "", string wantedAttributesJson = "")
         {
+
+            Console.WriteLine("\n******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************");
+            Console.WriteLine($"\n Parameter nesting = {nesting}");
+
             // Empty string means no filter (equivalent to the previous null defaults).
             Dictionary<string, object>? bindings = string.IsNullOrWhiteSpace(bindingsJson)
                 ? null
@@ -164,6 +153,7 @@ namespace MCPServer.MCPTools
             // TODO: don't want these baked into the code
             if (bindings == null && (nesting == "root-liveData" || nesting == "root-liveData-event_items" || nesting == "root-liveData-event-qualifier_items"))
             {
+                Console.WriteLine($"The nesting \"{nesting}\" returns a large result without filtering.  You MUST use bindings to reduce the size of the result.");
                 return new Dictionary<string, object>
                     {
                         { "Message to AI assistant", $"The nesting \"{nesting}\" returns a large result without filtering.  You MUST use bindings to reduce the size of the result." }
@@ -172,9 +162,7 @@ namespace MCPServer.MCPTools
 
             string jsonString = SportsFeedProcessorToolHelpers.readSportFeedForNesting(nesting);
             List<Dictionary<string, object>> deserializedObjects = SportsFeedProcessorToolHelpers.FilterHelpers.DeserializeToRecords(jsonString);
-            List<Dictionary<string, object>>? result = SportsFeedProcessorToolHelpers.FilterHelpers.FilterByAttribute(deserializedObjects, bindings, wantedAttributes, 200);
-
-            Console.WriteLine("\n******************************* SportsFeedProcessorTools.ReadSportFeed called *******************************");
+            List<Dictionary<string, object>>? result = SportsFeedProcessorToolHelpers.FilterHelpers.FilterByAttribute(deserializedObjects, bindings, wantedAttributes, 900);
 
             string bindingsMessage        = string.IsNullOrWhiteSpace(bindingsJson)        ? "null" : bindingsJson;
             string wantedAttributesMessage = string.IsNullOrWhiteSpace(wantedAttributesJson) ? "null" : wantedAttributesJson;
@@ -198,24 +186,6 @@ namespace MCPServer.MCPTools
 
             return jsonString;
         }
-
-        /*
-         * Superseded by readSportFeedFiltered.
-         * 
-
-        [McpServerTool(Name = "readSportFeedAttributes"), Description("Take a Nesting value string in the form 'level1-level2-...' and a list of attribute names as parameters, and return a list of Dictionary<string, string> objects that contain the bindings for these attributes.")]
-        public static async Task<List<Dictionary<string, string>>> ReadSportFeedAttributes(string nesting, List<string> wantedAttributes)
-        {
-            List<Dictionary<string, string>> attributes = SportsFeedProcessorToolHelpers.ReadSportFeedAttributesForNestingAndAttributeName(nesting, wantedAttributes);
-
-            Console.WriteLine("\n******************************* SportsFeedProcessorTools.ReadSportFeedAttributes called *******************************");
-            Console.WriteLine($"\n Parameter nesting = {nesting}, wantedAttributes = {wantedAttributes.Aggregate((a,b) => a + "," + b)}, Length = {attributes.Count}");
-
-
-            return attributes;
-        }
-
-        */
     }
 }
 

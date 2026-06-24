@@ -1,21 +1,24 @@
+using AiHighlightsMcpServer.Prompt_Engineering;
 using AiHighlightsWinFormsUi;
+using AiHighlightsWinFormsUi.MediaPipeline;
+using AiHighlightsWinFormsUi.Orchestration;
 using System.Text;
 using System.Text.Json;
 using static System.Net.Mime.MediaTypeNames;
-using AiHighlightsMcpServer.Prompt_Engineering;
-using AiHighlightsWinFormsUi.MediaPipeline;
 
 namespace WinFormsApp1
 {
     public partial class UiForm : Form
     {
         private readonly ChatClientApi theAiChatClient;
+        private readonly ChatOrchestrator _orchestrator;
         private string sourceVideoFilePath = Program.SourceVideoFilePath;
 
         public UiForm(ChatClientApi aiChatClient)
         {
             InitializeComponent();
             theAiChatClient = aiChatClient;
+            _orchestrator = new ChatOrchestrator(theAiChatClient);
             ConfigureControls();
 
             InitialiseChat();
@@ -67,8 +70,8 @@ namespace WinFormsApp1
             rtbAiChat.BorderStyle = BorderStyle.None;
             rtbAiChat.Font = new System.Drawing.Font("Segoe UI", 11);
 
-            foreach (string typeName in SoccerResultTypeCatalog.Descriptions.Keys)
-                cmbResultType.Items.Add(typeName);
+            cmbResultType.Items.Add("MatchEventList");
+            cmbResultType.Items.Add("PlayerList");
             cmbResultType.SelectedIndex = 0;
 
             txtInput.KeyDown += TxtInput_KeyDown;
@@ -147,18 +150,71 @@ namespace WinFormsApp1
             MediaPlayer.PlayVideoFromShell(Program.FfPlayBatPath);
         }
 
-        //private async void btnStartChat_Click(object sender, EventArgs e)
-        //{
-        //    string aiIntroduction = await theAiChatClient.SendMessageAsync("runPrompt", "Hello, please introduce yourself");
-        //    Log($"AI Introduction: {aiIntroduction}");
-        //}
+        private async void TxtInput_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter || e.Shift)
+            {
+                return;
+            }
 
-        //private async void btnGetOptions_Click(object sender, EventArgs e)
-        //{
-        //    string selectedOptions = await theAiChatClient.SendMessageAsync("getOptions", "");
+            e.SuppressKeyPress = true;
 
-        //    Log($"{selectedOptions}");
-        //}
+            var text = txtInput.Text.Trim();
+            if (text.Length == 0)
+            {
+                return;
+            }
+
+            AppendUserMessageToChatOutput(text);
+            txtInput.Clear();
+
+            var selectedType = cmbResultType.SelectedItem?.ToString() ?? "MatchEventList";
+            var response = await _orchestrator.HandleInputAsync(text, selectedType);
+
+            // route the response based on its kind, and render it in the chat output
+            switch (response.Kind)
+            {
+                case ResponseKind.Help:
+                    
+                    break;
+                case ResponseKind.EventResult:
+                    AppendAssistantMessageToChatOutput(response.Text);                  // raw JSON for now
+                    AppendRouteMarker("[pipeline trigger goes here — next iteration]"); // the seam, made visible
+                    break;
+                case ResponseKind.StructuredResult:
+                    
+                    break;
+                case ResponseKind.FreeformText:
+                    
+                    break;
+                case ResponseKind.Error:
+                    
+                    break;
+                default:
+                    Log($"Unknown response kind: {response.Kind}");
+                    break;
+            }
+
+            RenderResponse(response);
+        }
+
+        private void RenderResponse(ClientResponse response)
+        {
+            AppendRouteMarker($"[routed as: {response.Kind}]");   // the observable bit
+            AppendAssistantMessageToChatOutput(
+                response.Kind == ResponseKind.Error ? $"Error: {response.Text}" : response.Text);
+        }
+
+        private void AppendRouteMarker(string text) =>
+            AppendStyledTextToChatOutput($"{text}\n", Color.Gray,
+                new System.Drawing.Font("Segoe UI", 8, FontStyle.Italic), HorizontalAlignment.Left);
+    }
+}
+
+
+
+
+/*
 
         private async void TxtInput_KeyDown(object? sender, KeyEventArgs e)
         {
@@ -173,7 +229,7 @@ namespace WinFormsApp1
                 AppendUserMessageToChatOutput(text);
                 txtInput.Clear();
 
-                var selectedType = cmbResultType.SelectedItem?.ToString() ?? "GoalScorer";
+                var selectedType = cmbResultType.SelectedItem?.ToString() ?? "MatchEventList";
                 var typedRequest = new TypedPromptRequest(text, selectedType);
                 string completion = await theAiChatClient.SendMessageAsync("runTypedPrompt", typedRequest);
                 AppendAssistantMessageToChatOutput(completion);
@@ -191,5 +247,5 @@ namespace WinFormsApp1
                 AppendAssistantMessageToChatOutput(completion);
             }
         }
-    }
-}
+
+ * */

@@ -502,14 +502,22 @@ namespace ContentExtraction
                             List<Event> events = (List<Event>)items;
                             var unwrappedId = Unwrap(id);
                             long parsedId;
-                            if (unwrappedId is long l) parsedId = l;
-                            else if (unwrappedId is int i) parsedId = i;
-                            else if (unwrappedId is double d) parsedId = Convert.ToInt64(d);
-                            else parsedId = long.Parse(Convert.ToString(unwrappedId, System.Globalization.CultureInfo.InvariantCulture));
+                            try
+                            {
+                                if (unwrappedId is long l) parsedId = l;
+                                else if (unwrappedId is int i) parsedId = i;
+                                else if (unwrappedId is double d) parsedId = Convert.ToInt64(d);
+                                else parsedId = long.Parse(Convert.ToString(unwrappedId, System.Globalization.CultureInfo.InvariantCulture));
 
-                            Event ev = events.First(e => e.id == parsedId);
+                                Event ev = events.First(e => e.id == parsedId);
 
-                            return ev;
+                                return ev;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"readSportFeedItemForNestingAndId: {ex}, nesting={nesting}, id={id}");
+                                return null;
+                            }
                     }
                     return null;
 

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using WinFormsApp1;
 
-namespace WinFormsApp1
+namespace AiHighlightsWinFormsUi.MediaPipeline
 {
     public class MediaPlayer
     {

@@ -1,4 +1,5 @@
 using AiHighlightsMcpServer.Prompt_Engineering;
+using AiHighlightsMcpServer.Services;
 using Microsoft.AspNetCore.Mvc;
 using OllamaMcpWebServer.Controllers;
 using System.Text.Json;
@@ -54,9 +55,7 @@ public class SoccerResultTypeCatalogTests
     {
         var expected = new[]
         {
-            "GoalScorer", "GoalList",
             "MatchEvent", "MatchEventList",
-            "HighlightSegment", "HighlightSegmentList",
             "PlayerAppearance", "PlayerList",
         };
 
@@ -88,7 +87,7 @@ public class TypedPromptControllerTests
     [TestMethod]
     public void GetResultTypes_ReturnsOk()
     {
-        var controller = MakeController();
+        var (controller, _) = MakeController();
         var result = controller.GetResultTypes();
 
         Assert.IsInstanceOfType<OkObjectResult>(result);
@@ -97,13 +96,13 @@ public class TypedPromptControllerTests
     [TestMethod]
     public void GetResultTypes_ReturnsDictionary_WithAllTypes()
     {
-        var controller = MakeController();
+        var (controller, _) = MakeController();
         var ok   = (OkObjectResult)controller.GetResultTypes();
         var dict = ok.Value as Dictionary<string, string>;
 
         Assert.IsNotNull(dict);
-        Assert.IsTrue(dict.ContainsKey("GoalScorer"));
-        Assert.IsTrue(dict.ContainsKey("HighlightSegmentList"));
+        Assert.IsTrue(dict.ContainsKey("MatchEventList"));
+        Assert.IsTrue(dict.ContainsKey("PlayerList"));
     }
 
     // -------------------------------------------------------------------------
@@ -111,36 +110,20 @@ public class TypedPromptControllerTests
     // -------------------------------------------------------------------------
 
     [TestMethod]
-    public async Task RunTypedPrompt_GoalScorer_ReturnsOk()
-        => await AssertKnownTypeReturnsOk("GoalScorer");
+    public async Task RunTypedPrompt_MatchEvent_CallsFindEventAsync()
+        => await AssertDispatch("MatchEvent", nameof(StubSoccerMatchInfoService.FindEventAsync));
 
     [TestMethod]
-    public async Task RunTypedPrompt_GoalList_ReturnsOk()
-        => await AssertKnownTypeReturnsOk("GoalList");
+    public async Task RunTypedPrompt_MatchEventList_CallsFindEventsAsync()
+        => await AssertDispatch("MatchEventList", nameof(StubSoccerMatchInfoService.FindEventsAsync));
 
     [TestMethod]
-    public async Task RunTypedPrompt_MatchEvent_ReturnsOk()
-        => await AssertKnownTypeReturnsOk("MatchEvent");
+    public async Task RunTypedPrompt_PlayerAppearance_CallsFindPlayerAsync()
+        => await AssertDispatch("PlayerAppearance", nameof(StubSoccerMatchInfoService.FindPlayerAsync));
 
     [TestMethod]
-    public async Task RunTypedPrompt_MatchEventList_ReturnsOk()
-        => await AssertKnownTypeReturnsOk("MatchEventList");
-
-    [TestMethod]
-    public async Task RunTypedPrompt_HighlightSegment_ReturnsOk()
-        => await AssertKnownTypeReturnsOk("HighlightSegment");
-
-    [TestMethod]
-    public async Task RunTypedPrompt_HighlightSegmentList_ReturnsOk()
-        => await AssertKnownTypeReturnsOk("HighlightSegmentList");
-
-    [TestMethod]
-    public async Task RunTypedPrompt_PlayerAppearance_ReturnsOk()
-        => await AssertKnownTypeReturnsOk("PlayerAppearance");
-
-    [TestMethod]
-    public async Task RunTypedPrompt_PlayerList_ReturnsOk()
-        => await AssertKnownTypeReturnsOk("PlayerList");
+    public async Task RunTypedPrompt_PlayerList_CallsFindPlayersAsync()
+        => await AssertDispatch("PlayerList", nameof(StubSoccerMatchInfoService.FindPlayersAsync));
 
     // -------------------------------------------------------------------------
     // runTypedPrompt — unknown type returns BadRequest
@@ -149,8 +132,8 @@ public class TypedPromptControllerTests
     [TestMethod]
     public async Task RunTypedPrompt_UnknownType_ReturnsBadRequest()
     {
-        var controller = MakeController();
-        var request    = new TypedPromptRequest("any prompt", "UnknownType");
+        var (controller, _) = MakeController();
+        var request         = new TypedPromptRequest("any prompt", "UnknownType");
 
         var result = await controller.RunTypedPrompt(request);
 
@@ -161,9 +144,9 @@ public class TypedPromptControllerTests
     [TestMethod]
     public async Task RunTypedPrompt_UnknownType_ResponseContainsValidTypes()
     {
-        var controller = MakeController();
-        var result     = await controller.RunTypedPrompt(new TypedPromptRequest("p", "BadType"))
-                         as BadRequestObjectResult;
+        var (controller, _) = MakeController();
+        var result          = await controller.RunTypedPrompt(new TypedPromptRequest("p", "BadType"))
+                              as BadRequestObjectResult;
 
         var json = JsonSerializer.Serialize(result!.Value);
         Assert.IsTrue(json.Contains("validTypes"), "Bad-request body should list validTypes");
@@ -173,18 +156,29 @@ public class TypedPromptControllerTests
     // Helpers
     // -------------------------------------------------------------------------
 
-    private static AiChatController MakeController()
-        => new AiChatController(new StubTypedAiChatClientService());
-
-    private static async Task AssertKnownTypeReturnsOk(string resultType)
+    private static (AiChatController controller, StubSoccerMatchInfoService stub) MakeController()
     {
-        var controller = MakeController();
-        var request    = new TypedPromptRequest("test prompt", resultType);
+        var stub = new StubSoccerMatchInfoService();
+        return (new AiChatController(new StubTypedAiChatClientService(), stub), stub);
+    }
+
+    private static async Task AssertDispatch(string resultType, string expectedMethod)
+    {
+        var (controller, stub) = MakeController();
+        var request = new TypedPromptRequest("test prompt", resultType);
 
         var result = await controller.RunTypedPrompt(request);
 
         Assert.IsInstanceOfType<OkObjectResult>(result,
             $"ResultType '{resultType}' should return 200 OK");
+        Assert.AreEqual(expectedMethod, stub.LastMethod,
+            $"ResultType '{resultType}' should dispatch to {expectedMethod}");
+        Assert.AreEqual("test prompt", stub.LastPrompt,
+            "Prompt should be forwarded unchanged to the service");
+
+        var json = ((OkObjectResult)result).Value as string;
+        Assert.IsFalse(string.IsNullOrWhiteSpace(json) || json == "null",
+            $"ResultType '{resultType}' response body should not be null");
     }
 }
 
@@ -207,7 +201,7 @@ public class TypedPromptTests
         catch { Assert.Inconclusive("MCP server not reachable on :11190 — start it before running integration tests."); }
 
         await theService.InitialiseApi();
-        theController = new AiChatController(theService);
+        theController = new AiChatController(theService, new StubSoccerMatchInfoService());
         await theController.SetModel(new PutParameter { Value = "Claude" });
     }
 
@@ -235,26 +229,48 @@ public class TypedPromptTests
 }
 
 // =============================================================================
-// Stub — returns default(T) for all typed calls; enough for controller tests.
+// Stubs — return defaults; enough for controller unit tests (no LLM required).
 // =============================================================================
 
 internal class StubTypedAiChatClientService : IAiChatClientService
 {
-    public string? LastPrompt      { get; private set; }
-    public string? LastResultType  { get; private set; }
+    public Task<T?> RunWorkInProgressPrompt<T>(string prompt) => Task.FromResult(default(T?));
+    public Task<T?> RunPromptUnderTest<T>(string prompt)      => Task.FromResult(default(T?));
+    public Task<T?> RunTypedPrompt<T>(string prompt)          => Task.FromResult(default(T?));
+    public Task<string> RunOriginalPrompt(string prompt)      => Task.FromResult(string.Empty);
+    public void SetModelByName(string modelName)              { }
+    public void SetSystemPromptByName(string promptName)      { }
+}
 
-    public Task<T?> RunPromptUnderTest<T>(string prompt)
+internal class StubSoccerMatchInfoService : ISoccerMatchInfoService
+{
+    // Track which method was called and with what prompt so tests can assert on it.
+    public string? LastPrompt  { get; private set; }
+    public string? LastMethod  { get; private set; }
+
+    public Task<MatchEvent?> FindEventAsync(string prompt)
     {
-        LastPrompt = prompt;
-        return Task.FromResult(default(T?));
+        (LastMethod, LastPrompt) = (nameof(FindEventAsync), prompt);
+        return Task.FromResult<MatchEvent?>(new MatchEvent("Goal", "Test Player", "Home", 1, 10, 0));
     }
 
-    public Task<T?> RunTypedPrompt<T>(string prompt)
-        => Task.FromResult(default(T?));
+    public Task<MatchEventList?> FindEventsAsync(string prompt)
+    {
+        (LastMethod, LastPrompt) = (nameof(FindEventsAsync), prompt);
+        return Task.FromResult<MatchEventList?>(
+            new MatchEventList([new MatchEvent("Foul", "Test Player", "Away", 1, 22, 30)]));
+    }
 
-    public Task<string> RunOriginalPrompt(string prompt)
-        => Task.FromResult(string.Empty);
+    public Task<PlayerAppearance?> FindPlayerAsync(string prompt)
+    {
+        (LastMethod, LastPrompt) = (nameof(FindPlayerAsync), prompt);
+        return Task.FromResult<PlayerAppearance?>(new PlayerAppearance("Test Player", "Home"));
+    }
 
-    public void SetModelByName(string modelName)       { }
-    public void SetSystemPromptByName(string promptName) { }
+    public Task<PlayerList?> FindPlayersAsync(string prompt)
+    {
+        (LastMethod, LastPrompt) = (nameof(FindPlayersAsync), prompt);
+        return Task.FromResult<PlayerList?>(
+            new PlayerList([new PlayerAppearance("Test Player", "Home")]));
+    }
 }

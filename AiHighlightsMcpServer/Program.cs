@@ -57,7 +57,7 @@ namespace WebApplication1
             // lifetime. This is useful for shared resources like configuration settings or logging services
             builder.Services.AddSingleton<Ma3FeedDataProviderService>();
             builder.Services.AddSingleton<IAiChatClientService, AiChatClientService>();
-            //builder.Services.AddSingleton<SoccerMatchInfoService>();
+            builder.Services.AddSingleton<ISoccerMatchInfoService, SoccerMatchInfoService>();
             
             // If you have an MCP client hosted service you want to run in the same process, enable it.
             // builder.Services.AddHostedService<TestMcpClientHostedService>();

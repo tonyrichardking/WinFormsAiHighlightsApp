@@ -85,7 +85,15 @@ namespace WinFormsApp1
 
             // -----------------------------------------------------------
 
-            ChatClientApi TheAiChatClient = new ChatClientApi(new HttpClient() { BaseAddress = new Uri("http://localhost:11190/aiChat/") });
+            // working prompts
+            // - Make a list of highlights for the match
+            // - Make a list of players who appeared in the match
+
+            ChatClientApi TheAiChatClient = new ChatClientApi(new HttpClient() 
+            { 
+                BaseAddress = new Uri("http://localhost:11190/aiChat/"),
+                Timeout = TimeSpan.FromMinutes(5)
+            });
 
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
