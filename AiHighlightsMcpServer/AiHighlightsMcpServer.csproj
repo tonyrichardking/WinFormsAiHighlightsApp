@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\..\..\Users\tking\Downloads\StructuredPromptRequest.cs" Link="Prompt Engineering\Dtos\StructuredPromptRequest.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Anthropic" Version="12.29.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="10.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
@@ -55,10 +51,6 @@
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Prompt Engineering\Dtos\" />
   </ItemGroup>
 
 </Project>
