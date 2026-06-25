@@ -32,11 +32,14 @@ namespace WinFormsApp1
                 .AddJsonFile("appsettings.json", optional: false)
                 .Build();
 
-            var paths = config.GetSection("Paths");
-            SourceVideoFilePath     = paths["SourceVideoFilePath"]     ?? "";
-            OutputClipDirPath       = paths["OutputClipDirPath"]       ?? "";
-            OutputHighlightsDirPath = paths["OutputHighlightsDirPath"] ?? "";
-            MediaDirPath            = paths["MediaDirPath"]            ?? "";
+            var paths    = config.GetSection("Paths");
+            var appDir   = paths["AppDir"]   ?? "";
+            var mediaDir = paths["MediaDir"] ?? "";
+
+            SourceVideoFilePath     = Path.Combine(appDir, mediaDir, paths["MediaFileName"] ?? "");
+            OutputClipDirPath       = Path.Combine(appDir, paths["ClipsDir"]      ?? "Clips");
+            OutputHighlightsDirPath = Path.Combine(appDir, paths["HighlightsDir"] ?? "Highlights");
+            MediaDirPath            = Path.Combine(appDir, mediaDir);
 
             // read optional logging configuration (max buffered log messages)
             var loggingSection = config.GetSection("Logging");
