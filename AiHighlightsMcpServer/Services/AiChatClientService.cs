@@ -464,7 +464,7 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
 
             AnthropicClient client = new()
             {
-                ApiKey = "REDACTED_ANTHROPIC_API_KEY",
+                ApiKey = AppPaths.AnthropicApiKey,
 
                 // AuthToken = "your-auth-token-here", // use ApiKey OR AuthToken, not both (mutually exclusive)
                 // BaseUrl = "https://your-custom-endpoint.com"

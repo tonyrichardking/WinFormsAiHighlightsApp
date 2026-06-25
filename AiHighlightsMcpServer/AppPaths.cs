@@ -11,4 +11,5 @@ public static class AppPaths
     public static string SchemaDocsDir     { get; set; } = "";
     public static string SystemPromptPath  { get; set; } = "";
     public static string MediaSidecarPath  { get; set; } = "";
+    public static string AnthropicApiKey   { get; set; } = "";
 }

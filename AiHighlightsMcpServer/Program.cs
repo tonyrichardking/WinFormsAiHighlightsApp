@@ -58,6 +58,7 @@ namespace WebApplication1
             AppPaths.SchemaIndexPath  = Path.Combine(appDir, schemaMapsDir, "SchemaIndex.json");
             AppPaths.SchemaDocsDir    = Path.Combine(appDir, schemaDocsDir);
             AppPaths.SystemPromptPath = Path.Combine(appDir, solutionDir,   paths["SystemPromptRelPath"] ?? "");
+            AppPaths.AnthropicApiKey  = builder.Configuration["Secrets:AnthropicApiKey"] ?? "";
 
             // The Singleton design pattern ensures that a class has only one instance throughout the application's
             // lifetime. This is useful for shared resources like configuration settings or logging services

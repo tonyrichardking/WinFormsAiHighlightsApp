@@ -27,3 +27,6 @@ TestResults/
 
 # Logs
 *.log
+
+# Local secrets — never commit these
+appsettings.Development.json
