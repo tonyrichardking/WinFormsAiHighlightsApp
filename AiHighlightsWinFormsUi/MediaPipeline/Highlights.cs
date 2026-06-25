@@ -3,7 +3,7 @@
 namespace AiHighlightsWinFormsUi.MediaPipeline
 {
     /// How many seconds of lead-in and lead-out a highlight of a given type carries.
-    public record PaddingRule(int LeadInSeconds, int LeadOutSeconds);
+    //public record PaddingRule(int LeadInSeconds, int LeadOutSeconds);
 
     // Padding rules example: a goal wants the build-up and the celebration; a foul much less.
     //var paddingRules = new Dictionary<string, PaddingRule>

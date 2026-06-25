@@ -2,6 +2,7 @@ using AiHighlightsMcpServer.Prompt_Engineering;
 using AiHighlightsWinFormsUi;
 using AiHighlightsWinFormsUi.MediaPipeline;
 using AiHighlightsWinFormsUi.Orchestration;
+using AiHighlightsWinFormsUi.Rendering;
 using System.Text;
 using System.Text.Json;
 using static System.Net.Mime.MediaTypeNames;
@@ -12,7 +13,6 @@ namespace WinFormsApp1
     {
         private readonly ChatClientApi theAiChatClient;
         private readonly ChatOrchestrator _orchestrator;
-        private string sourceVideoFilePath = Program.SourceVideoFilePath;
 
         public UiForm(ChatClientApi aiChatClient)
         {
@@ -35,12 +35,44 @@ namespace WinFormsApp1
 
         public void Log(List<string> message)
         {
+            if (InvokeRequired)
+            {
+                // Marshal the call to the UI thread to avoid cross-thread exceptions
+                Invoke(new Action<List<string>>(Log), message);
+                return;
+            }
+
             lstLog.Items.Add($"\n {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}: ");
             foreach (string line in message)
             {
                 lstLog.Items.Add(line);
-                lstLog.Refresh();
             }
+
+            // Refresh once after all items have been added
+            lstLog.Refresh();
+        }
+
+        // LogRaw: append lines exactly as provided, without adding an extra timestamp header.
+        public void LogRaw(string message)
+        {
+            List<string> messageLines = message.Split("\n").ToList();
+            LogRaw(messageLines);
+        }
+
+        public void LogRaw(List<string> message)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<List<string>>(LogRaw), message);
+                return;
+            }
+
+            foreach (string line in message)
+            {
+                lstLog.Items.Add(line);
+            }
+
+            lstLog.Refresh();
         }
 
         /// <summary>
@@ -95,15 +127,6 @@ namespace WinFormsApp1
                 HorizontalAlignment.Left);
         }
 
-        private void AppendNewLineToChatOutput()
-        {
-            AppendStyledTextToChatOutput(
-                "\n",
-                Color.Black,
-                new System.Drawing.Font("Segoe UI", 11),
-                HorizontalAlignment.Left);
-        }
-
         private void AppendStyledTextToChatOutput(string text, Color colour, System.Drawing.Font font, HorizontalAlignment alignment)
         {
             if (InvokeRequired)
@@ -124,32 +147,6 @@ namespace WinFormsApp1
             rtbAiChat.ScrollToCaret();
         }
 
-        private async void btnStartProcessing_Click(object sender, EventArgs e)
-        {
-            // ensure the directories exist
-            Directory.CreateDirectory(Program.OutputClipDirPath);
-            Directory.CreateDirectory(Program.OutputHighlightsDirPath);
-
-            // delete any existing clips in the output directories
-            foreach (string file in Directory.GetFiles(Program.OutputClipDirPath))
-            {
-                File.Delete(file);
-            }
-
-            foreach (string file in Directory.GetFiles(Program.OutputHighlightsDirPath))
-            {
-                File.Delete(file);
-            }
-
-            SubClipper.MakeClips(sourceVideoFilePath, Program.OutputClipDirPath, Program.ExampleClipDefinitionJson);
-            SubClipper.AssembleClips(Directory.GetFiles(Program.OutputClipDirPath, "*.mp4").ToList(), Program.OutputHighlightsDirPath);
-        }
-
-        private void btnPlayHighlights_Click(object sender, EventArgs e)
-        {
-            MediaPlayer.PlayVideoFromShell(Program.FfPlayBatPath);
-        }
-
         private async void TxtInput_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Enter || e.Shift)
@@ -159,93 +156,91 @@ namespace WinFormsApp1
 
             e.SuppressKeyPress = true;
 
-            var text = txtInput.Text.Trim();
-            if (text.Length == 0)
+            var promptText = txtInput.Text.Trim();
+            if (promptText.Length == 0)
             {
                 return;
             }
 
-            AppendUserMessageToChatOutput(text);
+            AppendUserMessageToChatOutput(promptText);
             txtInput.Clear();
+            SetBusy(true);
 
             var selectedType = cmbResultType.SelectedItem?.ToString() ?? "MatchEventList";
-            var response = await _orchestrator.HandleInputAsync(text, selectedType);
+            var progress = new Progress<PipelineStage>(ReportStage);   // callback runs on UI thread
 
-            // route the response based on its kind, and render it in the chat output
-            switch (response.Kind)
+            try
             {
-                case ResponseKind.Help:
-                    
-                    break;
-                case ResponseKind.EventResult:
-                    AppendAssistantMessageToChatOutput(response.Text);                  // raw JSON for now
-                    AppendRouteMarker("[pipeline trigger goes here — next iteration]"); // the seam, made visible
-                    break;
-                case ResponseKind.StructuredResult:
-                    
-                    break;
-                case ResponseKind.FreeformText:
-                    
-                    break;
-                case ResponseKind.Error:
-                    
-                    break;
-                default:
-                    Log($"Unknown response kind: {response.Kind}");
-                    break;
+                var response = await _orchestrator.HandleInputAsync(promptText, selectedType, progress);
+
+                // route the response based on its kind, and render it in the chat output
+                switch (response.Kind)
+                {
+                    case ResponseKind.Help:
+                        AppendAssistantMessageToChatOutput(response.Text);                  // raw JSON for now
+                        break;
+                    case ResponseKind.EventResult:
+                        AppendTableToChatOutput(TableRenderer.Render(response.Events!.Events));   // MatchEvent[]
+                        AppendRouteMarker("[reel playing]");
+                        break;
+                    case ResponseKind.StructuredResult:
+                        // PlayerList isn't parsed upstream yet — deserialize here, then render the same way.
+                        var players = JsonSerializer.Deserialize<PlayerList>(
+                            response.Text, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                        AppendTableToChatOutput(TableRenderer.Render(players!.Players));
+                        break;
+                    case ResponseKind.FreeformText:
+
+                        break;
+                    case ResponseKind.Error:
+
+                        break;
+                    default:
+                        Log($"Unknown response kind: {response.Kind}");
+                        break;
+                }
             }
-
-            RenderResponse(response);
+            catch (Exception ex)
+            {
+                Log($"Error during processing: {ex.Message}");
+                AppendAssistantMessageToChatOutput($"Error: {ex.Message}");
+            }
+            finally
+            {
+                SetBusy(false);
+            }
         }
 
-        private void RenderResponse(ClientResponse response)
-        {
-            AppendRouteMarker($"[routed as: {response.Kind}]");   // the observable bit
-            AppendAssistantMessageToChatOutput(
-                response.Kind == ResponseKind.Error ? $"Error: {response.Text}" : response.Text);
-        }
+        private void AppendTableToChatOutput(string table) =>
+            AppendStyledTextToChatOutput($"{table}\n",
+            Color.Black,
+            new System.Drawing.Font("Consolas", 10),                       // fixed-width: the whole point
+            HorizontalAlignment.Left);
 
         private void AppendRouteMarker(string text) =>
             AppendStyledTextToChatOutput($"{text}\n", Color.Gray,
                 new System.Drawing.Font("Segoe UI", 8, FontStyle.Italic), HorizontalAlignment.Left);
-    }
-}
 
-
-
-
-/*
-
-        private async void TxtInput_KeyDown(object? sender, KeyEventArgs e)
+        private void ReportStage(PipelineStage stage)
         {
-            string text = txtInput.Text.Trim();
-
-            if (e.KeyCode == Keys.Enter && !e.Shift)
+            lblStatus.Text = stage switch
             {
-                // Enter: typed prompt — returns a structured GoalScorer result
-
-                e.SuppressKeyPress = true;
-
-                AppendUserMessageToChatOutput(text);
-                txtInput.Clear();
-
-                var selectedType = cmbResultType.SelectedItem?.ToString() ?? "MatchEventList";
-                var typedRequest = new TypedPromptRequest(text, selectedType);
-                string completion = await theAiChatClient.SendMessageAsync("runTypedPrompt", typedRequest);
-                AppendAssistantMessageToChatOutput(completion);
-            }
-            else if (e.KeyCode == Keys.Enter && e.Shift)
-            {
-                // Shift+Enter: regular prompt — returns a simple text response
-
-                e.SuppressKeyPress = true;
-
-                AppendUserMessageToChatOutput(text);
-                txtInput.Clear();
-
-                string completion = await theAiChatClient.SendMessageAsync("runPrompt", text);
-                AppendAssistantMessageToChatOutput(completion);
-            }
+                PipelineStage.Thinking => "Finding events…",
+                PipelineStage.MappingTimes => "Mapping match time to video…",
+                PipelineStage.CuttingClips => "Cutting clips…",
+                PipelineStage.AssemblingReel => "Assembling reel…",
+                PipelineStage.Ready => "Playing highlights.",
+                PipelineStage.Failed => "Something went wrong.",
+                _ => ""
+            };
         }
 
- * */
+        private void SetBusy(bool busy)
+        {
+            txtInput.Enabled = !busy;
+            cmbResultType.Enabled = !busy;
+            lblStatus.Visible = busy || lblStatus.Text == "Playing highlights.";
+            Cursor = busy ? Cursors.WaitCursor : Cursors.Default;
+        }
+    }
+}

@@ -4,6 +4,8 @@ namespace AiHighlightsWinFormsUi.MediaPipeline;
 
 public static class ManuVsBrightonMapperContext
 {
+    // TODO:- this becomes the media side
+
     /*
 
     Opta Match time to Media time mapping

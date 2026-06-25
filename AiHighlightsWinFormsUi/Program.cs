@@ -1,7 +1,6 @@
 using AiHighlightsWinFormsUi;
 using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
-using System.Text.Json;
 
 namespace WinFormsApp1
 {
@@ -10,27 +9,17 @@ namespace WinFormsApp1
         public static string SourceVideoFilePath    { get; private set; } = "";
         public static string OutputClipDirPath      { get; private set; } = "";
         public static string OutputHighlightsDirPath { get; private set; } = "";
-        public static string FfPlayBatPath          { get; private set; } = "";
+        public static string MediaDirPath           { get; private set; } = "";
 
         public static ChatClientApi TheAiChatClient { get; private set; }
 
         public static UiForm MainForm { get; private set; }
 
-        public static string ExampleClipDefinitionJson { get; private set; }
-
-        public class HghlightsDefinition()
-        {
-            public string MatchDescription { get; set; }
-            public List<ClipDefinition> ClipList { get; set; } = new List<ClipDefinition>();
-        }
-
-        public class ClipDefinition()
-        {
-            public int StartTimeSeconds { get; set; }
-            public int DurationSeconds { get; set; }
-            public string Label { get; set; }
-            public string Detail { get; set; }
-        }
+        // In-memory buffer for log messages produced before the UI is ready.
+        private static int MaxLogBufferSize = 1000; // default, may be overridden from appsettings.json
+        private static readonly object _logBufferLock = new object();
+        // Use a fixed-size circular buffer (Queue) to store recent messages.
+        private static Queue<string> _logBuffer = new Queue<string>();
 
         /// <summary>
         ///  The main entry point for the application.
@@ -47,47 +36,14 @@ namespace WinFormsApp1
             SourceVideoFilePath     = paths["SourceVideoFilePath"]     ?? "";
             OutputClipDirPath       = paths["OutputClipDirPath"]       ?? "";
             OutputHighlightsDirPath = paths["OutputHighlightsDirPath"] ?? "";
-            FfPlayBatPath           = paths["FfPlayBatPath"]           ?? "";
+            MediaDirPath            = paths["MediaDirPath"]            ?? "";
 
-            // build example clip definition data
-
-            HghlightsDefinition Highlights = new HghlightsDefinition()
+            // read optional logging configuration (max buffered log messages)
+            var loggingSection = config.GetSection("Logging");
+            if (int.TryParse(loggingSection["MaxLogBufferSize"], out var configuredSize) && configuredSize > 0)
             {
-                MatchDescription = "Manchester United vs Nottingham Forest",
-                ClipList = new List<ClipDefinition>()
-            };
-
-            Highlights.ClipList.Add(new ClipDefinition() 
-            { 
-                StartTimeSeconds = 11*60 + 10, 
-                DurationSeconds = 10,
-                Label = "First Brighton Goal",
-                Detail = "Brajan Gruda opens the scoring in the 12th minute against the run of play."
-            });
-
-            Highlights.ClipList.Add(new ClipDefinition()
-            {
-                StartTimeSeconds = 65*60 + 50,
-                DurationSeconds = 15,
-                Label = "Second Brighton Goal",
-                Detail = "Danny Welbeck scores the second goal."
-            });
-
-            Highlights.ClipList.Add(new ClipDefinition()
-            {
-                StartTimeSeconds = 86*60 + 20,
-                DurationSeconds = 15,
-                Label = "First Manchester United Goal",
-                Detail = "Benjamin Šeško. scores Man U's first goal."
-            });
-
-            ExampleClipDefinitionJson = JsonSerializer.Serialize(Highlights, new JsonSerializerOptions() { WriteIndented = true });
-
-            // -----------------------------------------------------------
-
-            // working prompts
-            // - Make a list of highlights for the match
-            // - Make a list of players who appeared in the match
+                MaxLogBufferSize = configuredSize;
+            }
 
             ChatClientApi TheAiChatClient = new ChatClientApi(new HttpClient() 
             { 
@@ -99,7 +55,8 @@ namespace WinFormsApp1
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            MainForm = new UiForm(TheAiChatClient);          
+            var mainFormInstance = new UiForm(TheAiChatClient);
+            RegisterMainForm(mainFormInstance);
 
             Application.Run(MainForm);
         }
@@ -107,7 +64,49 @@ namespace WinFormsApp1
         // https://stackoverflow.com/questions/2196097/elegant-log-window-in-winforms-c-sharp
         public static void LogToForm(string message)
         {
+            lock (_logBufferLock)
+            {
+                if (MainForm is null)
+                {
+                    // buffer message until UI is ready; enforce max buffer size to avoid unbounded growth
+                    if (_logBuffer.Count >= MaxLogBufferSize)
+                    {
+                        // drop the oldest message to make room
+                        _logBuffer.Dequeue();
+                    }
+                    var tsMessage = $"[Buffered {DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}";
+                    _logBuffer.Enqueue(tsMessage);
+                    Debug.WriteLine(tsMessage);
+                    return;
+                }
+            }
+
+            // MainForm is available; log directly on UI thread.
             MainForm.Log(message);
+        }
+
+        /// <summary>
+        /// Registers the main UI form and flushes any buffered log messages to it.
+        /// Call this as soon as the form instance is available.
+        /// </summary>
+        public static void RegisterMainForm(UiForm form)
+        {
+            if (form is null) return;
+
+            MainForm = form;
+
+            string[] buffered;
+            lock (_logBufferLock)
+            {
+                buffered = _logBuffer.ToArray();
+                _logBuffer.Clear();
+            }
+
+            foreach (var msg in buffered)
+            {
+                // Buffered messages already include a timestamp; use LogRaw to avoid double timestamps.
+                MainForm.LogRaw(msg);
+            }
         }
     }
 }

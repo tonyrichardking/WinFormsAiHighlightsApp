@@ -8,20 +8,46 @@ namespace AiHighlightsWinFormsUi.MediaPipeline
 {
     public class MediaPlayer
     {
+        public static Task PlayAsync(string videoFilePath) =>
+            Task.Run(() => PlayVideoFromShell(videoFilePath));
+
         public static void PlayVideoFromShell(string videoFilePath)
         {
             Program.LogToForm("Playing video from shell: " + videoFilePath);
 
-            Process process = new Process();
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = videoFilePath,                 // Specify the path to your video file
+                UseShellExecute = true,                   // Use the shell to start the process with default handler
+            };
 
-            process.StartInfo.FileName = videoFilePath;                 // Specify the path to your .bat file
-            process.StartInfo.UseShellExecute = false;                  // Do not use the shell to start the process
-            process.StartInfo.RedirectStandardOutput = true;            // Redirect output if needed
-            process.StartInfo.CreateNoWindow = true;                    // Do not create a window
+            Process startedProcess = null;
+            try
+            {
+                // Use the static Start which may return null when UseShellExecute=true and the shell
+                // opens the document (no process to track).
+                startedProcess = Process.Start(startInfo);
+            }
+            catch (Exception ex)
+            {
+                Program.LogToForm("Failed to start process: " + ex.Message);
+            }
 
-            process.Start(); // Start the process
-            string output = process.StandardOutput.ReadToEnd();         // Read the output if redirected
-            process.WaitForExit();                                      // Wait for the process to finish
+            if (startedProcess != null)
+            {
+                try
+                {
+                    startedProcess.WaitForExit(); // Wait for the process to finish
+                }
+                catch (Exception ex)
+                {
+                    Program.LogToForm("Error waiting for process exit: " + ex.Message);
+                }
+            }
+            else
+            {
+                Program.LogToForm("No process associated; cannot wait for exit (likely opened by shell).");
+            }
 
             Program.LogToForm("Finished");
         }
