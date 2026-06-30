@@ -1,0 +1,86 @@
+﻿Good — building a test set before chasing fixes is the right order, because you can't tell whether a tweak 
+helped without a stable yardstick to measure against. And your two examples have already found the most 
+important fault line, so let me name it first, since it shapes what's worth testing.
+Your two "best skill" prompts differ in one way: the first asks a question and then requests a clip 
+("What was the best skill? Please make a clip"), the second only requests a clip ("make a clip showing 
+the best skill"). The first gives the model a reason to answer in prose — there's a question to answer — so 
+it picks submit_unstructured and describes the clip in words instead of producing one. The second has no 
+question, only an action, so it routes to events and the reel fires. That's the seam to probe: routing 
+is driven by whether the model reads the prompt as "tell me" or "make me," and mixed prompts are ambiguous. 
+Most of the tests below are designed to map exactly where that line sits.
+A note on method before the prompts: run each a few times, not once. Temperature is 0, so it should be 
+stable, but routing-by-tool-choice can still wobble on ambiguous inputs, and you want to know which prompts 
+are reliably right, reliably wrong, or flickering — the flickering ones are the most informative. Record 
+three things per prompt: which type was chosen (your [understood as: …] marker now shows this directly — that's 
+its second job, as an evaluation instrument), whether that routing was appropriate, and whether the payload 
+was correct. Keep routing and correctness separate; a prompt can route right but return wrong events, or 
+route wrong yet contain a sensible answer.
+Group 1 — Auto routing, unambiguous (these should "just work"; they're your baseline).
+
+"List the goals in the match."
+"Show me all the fouls."
+"Were there any red cards?"
+"Who started for Manchester United?" (→ PlayerList)
+"How long was the match?" (→ Text; you've confirmed this)
+"What was the final score?" (→ Text)
+
+If any of these misroute, that's a higher-priority signal than the ambiguous ones failing.
+Group 2 — the tell/make seam (the heart of it, built around your discovery).
+
+"Make a clip of the best skill." (your working case — expect events/reel)
+"What was the best skill in the match?" (expect Text — describing, not cutting)
+"What was the best skill? Make a clip of it." (your failing case — mixed; which wins?)
+"Show me the best piece of skill." ("show me" — does it read as visual/action or as "tell me"?)
+"Find the best tackle and play it." (action verb at the end)
+"Tell me about the best goal and show it to me." (tell and show in one)
+
+This group maps the boundary precisely. I'd predict the action-only ones route to events and the question-led 
+ones to Text, with the mixed ones being the flickering middle — but the point is to find out, not assume.
+Group 3 — vocabulary the feed may not have (probes the model's grounding discipline).
+
+"Show me the counter-attacks." (no single event type for this)
+"Make a reel of the build-up play before each goal." (sequence-based — beyond flat events)
+"Show me the best saves." (depends whether saves are in the feed's event vocabulary)
+"Clip every shot on target." (needs a qualifier, not just a typeId)
+
+These test what happens at the edge of what the data supports — does it route to events and return an empty or 
+wrong list, or honestly fall back to Text saying it can't? Empty-but-confident is the failure mode that matters 
+for a demo.
+Group 4 — quantity and filtering (correctness, not routing).
+
+"Show me the first goal." (one event — does the always-a-list design hold?)
+"Show me the last foul of the first half." (filtering by period + ordering)
+"All of Bruno Fernandes's actions." (player filter; also a volume check — could this overflow the token ceiling 
+we just raised?)
+"Goals in the second half only."
+
+These stress the events path itself: ordering, filtering, and whether a big result still binds.
+Group 5 — manual override (lock the type, vary the prompt).
+With the combo box on MatchEventList: ask "how long was the match?" — a prompt that wants prose but is forced 
+to events. Does it invent nonsense events, return empty, or error? This tells you how the override behaves 
+under a mismatched prompt, which matters because users will do this.
+With the combo box on PlayerList: ask "list the goals" — forced to the wrong structured shape. 
+Same question: graceful or garbage?
+The override tests are deliberately adversarial — you're checking the failure modes when prompt and forced-type 
+disagree, since "Auto" exists precisely to avoid that, and you want to know what the escape hatch does when misused.
+Group 6 — local and degenerate (cheap, catches dumb breakage).
+
+"help" and "?" (no AI — instant local text).
+"" / whitespace (your length-guard should swallow it).
+"asdfghjkl" (nonsense — does it route to Text gracefully?).
+A non-soccer question: "What's the capital of France?" (does the system prompt's "discard prior knowledge / match-only" 
+discipline hold, or does it answer?).
+
+That last one is a quiet but real test of whether the model stays in its lane.
+Two suggestions to make this an instrument rather than a one-off. First, since you're already capturing the chosen 
+type in the marker, jot results into a simple table (prompt | expected route | actual route | payload OK?) — even 
+a text file. The value compounds: once you start tweaking tool descriptions, you re-run the same set and see 
+whether Group 2 improved without Group 1 regressing. That's the difference between tuning and guessing. 
+Second, resist fixing anything until you've run the whole set once, because the fixes interact — sharpening the 
+submit_unstructured description to catch "best skill" questions could pull other prompts into Text that you 
+wanted as events. The full baseline tells you the trade, one isolated fix doesn't.
+And since you flagged it: the "best skill" issue is fundamentally tunable rather than deep — it lives almost entirely 
+in the three tool descriptions (making submit_event_list clearly own "any request that results in a clip/reel, even 
+if a question is also asked" would likely fix your mixed case). But that's exactly the kind of change to make after 
+the baseline exists, so you can confirm it helps Group 2 without disturbing Group 1. Want me to draft sharpened 
+tool descriptions once you've run the set and can show me where it actually breaks?

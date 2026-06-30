@@ -1,4 +1,5 @@
 using AiHighlightsMcpServer.Prompt_Engineering;
+using static AiChatClientService;
 
 
 /// <summary>
@@ -10,8 +11,8 @@ using AiHighlightsMcpServer.Prompt_Engineering;
 /// </summary>
 public interface IAiChatClientService
 {
+    Task<AutoResult?> RunAutoPrompt(string apiCall);
     Task<T?> RunWorkInProgressPrompt<T>(string prompt);
-    Task<T?> RunPromptUnderTest<T>(string prompt);
     Task<T?> RunTypedPrompt<T>(string prompt);
     Task<string> RunOriginalPrompt(string apiCall);
     void SetModelByName(string modelName);

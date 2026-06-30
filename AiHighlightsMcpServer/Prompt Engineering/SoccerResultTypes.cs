@@ -34,9 +34,7 @@ namespace AiHighlightsMcpServer.Prompt_Engineering
     {
         public static readonly Dictionary<string, string> Descriptions = new()
         {
-            ["MatchEvent"]           = "A single match event: type, player, team, period, and time.",
             ["MatchEventList"]       = "A list of match events matching the query.",
-            ["PlayerAppearance"]     = "A single player: name, team, position, shirt number.",
             ["PlayerList"]           = "A list of players matching the query.",
         };
     }

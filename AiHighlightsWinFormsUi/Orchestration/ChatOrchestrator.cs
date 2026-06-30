@@ -40,16 +40,20 @@ namespace AiHighlightsWinFormsUi.Orchestration
         private static string _sourceVideoFilePath => WinFormsApp1.Program.SourceVideoFilePath;
         private static string _mediaPath => WinFormsApp1.Program.MediaDirPath;
 
+        // Mirror of the server's AutoResult. Payload stays as raw JSON until we know the type.
+        private record AutoEnvelope(string ChosenType, JsonElement Payload);
+
+        public record ClientResponse(ResponseKind Kind, string Text)
+        {
+            public MatchEventList? Events { get; init; }
+            public string? ChosenType { get; init; }     // ← new: the server's decision
+        }
+
         public async Task<ClientResponse> HandleInputAsync(string input, string selectedType, IProgress<PipelineStage> progress)
         {
-            // WORK IN PROGRESS start of iteration 4 - The orchestrator: parse, then drive the pipeline
-
             var text = input.Trim();
-
-            if (LocalCommands.IsHelp(text))                       // ← short-circuit: no network
-            {
+            if (LocalCommands.IsHelp(text))
                 return new ClientResponse(ResponseKind.Help, LocalCommands.HelpText);
-            }
 
             try
             {
@@ -57,26 +61,37 @@ namespace AiHighlightsWinFormsUi.Orchestration
                 var request = new TypedPromptRequest(text, selectedType);
                 string completion = await _api.SendMessageAsync("runTypedPrompt", request);
 
-                if (IsEventType(selectedType))
+                var opts = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var envelope = JsonSerializer.Deserialize<AutoEnvelope>(completion, opts);
+                if (envelope is null)
+                    return new ClientResponse(ResponseKind.Error, "Could not read the server response.");
+
+                // Branch on what the SERVER chose, not the combo box.
+                switch (envelope.ChosenType)
                 {
-                    // JSON → typed. NormalizeToList wraps a singular MatchEvent into a 1-item list,
-                    // so "the first goal" and "all the goals" take the same path.
-                    MatchEventList? events = NormalizeToList(completion, selectedType);
-                    if (events is null || events.Events.Length == 0)
-                    {
-                        return new ClientResponse(ResponseKind.FreeformText, "No matching events found.");
-                    }
+                    case "MatchEventList":
+                        {
+                            var events = envelope.Payload.Deserialize<MatchEventList>(opts);
+                            if (events is null || events.Events.Length == 0)
+                                return new ClientResponse(ResponseKind.FreeformText, "No matching events found.")
+                                { ChosenType = envelope.ChosenType };
 
-                    await _pipeline.ProduceAndPlayAsync(events, _sourceVideoFilePath, _mediaPath, progress);   // ← the real work
-                    return new ClientResponse(ResponseKind.EventResult, completion) { Events = events };
+                            await _pipeline.ProduceAndPlayAsync(events, _sourceVideoFilePath, _mediaPath, progress);
+                            return new ClientResponse(ResponseKind.EventResult, completion)
+                            { Events = events, ChosenType = envelope.ChosenType };
+                        }
+
+                    case "PlayerList":
+                        return new ClientResponse(ResponseKind.StructuredResult, envelope.Payload.GetRawText())
+                        { ChosenType = envelope.ChosenType };
+
+                    case "Text":
+                        return new ClientResponse(ResponseKind.FreeformText, envelope.Payload.GetString() ?? "")
+                        { ChosenType = envelope.ChosenType };
+
+                    default:
+                        return new ClientResponse(ResponseKind.Error, $"Unknown result type: {envelope.ChosenType}");
                 }
-
-                if (IsStructuredType(selectedType))
-                {
-                    return new ClientResponse(ResponseKind.StructuredResult, completion);
-                }
-
-                return new ClientResponse(ResponseKind.FreeformText, completion);
             }
             catch (Exception ex)
             {
@@ -96,3 +111,58 @@ namespace AiHighlightsWinFormsUi.Orchestration
         }
     }
 }
+
+
+
+
+/*
+
+        public async Task<ClientResponse> HandleInputAsync(string input, string selectedType, IProgress<PipelineStage> progress)
+        {
+            var text = input.Trim();
+            if (LocalCommands.IsHelp(text))
+                return new ClientResponse(ResponseKind.Help, LocalCommands.HelpText);
+
+            try
+            {
+                progress.Report(PipelineStage.Thinking);
+                var request = new TypedPromptRequest(text, selectedType);
+                string completion = await _api.SendMessageAsync("runTypedPrompt", request);
+
+                var opts = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var envelope = JsonSerializer.Deserialize<AutoEnvelope>(completion, opts);
+                if (envelope is null)
+                    return new ClientResponse(ResponseKind.Error, "Could not read the server response.");
+
+                // Branch on what the SERVER chose, not the combo box.
+                switch (envelope.ChosenType)
+                {
+                    case "MatchEventList":
+                        {
+                            var events = envelope.Payload.Deserialize<MatchEventList>(opts);
+                            if (events is null || events.Events.Length == 0)
+                                return new ClientResponse(ResponseKind.FreeformText, "No matching events found.");
+
+                            await _pipeline.ProduceAndPlayAsync(events, _sourceVideoFilePath, _mediaPath, progress);
+                            return new ClientResponse(ResponseKind.EventResult, completion) { Events = events };
+                        }
+
+                    case "PlayerList":
+                        return new ClientResponse(ResponseKind.StructuredResult, envelope.Payload.GetRawText());
+
+                    case "Text":
+                        return new ClientResponse(ResponseKind.FreeformText, envelope.Payload.GetString() ?? "");
+
+                    default:
+                        return new ClientResponse(ResponseKind.Error, $"Unknown result type: {envelope.ChosenType}");
+                }
+            }
+            catch (Exception ex)
+            {
+                progress.Report(PipelineStage.Failed);
+                return new ClientResponse(ResponseKind.Error, ex.Message);
+            }
+        }
+
+
+ */

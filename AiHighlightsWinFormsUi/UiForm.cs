@@ -102,9 +102,9 @@ namespace WinFormsApp1
             rtbAiChat.BorderStyle = BorderStyle.None;
             rtbAiChat.Font = new System.Drawing.Font("Segoe UI", 11);
 
-            cmbResultType.Items.Add("MatchEventList");
-            cmbResultType.Items.Add("PlayerList");
-            cmbResultType.SelectedIndex = 0;
+            cmbResultType.Items.Clear();
+            cmbResultType.Items.AddRange(new object[] { "Auto", "MatchEventList", "PlayerList" });
+            cmbResultType.SelectedIndex = 0;   // Auto by default
 
             txtInput.KeyDown += TxtInput_KeyDown;
         }
@@ -166,7 +166,130 @@ namespace WinFormsApp1
             txtInput.Clear();
             SetBusy(true);
 
-            var selectedType = cmbResultType.SelectedItem?.ToString() ?? "MatchEventList";
+            var selectedType = cmbResultType.SelectedItem?.ToString() ?? "Auto";
+            var progress = new Progress<PipelineStage>(ReportStage);   // callback runs on UI thread
+
+            try
+            {
+                var response = await _orchestrator.HandleInputAsync(promptText, selectedType, progress);
+
+                // route the response based on its kind, and render it in the chat output
+                switch (response.Kind)
+                {
+                    case ResponseKind.Help:
+                        AppendAssistantMessageToChatOutput(response.Text);
+                        break;
+
+                    case ResponseKind.EventResult:
+                        AppendRouteMarker(InterpretationMarker(response.ChosenType));      // ← what the model understood
+                        AppendTableToChatOutput(TableRenderer.Render(response.Events!.Events));
+                        AppendRouteMarker("[reel playing]");
+                        break;
+
+                    case ResponseKind.StructuredResult:
+                        AppendRouteMarker(InterpretationMarker(response.ChosenType));
+                        var players = JsonSerializer.Deserialize<PlayerList>(
+                            response.Text, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                        AppendTableToChatOutput(TableRenderer.Render(players!.Players));
+                        break;
+
+                    case ResponseKind.FreeformText:                                        // ← was empty
+                        AppendRouteMarker(InterpretationMarker(response.ChosenType));
+                        AppendAssistantMessageToChatOutput(response.Text);
+                        break;
+
+                    case ResponseKind.Error:                                               // ← was empty
+                        AppendAssistantMessageToChatOutput($"Error: {response.Text}");
+                        break;
+
+                    default:
+                        Log($"Unknown response kind: {response.Kind}");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log($"Error during processing: {ex.Message}");
+                AppendAssistantMessageToChatOutput($"Error: {ex.Message}");
+            }
+            finally
+            {
+                SetBusy(false);
+            }
+        }
+
+        private static string InterpretationMarker(string? chosenType)
+        {
+            if (string.IsNullOrEmpty(chosenType))
+                return "[understood your request]";
+
+            // Reuse the server-side descriptions if the client references that catalog;
+            // otherwise a tiny local map. Keep it to ONE place.
+            var phrase = SoccerResultTypeCatalog.Descriptions.TryGetValue(chosenType, out var d)
+                ? d
+                : chosenType;
+            return $"[understood as: {phrase}]";
+        }
+
+        private void AppendTableToChatOutput(string table) =>
+            AppendStyledTextToChatOutput($"{table}\n",
+            Color.Black,
+            new System.Drawing.Font("Consolas", 10),                       // fixed-width: the whole point
+            HorizontalAlignment.Left);
+
+        private void AppendRouteMarker(string text) =>
+            AppendStyledTextToChatOutput($"{text}\n", Color.Gray,
+                new System.Drawing.Font("Segoe UI", 8, FontStyle.Italic), HorizontalAlignment.Left);
+
+        private void ReportStage(PipelineStage stage)
+        {
+            lblStatus.Text = stage switch
+            {
+                PipelineStage.Thinking => "Finding events…",
+                PipelineStage.MappingTimes => "Mapping match time to video…",
+                PipelineStage.CuttingClips => "Cutting clips…",
+                PipelineStage.AssemblingReel => "Assembling reel…",
+                PipelineStage.Ready => "Playing highlights.",
+                PipelineStage.Failed => "Something went wrong.",
+                _ => ""
+            };
+        }
+
+        private void SetBusy(bool busy)
+        {
+            txtInput.Enabled = !busy;
+            cmbResultType.Enabled = !busy;
+            lblStatus.Visible = busy || lblStatus.Text == "Playing highlights.";
+            Cursor = busy ? Cursors.WaitCursor : Cursors.Default;
+        }
+    }
+}
+
+
+
+
+/*
+
+        private async void TxtInput_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter || e.Shift)
+            {
+                return;
+            }
+
+            e.SuppressKeyPress = true;
+
+            var promptText = txtInput.Text.Trim();
+            if (promptText.Length == 0)
+            {
+                return;
+            }
+
+            AppendUserMessageToChatOutput(promptText);
+            txtInput.Clear();
+            SetBusy(true);
+
+            var selectedType = cmbResultType.SelectedItem?.ToString() ?? "Auto";
             var progress = new Progress<PipelineStage>(ReportStage);   // callback runs on UI thread
 
             try
@@ -211,36 +334,4 @@ namespace WinFormsApp1
             }
         }
 
-        private void AppendTableToChatOutput(string table) =>
-            AppendStyledTextToChatOutput($"{table}\n",
-            Color.Black,
-            new System.Drawing.Font("Consolas", 10),                       // fixed-width: the whole point
-            HorizontalAlignment.Left);
-
-        private void AppendRouteMarker(string text) =>
-            AppendStyledTextToChatOutput($"{text}\n", Color.Gray,
-                new System.Drawing.Font("Segoe UI", 8, FontStyle.Italic), HorizontalAlignment.Left);
-
-        private void ReportStage(PipelineStage stage)
-        {
-            lblStatus.Text = stage switch
-            {
-                PipelineStage.Thinking => "Finding events…",
-                PipelineStage.MappingTimes => "Mapping match time to video…",
-                PipelineStage.CuttingClips => "Cutting clips…",
-                PipelineStage.AssemblingReel => "Assembling reel…",
-                PipelineStage.Ready => "Playing highlights.",
-                PipelineStage.Failed => "Something went wrong.",
-                _ => ""
-            };
-        }
-
-        private void SetBusy(bool busy)
-        {
-            txtInput.Enabled = !busy;
-            cmbResultType.Enabled = !busy;
-            lblStatus.Visible = busy || lblStatus.Text == "Playing highlights.";
-            Cursor = busy ? Cursors.WaitCursor : Cursors.Default;
-        }
-    }
-}
+ */

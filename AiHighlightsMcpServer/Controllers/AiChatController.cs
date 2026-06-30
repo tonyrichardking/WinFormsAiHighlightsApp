@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
     using System.Text.Json;
+    using static AiChatClientService;
 
     [ApiController]
     [Route("[controller]")]
@@ -85,28 +86,33 @@
         }
 
         // POST: aiChat/runTypedPrompt
-        // Body: { "prompt": "...", "resultType": "MatchEventList" }
+        // Body: { "prompt": "...", "resultType": "Auto" }   // or a concrete type to override
         [EnableCors]
         [HttpPost("runTypedPrompt", Name = "RunTypedPrompt")]
         public async Task<IActionResult> RunTypedPrompt([FromBody] TypedPromptRequest request)
         {
-            if (!SoccerResultTypeCatalog.Descriptions.ContainsKey(request.ResultType))
+            // "Auto" (or empty) = let the model choose the shape. Otherwise it's an override,
+            // which must name a type the catalog knows.
+            bool isAuto = string.IsNullOrWhiteSpace(request.ResultType)
+                          || request.ResultType.Equals("Auto", StringComparison.OrdinalIgnoreCase);
+
+            if (!isAuto && !SoccerResultTypeCatalog.Descriptions.ContainsKey(request.ResultType))
             {
                 return BadRequest(new
                 {
-                    error      = $"Unknown resultType '{request.ResultType}'.",
+                    error = $"Unknown resultType '{request.ResultType}'.",
                     validTypes = SoccerResultTypeCatalog.Descriptions.Keys
                 });
             }
 
-            object? result = request.ResultType switch
-            {
-                "MatchEvent"       => await _matchInfo.FindEventAsync(request.Prompt),
-                "MatchEventList"   => await _matchInfo.FindEventsAsync(request.Prompt),
-                "PlayerAppearance" => await _matchInfo.FindPlayerAsync(request.Prompt),
-                "PlayerList"       => await _matchInfo.FindPlayersAsync(request.Prompt),
-                _                  => null
-            };
+            // One path for both modes. The override (when not Auto) narrows the tool set;
+            // either way we get back the same AutoResult envelope.
+            AutoResult? result = isAuto
+                ? await _matchInfo.FindResultsAsync(request.Prompt)
+                : await _matchInfo.FindResultsAsync(request.Prompt, request.ResultType);
+
+            if (result is null)
+                return Ok(JsonSerializer.Serialize(new AutoResult("Text", "No matching results found.")));
 
             return Ok(JsonSerializer.Serialize(result));
         }

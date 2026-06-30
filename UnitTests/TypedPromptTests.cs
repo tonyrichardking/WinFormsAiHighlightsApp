@@ -240,6 +240,11 @@ internal class StubTypedAiChatClientService : IAiChatClientService
     public Task<string> RunOriginalPrompt(string prompt)      => Task.FromResult(string.Empty);
     public void SetModelByName(string modelName)              { }
     public void SetSystemPromptByName(string promptName)      { }
+
+    Task<AiChatClientService.AutoResult?> IAiChatClientService.RunAutoPrompt(string apiCall)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 internal class StubSoccerMatchInfoService : ISoccerMatchInfoService
@@ -272,5 +277,15 @@ internal class StubSoccerMatchInfoService : ISoccerMatchInfoService
         (LastMethod, LastPrompt) = (nameof(FindPlayersAsync), prompt);
         return Task.FromResult<PlayerList?>(
             new PlayerList([new PlayerAppearance("Test Player", "Home")]));
+    }
+
+    Task<AiChatClientService.AutoResult?> ISoccerMatchInfoService.FindResultsAsync(string prompt)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<AiChatClientService.AutoResult?> ISoccerMatchInfoService.FindResultsAsync(string prompt, string resultType)
+    {
+        throw new NotImplementedException();
     }
 }

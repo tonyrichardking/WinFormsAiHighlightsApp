@@ -35,7 +35,7 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
 
     #region private members
 
-    private static string defaultModelName = "gpt-oss:latest";             //  Claude, llama3.2:latest deepseek-r1:latest; gemma3:latest; deepseek-r1:latest
+    private static string defaultModelName = "Claude";             // gpt-oss:latest, llama3.2:latest deepseek-r1:latest; gemma3:latest; deepseek-r1:latest
     private static string ollamaEndPoint = "http://localhost:11434";
 
     private static List<McpModel> theOllamaModels = new()
@@ -50,6 +50,7 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
             };
 
     // the OllamaApiClient is used to connect to the Ollama server and is the underlying chat client for the MCP client. 
+    private static bool useOllama = false;
     private IChatClient? ollamaApiClient;
 
     // The IChatClient interface allows consumption of language models
@@ -125,10 +126,83 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
 
     #region prompt loops
 
-    public async Task<T?> RunPromptUnderTest<T>(string prompt)
+    public record EventResultEnvelope(MatchEventList Result);
+    public record PlayerResultEnvelope(PlayerList Result);
+    public record TextResultEnvelope(string Result);
+
+    public async Task<AutoResult> RunPromptUnderTest<T>(string prompt)
     {
-        return await RunWorkInProgressPrompt<T>(prompt);
+        return await RunAutoPrompt(prompt);
     }
+
+    // Carries the routing decision (which tool fired) plus the captured payload.
+    public record AutoResult(string ChosenType, object? Payload);
+
+    /// Auto-routing sibling of RunWorkInProgressPrompt<T>. Instead of one submit_result
+    /// tool over a fixed T, it offers several terminal tools; the one the model calls
+    /// signals the inferred result type. One round-trip: the model gathers data AND
+    /// chooses the shape together.
+    public async Task<AutoResult?> RunAutoPrompt(string apiCall)
+    {
+        try
+        {
+            AutoResult? captured = null;
+
+            // Each tool wraps its payload in { "result": ... }, matching your existing
+            // envelope convention so binding behaves identically to the generic method.
+            var submitEvents = AIFunctionFactory.Create(
+                (EventResultEnvelope result) => { captured = new AutoResult("MatchEventList", result.Result); return "received"; },
+                name: "submit_event_list",
+                description: "Use when the answer is a set of timed match events — goals, fouls, cards, " +
+                             "shots — that the user may want as a highlights reel or a table.");
+
+            var submitPlayers = AIFunctionFactory.Create(
+                (PlayerResultEnvelope result) => { captured = new AutoResult("PlayerList", result.Result); return "received"; },
+                name: "submit_player_list",
+                description: "Use when the answer is about players or the squad — appearances, positions, " +
+                             "shirt numbers, who started, who was substituted.");
+
+            var submitText = AIFunctionFactory.Create(
+                (TextResultEnvelope result) => { captured = new AutoResult("Text", result.Result); return "received"; },
+                name: "submit_unstructured",
+                description: "Use for anything else — match duration, yes/no questions, counts, explanations. " +
+                             "Put the complete answer, formatted exactly as the user requested, in the text.");
+
+            var toolsForThisCall = new List<AITool>(AvailableTools) { submitEvents, submitPlayers, submitText };
+            var options = buildChatOptions(toolsForThisCall, 0);   // same call as yours
+
+            var messages = new List<ChatMessage>(ChatHistory)
+        {
+            new ChatMessage(ChatRole.User, apiCall),
+            new ChatMessage(ChatRole.User,
+                "When you have the data you need, call EXACTLY ONE of the submit_* tools to return " +
+                "your answer, choosing the one that best fits the result. Each takes a single argument " +
+                "object with a top-level \"result\" property. Do NOT write any prose outside the tool call. " +
+                "If no structured tool fits, use submit_unstructured.")
+        };
+
+            ChatResponse response = await chatClient.GetResponseAsync(messages, options);
+
+            if (captured is not null)
+                return captured;
+
+            // Same un-concealing diagnostic as your generic method.
+            Console.WriteLine("=== RunAutoPrompt: no submit_* tool was called ===");
+            Console.WriteLine($"FinishReason : {response.FinishReason}");
+            Console.WriteLine($"Raw .Text    : {response.Text}");
+            // Fallback: treat whatever prose came back as an unstructured answer rather than losing it.
+            return string.IsNullOrWhiteSpace(response.Text) ? null : new AutoResult("Text", response.Text);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"RunAutoPrompt error: {ex.Message}");
+            return null;
+        }
+    }
+
+    #endregion
+
+    #region legacy prompts
 
     /// <summary>
     /// Runs a prompt with the full tool loop enabled, but captures the model's final
@@ -349,6 +423,7 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
         }
     }
 
+
     #endregion
 
     #region public methods
@@ -498,8 +573,12 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
         StringBuilder sb = new StringBuilder();
         sb.AppendLine("\nMCP Client Started.");
 
-        OllamaApiClient ollamaApiClient = new OllamaApiClient(ollamaEndPoint, defaultModelName);
-        sb.AppendLine($"\nConnected to {ollamaEndPoint} using model {ollamaApiClient.SelectedModel}.");
+        OllamaApiClient ollamaApiClient = null;
+        if (useOllama)
+        {
+            ollamaApiClient = new OllamaApiClient(ollamaEndPoint, defaultModelName);
+            sb.AppendLine($"\nConnected to {ollamaEndPoint} using model {ollamaApiClient.SelectedModel}.");
+        }
 
         //
         // Create the MCP client and configure it to start and connect to your MCP server.
@@ -528,8 +607,13 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
         // List available models and tools
         //
 
-        var models = await ollamaApiClient.ListLocalModelsAsync();
-        List<string> availableModels = models.Select(m => m.Name).ToList();
+        var models = new List<McpModel>();
+        List<string> availableModels = new List<string>();
+        if (useOllama)
+        {
+            //models = await ollamaApiClient.ListLocalModelsAsync();
+            availableModels = models.Select(m => m.Name).ToList();
+        }
 
         IList<McpClientTool> availableTools = await mcpClient.ListToolsAsync();
 
@@ -541,17 +625,39 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
         return (sb.ToString(), ollamaApiClient, availableModels, availableTools, theChosenModel);
     }
 
-    private static ChatOptions buildChatOptions(IEnumerable<AITool> tools, float? temperature, string jsonSchema = null)
+    //private static ChatOptions xbuildChatOptions(IEnumerable<AITool> tools, float? temperature, string jsonSchema = null)
+    //{
+    //    ChatOptions chatOptions = new ChatOptions
+    //    {
+    //        Temperature = temperature,
+    //        Tools = [.. tools],
+    //        MaxOutputTokens = 1028,
+    //        ResponseFormat = jsonSchema is not null ? ChatResponseFormat.ForJsonSchema(JsonDocument.Parse(jsonSchema).RootElement) : null
+    //    };
+
+    //    return (chatOptions);
+    //}
+
+    /// <summary>
+    /// Note: A too-low maxOutputTokens value could leead to intermittent results
+    /// </summary>
+    /// <param name="tools"></param>
+    /// <param name="temperature"></param>
+    /// <param name="jsonSchema"></param>
+    /// <param name="maxOutputTokens"></param>
+    /// <returns></returns>
+    private static ChatOptions buildChatOptions(IEnumerable<AITool> tools, float? temperature,
+    string jsonSchema = null, int maxOutputTokens = 4096)
     {
         ChatOptions chatOptions = new ChatOptions
         {
             Temperature = temperature,
             Tools = [.. tools],
-            MaxOutputTokens = 1028,
-            ResponseFormat = jsonSchema is not null ? ChatResponseFormat.ForJsonSchema(JsonDocument.Parse(jsonSchema).RootElement) : null
+            MaxOutputTokens = maxOutputTokens,
+            ResponseFormat = jsonSchema is not null
+                ? ChatResponseFormat.ForJsonSchema(JsonDocument.Parse(jsonSchema).RootElement) : null
         };
-
-        return (chatOptions);
+        return chatOptions;
     }
 
     private static bool setThoughtLevel(McpModel theChosenModel, bool thinking, ChatOptions chatOptions)
