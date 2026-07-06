@@ -17,11 +17,11 @@ namespace UnitTests
 
         public static MatchEventList sampleEvents = new MatchEventList(new[]
         {
-            new MatchEvent("Goal", "B. Gruda", "Brighton \u0026 Hove Albion", 1, 11, 11),
-            new MatchEvent("Card", "K. Mainoo", "Manchester United", 2, 59, 33),
-            new MatchEvent("Goal", "D. Welbeck", "Brighton \u0026 Hove Albion", 2, 63, 56),
-            new MatchEvent("Goal", "B. \u0160e\u0161ko", "Manchester United", 2, 84, 36),
-            new MatchEvent("Card", "C. Kostoulas", "Brighton & Hove Albion", 2, 92, 4),
+            new MatchEvent("Goal", "B. Gruda", "Brighton \u0026 Hove Albion", 1, 11, 11, "A goal"),
+            new MatchEvent("Card", "K. Mainoo", "Manchester United", 2, 59, 33, "A yellow card"),
+            new MatchEvent("Goal", "D. Welbeck", "Brighton \u0026 Hove Albion", 2, 63, 56, "A goal"),
+            new MatchEvent("Goal", "B. \u0160e\u0161ko", "Manchester United", 2, 84, 36, "A goal"),
+            new MatchEvent("Card", "C. Kostoulas", "Brighton & Hove Albion", 2, 92, 4, "A yellow card"),
         });
 
         public static MediaTimeMapper mediaTimeMapper;

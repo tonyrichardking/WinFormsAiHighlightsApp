@@ -6,9 +6,9 @@ namespace AiHighlightsMcpServer.Prompt_Engineering
     // ---- LLM-facing result types (what RunPrompt<T> may return) ----
 
     /// <summary>
-    /// A single match event in match (feed) time: what happened, who was involved, and when.
+    /// A single match event in match (feed) time: what happened, who was involved, when, and description.
     /// </summary>
-    public record MatchEvent(string EventType, string PlayerName, string Team, int Period, int TimeMin, int TimeSec);
+    public record MatchEvent(string EventType, string PlayerName, string Team, int Period, int TimeMin, int TimeSec, string shortEventDescription);
 
     /// <summary>
     /// A list of match events matching the user's query — goals, fouls, cards, shots, etc.

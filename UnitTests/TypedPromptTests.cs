@@ -256,14 +256,14 @@ internal class StubSoccerMatchInfoService : ISoccerMatchInfoService
     public Task<MatchEvent?> FindEventAsync(string prompt)
     {
         (LastMethod, LastPrompt) = (nameof(FindEventAsync), prompt);
-        return Task.FromResult<MatchEvent?>(new MatchEvent("Goal", "Test Player", "Home", 1, 10, 0));
+        return Task.FromResult<MatchEvent?>(new MatchEvent("Goal", "Test Player", "Home", 1, 10, 0, "A goal"));
     }
 
     public Task<MatchEventList?> FindEventsAsync(string prompt)
     {
         (LastMethod, LastPrompt) = (nameof(FindEventsAsync), prompt);
         return Task.FromResult<MatchEventList?>(
-            new MatchEventList([new MatchEvent("Foul", "Test Player", "Away", 1, 22, 30)]));
+            new MatchEventList([new MatchEvent("Foul", "Test Player", "Away", 1, 22, 30, "A foul")]));
     }
 
     public Task<PlayerAppearance?> FindPlayerAsync(string prompt)

@@ -1,0 +1,306 @@
+
+I think that was definitely a worthwhile exercise.  I'll list the results below and make my own comments underneath.
+At that point I'd like you to make your own general observations, but not do anything else yet.  Please make a note
+about the two next steps that are pending: the "shared-types question" and the "tool-sharpening" issue, and make sure 
+we return to them (I may do a little bit of refactoring, with your help, first).
+
+
+*******************************************************************
+
+
+Group 1 — Auto routing, unambiguous (should "just work").
+---------------------------------------------------------
+
+"List the goals in the match."
+Run 1,2 & 3.  [understood as: A list of match events matching the query.] Table and reel returned as expected.
+  
+"Show me all the fouls."
+Run 1,2 & 3.  [understood as: A list of match events matching the query.] Table and reel returned as expected.
+
+"Were there any red cards?"
+Run 1,2 & 3. [understood as: Text] Returned "No" (correct) but the tool threw an exception - to be investigated.
+
+"Who kicked off the two periods of the match?" 
+Run 1,2 & 3. [understood as: Text] First Period: Brighton & Hove Albion (G. Rutter) Second Period: Manchester United (Bruno Fernandes) (correct but should be table)
+
+"How long was the match?"
+Run 1,2 & 3. [understood as: Text] 96:18.  (correct)
+
+"What was the final score?" 
+Run 1,2 & 3. [understood as: Text] Manchester United 1-2 Brighton & Hove Albion (correct)
+
+"Summarise the match"
+[understood as: Text] Text: MATCH SUMMARY Manchester United 1-2 Brighton & Hove Albion Match Status: Played Duration: 96 minutes 18 seconds...etc
+
+"Use descriptive prose to describe the the match"
+[understood as: Text] Text: Manchester United hosted Brighton & Hove Albion at Old Trafford in an FA Cup match on January 11, 2026. Brighton secured a 2-1 victory in a closely contested encounter...etc
+
+"Analyse the full match and automatically produce a 60-second social highlight reel featuring the biggest moments, key plays, celebrations 
+and crowd reactions, edited with a fast pace and a clear match narrative suitable for Manchester United social channels."
+[understood as: A list of match events matching the query.]:
+
+EventType      PlayerName       Team                    Period  TimeMin  TimeSec  shortEventDescription                                    
+-------------  ---------------  ----------------------  ------  -------  -------  -------------------------------------------------------  
+Attempt Saved  Bruno Fernandes  Manchester United       1       6        7        Early chance - Bruno's shot saved                        
+Goal           B. Gruda         Brighton & Hove Albion  1       11       11       GOAL! Gruda strikes early - Brighton takes the lead      
+Attempt Saved  B. Šeško         Manchester United       1       15       31       Šeško's effort saved - United pressing                   
+Attempt Saved  Bruno Fernandes  Manchester United       1       33       29       Bruno's powerful strike - saved by keeper                
+Card           K. Mainoo        Manchester United       2       59       33       Yellow card - Mainoo cautioned                           
+Goal           D. Welbeck       Brighton & Hove Albion  2       63       56       GOAL! Welbeck doubles Brighton's lead - clinical finish  
+Attempt Saved  B. Šeško         Manchester United       2       80       42       Šeško's chance - saved                                   
+Goal           B. Šeško         Manchester United       2       84       36       GOAL! Šeško pulls one back - United fights back late     
+Card           S. Lacey         Manchester United       2       86       33       Yellow card - Lacey cautioned                            
+Card           S. Lacey         Manchester United       2       88       58       Red card! Lacey sent off - United down to 10 men         
+
+Group 2 — the tell/make seam.
+-----------------------------
+
+"Make a clip of the best skill."
+Run 1 [understood as: A list of match events matching the query.] Clip returned. Table: Take On    Matheus Cunha  Manchester United      
+Run 2 & 3. [understood as: A list of match events matching the query.] Clip returned. Table:  Take On    Casemiro    Manchester United    
+
+"What was the best skill in the match?" 
+Run 1. [understood as: Text] Matheus Cunha displayed the best skill in the match with 3 successful take-ons (dribbles), more than any other player. His successful dribbles occurred at 45:36, 48:58, and 54:18.
+Run 2. [understood as: Text] No 'Good skill' events were recorded in this match. The closest skill-related events are 'Take On' (dribbling) events. Matheus Cunha had the most successful take-ons with 3 successful dribbles (at 45:36, 48:58, and 54:18).
+Run 3. [understood as: Text] No good skill events were recorded in this match. (also threw a tool exceptiomn).
+
+"What was the best skill? Make a clip of it."
+Run 1. [understood as: Text] No skill events were recorded in this match. There are no "Good skill" moments to create a clip from. (also threw a tool exception).
+Run 2. [understood as: Text]  No skill events were recorded in this match. While the "Good skill" event type (typeId 42) exists in the system to capture moments when a player shows a good piece of skill on the ball such as a step over or turn, no such events were documented by the match analysts during this fixture.  (also threw a tool exception).
+Run 3. [understood as: Text] No skill events were recorded in this match. The sports feed does not contain any "Good skill" (typeId 42) events that could be clipped.
+
+"Show me the best piece of skill."
+Run 1, 2 & 3. [understood as: A list of match events matching the query.] Clip returned. Table: Take On    Matheus Cunha  Manchester United. (also threw a tool exception on runs 2 & 3).
+
+"Find the best tackle and play it."
+Run 1. [understood as: A list of match events matching the query.]  Clip returned. Table: Tackle     L. Yoro     Manchester United   
+Run 2 & 3. [understood as: A list of match events matching the query.]  Clip returned. Table: Tackle     P. Groß     Brighton & Hove Albion 
+
+"Tell me about the best goal and show it to me." 
+Run 1,2 & 3. [understood as: A list of match events matching the query.]  Clip returned. Table: Goal       B. Gruda    Brighton & Hove Albion     
+
+
+Group 3 — vocabulary the feed may not have.
+-------------------------------------------
+
+"Show me the counter-attacks."
+Run 1. [understood as: Text] No counter-attacks were recorded in this match. (also threw a tool exception.)
+Run 2. [understood as: Text] No counter-attacks found in this match. The sports feed data does not contain any events with the "Fast break" qualifier (qualifierId 23), which is how counter-attacks are classified in this system.  (also threw a tool exception.)
+Run 3. [understood as: Text] No counter-attacks found in the match data, or the counter-attack data is not available in the current feed format. The sports feed system uses qualifier ID 23 to mark 'fast break' situations, which is the closest equivalent to counter-attacks. However, the qualifier information is not being returned in the accessible event data for this match.  (also threw a tool exception.)
+
+"Make a reel of the build-up play before each goal."
+Run 1 & 2. [understood as: A list of match events matching the query.] Clip returned. Table: 
+     
+Pass        D. Welbeck       Brighton  1       11       8        
+Shot Saved  G. Rutter        Brighton  1       11       10       
+Goal        B. Gruda         Brighton  1       11       11       
+Pass        D. Welbeck       Brighton  2       63       13             
+<more passes>         
+Pass        B. Gruda         Brighton  2       63       54       
+Goal        D. Welbeck       Brighton  2       63       56       
+Pass        Bruno Fernandes  Wolves    2       84       3        
+<more passes>      
+Pass        Bruno Fernandes  Wolves    2       84       33       
+Goal        B. Šeško         Wolves    2       84       36    
+
+Run 3. [understood as: A list of match events matching the query.]  Clip returned. Table: 
+
+Goal       B. Gruda    Brighton & Hove Albion  1       11       11       
+Goal       D. Welbeck  Brighton & Hove Albion  2       63       56       
+Goal       B. Šeško    Manchester United       2       84       36    
+
+
+"Show me the best saves."
+Run 1,2 & 3. [understood as: A list of match events matching the query.]  Clip returned. Table: 
+
+Save       J. Steele          Brighton & Hove Albion  1       1        56       
+Save       J. Steele          Brighton & Hove Albion  1       6        8        
+<more saves>        
+Save       J. Steele          Brighton & Hove Albion  2       80       43       
+Save       J. Steele          Brighton & Hove Albion  2       94       35 
+
+NOTE: The player named in the event is not always the goalkeeper - possibly the scorer?  To be investigated.    
+
+
+"Clip every shot on target."
+Run 1 & 2. [understood as: A list of match events matching the query.]   Clip returned. Table: 
+ 
+Attempt Saved  Diogo Dalot        Manchester United       1       1        56       
+<more Attempt Saved>   
+Attempt Saved  G. Rutter          Brighton & Hove Albion  1       11       10       
+Goal           B. Gruda           Brighton & Hove Albion  1       11       11       
+Attempt Saved  D. Welbeck         Brighton & Hove Albion  1       13       43       
+<more Attempt Saved>         
+Attempt Saved  J. Hinshelwood     Brighton & Hove Albion  2       50       31       
+Goal           D. Welbeck         Brighton & Hove Albion  2       63       56       
+Attempt Saved  P. Dorgu           Manchester United       2       73       41       
+Goal           B. Šeško           Manchester United       2       84       36       
+<more Attempt Saved>    
+
+Run 3 [understood as: Text] No clip returned. Text: No shots on target found in the match data. The sports feed for this match contains only pass events and does not include shot event data (typeId 15 for "Attempt Saved" or typeId 16 for "Goal").     
+
+
+Group 4 — quantity and filtering (correctness, not routing).
+------------------------------------------------------------
+
+"Show me the first goal."
+Run 1,2 & 3. [understood as: A list of match events matching the query.]  Clip returned. Table: Goal       B. Gruda    Brighton & Hove Albion      
+
+"Show me the last foul of the first half.".
+Run 1,2 & 3. [understood as: A list of match events matching the query.] Clip returned. Table: Foul       Lisandro Martínez  Manchester United 
+ 
+"All of Bruno Fernandes's actions."
+Run 1. [understood as: Text] Text: No matching results found.  Console Log: "RunAutoPrompt error: The JSON value could not be converted to AiChatClientService+TextResultEnvelope. Path: $ | LineNumber: 0 | BytePositionInLine: 1895."
+Run 2 & 3. [understood as: Text] Text: Bruno Fernandes - All Actions
+
+PERIOD 1:
+0:13 - Aerial (Lost)
+<~50 more events>
+
+PERIOD 2:
+45:00 - Pass (Successful)
+<~50 more events>
+
+SUMMARY:
+Total Actions: 176
+Passes: 139 (Successful: 103, Unsuccessful: 36)
+Attempts Saved: 2
+<~20 more actions>
+
+"Goals in the second half only."
+Run 1,2 & 3. [understood as: A list of match events matching the query.] Clip returned. Table: 
+
+Goal       D. Welbeck  Brighton & Hove Albion  2       63       56       
+Goal       B. Šeško    Manchester United       2       84       36       
+ 
+
+Group 5 — manual override (lock the type, vary the prompt).
+-----------------------------------------------------------
+
+Combo box on MatchEventList: "how long was the match?"
+Run 1,2 & 3. [understood as: Text]  Text: 96:18
+
+Combo box on PlayerList: "list the goals"
+Run 1,2 & 3. [understood as: A list of match events matching the query.]
+
+Goal       B. Gruda    Brighton & Hove Albion  1       11       11       
+Goal       D. Welbeck  Brighton & Hove Albion  2       63       56       
+Goal       B. Šeško    Manchester United       2       84       36    
+
+   
+Group 6 — local and degenerate (cheap, catches dumb breakage).
+--------------------------------------------------------------
+
+"help" and "?" 
+Assistant:
+Type a question about the match and pick a result type:
+  • MatchEvent / MatchEventList — goals, fouls, cards… (drives the highlights reel)
+  • PlayerAppearance / PlayerList — squad and roster info
+Type 'help' or '?' for this message.
+
+"" / whitespace 
+<no result>
+
+"asdfghjkl"
+[understood as: Text] Assistant: I'm ready to help you with sports match data! However, "asdfghjkl" doesn't appear <etc>
+
+"What's the capital of France?"
+[understood as: Text] Assistant: I appreciate the question, but I'm specifically designed to answer questions about sports matches <etc>
+
+
+*******************************************************************
+
+My Observations
+===============
+
+1. Group 1: tests mainly worked as expected ("Who kicked off the two periods of the match?" should have returned a Player table rather than text).
+
+2. Group 2: "What was the best skill.." queries caused some confusion.  "Show me.." and "Tell me.." queries worked worked but sometimes returned different resuts.
+
+3. Group 3: "counter-attack" wasn't understood, "build up" worked two times out of three.
+
+4. Group 4: "All of Bruno Fernandes's actions." possibly overflowed once but worked twice (returning text, not a table)
+
+5. Group 5: Seemed to work although Combo box on PlayerList: "list the goals" returned an event list, which is slightly puzzling.
+
+6. Group 6: All good.
+
+7. Some of the queries resulted in tool exceptions  (although some of these returned correct results nevertheless).  This is undoubtably
+   because we are using untried parts of the system (new event / qualifier ids, etc).  I'll debug.
+
+8. The Assistant complained that some qualifier ids weren't found (either in the specification, or in the Json data).  I'll debug.
+
+
+
+*******************************************************************
+
+Claude Observations
+===================
+
+The headline is that your architecture held up across the whole set — every prompt routed, returned, and rendered without a crash, and the failures 
+are all content/tuning failures inside a working frame, not structural ones. That's the dividend of the layering: when "counter-attacks" isn't 
+understood, you get a clean "not found," not a corrupted reel. Worth noting explicitly because it's easy to focus on the misroutes and miss that 
+the scaffolding passed.
+
+On the routing itself, your tell/make seam diagnosis is confirmed by the data, but the results refine it in an important way: the deciding factor 
+isn't the verb so much as whether the model finds matching events. Look at the "best skill" cluster — when it routed to events it found Take On 
+and produced a clip; when it routed to Text it declared "no Good skill events." The model is conflating two different concepts ("good skill" the 
+event type vs. "best skill" the superlative judgement) and the routing follows whichever interpretation wins that turn. So Group 2's instability is 
+partly a routing-description problem (tool-sharpening will help) but partly something tuning can't fix: "best" is a subjective judgement the feed 
+doesn't encode, so the model is improvising a proxy (most take-ons). That's worth separating in your mind — some Group 2 wobble is fixable by 
+description, some is inherent to asking an event feed a subjective question.
+
+The most significant correctness finding is one you flagged lightly but I'd rank highest: in several tables the named player looks wrong — "best saves" 
+attributed to outfield names, and a recurring Brighton/Wolves/Manchester United team-label inconsistency in the build-up tables (Bruno Fernandes 
+labelled "Wolves"). This points at something beneath the LLM layer — likely contestant/player-id resolution, or the model picking the wrong participant 
+from an event's fields. It matters more than the routing foibles because it's silently plausible: a clip with the wrong name attached looks fine until 
+someone who knows the match watches it, which is exactly the "correct, not merely plausible" failure the whole design exists to prevent. I'd treat this 
+as its own investigation, separate from routing.
+
+The tool exceptions are the other thread to pull, and your instinct (untried event/qualifier ids) is probably right — but notice the pattern: they cluster 
+on the queries probing absent vocabulary (counter-attacks, skill, some saves). That suggests the exception fires on a lookup miss (a qualifierId not in 
+the spec or not present in the data) rather than random instability. If so, it's a missing-key path that needs to degrade to "not found" gracefully instead 
+of throwing — relevant because a thrown exception mid-reel is a demo-killer even when, as you saw, the answer sometimes survives anyway.
+
+Three smaller notes. Your Group 5 puzzle — PlayerList override returning an event list — is explained by the server stub we knowingly left: the override 
+has no teeth yet (it still offers all tools), so "list the goals" routes to events regardless of the combo box. Expected, and it resolves when we give 
+the override its single-tool narrowing. The "who kicked off" → Text-instead-of-table case is a genuine routing miss for tool-sharpening's list. And the 
+TextResultEnvelope conversion error on the big Bruno query is worth watching: it failed once and worked twice, which smells like the token-ceiling 
+truncation again on a very large result — the same length foible, now landing on the text path rather than the events path.
+
+Net: a healthy baseline. The structure is sound; what remains is content correctness (the player/team naming, most urgent), graceful degradation 
+(the exceptions), and routing polish (tool-sharpening). Do your refactoring whenever you're ready, and tell me which of the parked items — or which of 
+these findings — you'd like to pick up first.
+
+
+
+
+
+
+
+    
+
+
+ 
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
