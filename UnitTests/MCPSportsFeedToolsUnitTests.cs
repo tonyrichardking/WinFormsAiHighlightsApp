@@ -49,7 +49,7 @@ namespace UnitTests
         [TestMethod]
         public void TestSportFeedQueries()
         {
-            const string liveDataEventBindingsJson       = """{"typeId": "16"}""";
+            const string liveDataEventBindingsJson = """{"typeId": "16"}""";
             const string wantedLiveDataEventAttributesJson = """["playerName","timeMin","timeSec","periodId"]""";
 
             // liveData unfiltered
@@ -94,12 +94,25 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void TestSportFeedItemQueries()
+        public void TestSportFeedParameterQueries()
         {
-            // "root-liveData
-            string SportFeedLiveDataEventItemsText = SportsFeedProcessorTools.ReadSportFeedItem("root-liveData-event_items", "2581926701").Result;
-            string SportFeedLiveDataEventQualifierItemsText = SportsFeedProcessorTools.ReadSportFeedItem("root-liveData-event-qualifier_items", "4464621259").Result;
-            string SportFeedLiveDataMatchDetailsPeriodText = SportsFeedProcessorTools.ReadSportFeedItem("root-liveData-matchDetails-period_items", "1").Result;
+            Dictionary <string, object> bindings = new Dictionary<string, object>
+            {
+                { "id", "6eqit8ye8aomdsrrq0hk3v7gh" }
+            };
+
+            List<object> wantedAttributes = new List<object>
+            {
+                "name"
+            };
+
+            string bindingsJson = System.Text.Json.JsonSerializer.Serialize(bindings);
+            string wantedAttributesJson = System.Text.Json.JsonSerializer.Serialize(wantedAttributes);
+
+            //string bindingsJson = """{{ "id", "6eqit8ye8aomdsrrq0hk3v7gh" }}""";
+            //string wantedAttributesJson = """{{ "name" }}""";
+
+            object SportFeedMatchInfoContestantText = SportsFeedProcessorTools.ReadSportFeed("root-matchInfo-contestant_items", bindingsJson, wantedAttributesJson).Result;
         }
     }
 }

@@ -14,12 +14,18 @@ public sealed class TestAssemblyInit
             .Build();
 
         var paths = config.GetSection("Paths");
-        AppPaths.FeedFilePath      = paths["FeedFilePath"]      ?? "";
-        AppPaths.EventMapPath      = paths["EventMapPath"]      ?? "";
-        AppPaths.QualifierMapPath  = paths["QualifierMapPath"]  ?? "";
-        AppPaths.SchemaIndexPath   = paths["SchemaIndexPath"]   ?? "";
-        AppPaths.SchemaDocsDir     = paths["SchemaDocsDir"]     ?? "";
-        AppPaths.SystemPromptPath  = paths["SystemPromptPath"]  ?? "";
-        AppPaths.MediaSidecarPath  = paths["MediaSidecarPath"]  ?? "";
+        var appDir        = paths["AppDir"]        ?? "";
+        var solutionDir   = paths["SolutionDir"]   ?? "";
+        var mediaDir      = paths["MediaDir"]      ?? "";
+        var schemaMapsDir = paths["SchemaMapsDir"] ?? "";
+        var schemaDocsDir = paths["SchemaDocsDir"] ?? "";
+
+        AppPaths.FeedFilePath     = Path.Combine(appDir, mediaDir,      paths["FeedFileName"]        ?? "");
+        AppPaths.MediaSidecarPath = Path.Combine(appDir, mediaDir,      paths["SidecarFileName"]     ?? "");
+        AppPaths.EventMapPath     = Path.Combine(appDir, schemaMapsDir, "EventMap.json");
+        AppPaths.QualifierMapPath = Path.Combine(appDir, schemaMapsDir, "QualifierMap.json");
+        AppPaths.SchemaIndexPath  = Path.Combine(appDir, schemaMapsDir, "SchemaIndex.json");
+        AppPaths.SchemaDocsDir    = Path.Combine(appDir, schemaDocsDir);
+        AppPaths.SystemPromptPath = Path.Combine(appDir, solutionDir,   paths["SystemPromptRelPath"] ?? "");
     }
 }

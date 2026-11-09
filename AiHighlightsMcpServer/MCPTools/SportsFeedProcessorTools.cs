@@ -176,16 +176,16 @@ namespace MCPServer.MCPTools
 
         // ******************************************************************************
 
-        [McpServerTool(Name = "readSportFeedItem"), Description("Takes a Nesting value string in the form 'level1-level2-...' and an id value, and returns the corresponding single item of an array section of the sports feed as textual Json.")]
-        public static async Task<string> ReadSportFeedItem(string nesting, object id)
-        {
-            string jsonString = SportsFeedProcessorToolHelpers.readSportFeedForNestingAndId(nesting, id);
+        //[McpServerTool(Name = "readSportFeedItem"), Description("Takes a Nesting value string in the form 'level1-level2-...' and an id value, and returns the corresponding single item of an array section of the sports feed as textual Json.")]
+        //public static async Task<string> ReadSportFeedItem(string nesting, object id)
+        //{
+        //    string jsonString = SportsFeedProcessorToolHelpers.readSportFeedForNestingAndId(nesting, id);
 
-            Console.WriteLine("\n******************************* SportsFeedProcessorTools.ReadSportFeedItem called *******************************");
-            Console.WriteLine($"\n Parameter nesting = {nesting}, id = {id}, Length = {jsonString.Length}");
+        //    Console.WriteLine("\n******************************* SportsFeedProcessorTools.ReadSportFeedItem called *******************************");
+        //    Console.WriteLine($"\n Parameter nesting = {nesting}, id = {id}, Length = {jsonString.Length}");
 
-            return jsonString;
-        }
+        //    return jsonString;
+        //}
     }
 }
 

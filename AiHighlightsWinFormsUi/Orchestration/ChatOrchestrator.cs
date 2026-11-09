@@ -49,6 +49,13 @@ namespace AiHighlightsWinFormsUi.Orchestration
             public string? ChosenType { get; init; }     // ← new: the server's decision
         }
 
+        /// <summary>
+        /// Handle the user input, send it to the server, and process the response.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="selectedType"></param>
+        /// <param name="progress"></param>
+        /// <returns></returns>
         public async Task<ClientResponse> HandleInputAsync(string input, string selectedType, IProgress<PipelineStage> progress)
         {
             var text = input.Trim();
@@ -99,70 +106,6 @@ namespace AiHighlightsWinFormsUi.Orchestration
                 return new ClientResponse(ResponseKind.Error, ex.Message);
             }
         }
-
-        private MatchEventList? NormalizeToList(string json, string selectedType)
-        {
-            var opts = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            if (selectedType == "MatchEventList")
-                return JsonSerializer.Deserialize<MatchEventList>(json, opts);
-
-            var single = JsonSerializer.Deserialize<MatchEvent>(json, opts);   // singular
-            return single is null ? null : new MatchEventList(new[] { single });
-        }
     }
 }
 
-
-
-
-/*
-
-        public async Task<ClientResponse> HandleInputAsync(string input, string selectedType, IProgress<PipelineStage> progress)
-        {
-            var text = input.Trim();
-            if (LocalCommands.IsHelp(text))
-                return new ClientResponse(ResponseKind.Help, LocalCommands.HelpText);
-
-            try
-            {
-                progress.Report(PipelineStage.Thinking);
-                var request = new TypedPromptRequest(text, selectedType);
-                string completion = await _api.SendMessageAsync("runTypedPrompt", request);
-
-                var opts = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var envelope = JsonSerializer.Deserialize<AutoEnvelope>(completion, opts);
-                if (envelope is null)
-                    return new ClientResponse(ResponseKind.Error, "Could not read the server response.");
-
-                // Branch on what the SERVER chose, not the combo box.
-                switch (envelope.ChosenType)
-                {
-                    case "MatchEventList":
-                        {
-                            var events = envelope.Payload.Deserialize<MatchEventList>(opts);
-                            if (events is null || events.Events.Length == 0)
-                                return new ClientResponse(ResponseKind.FreeformText, "No matching events found.");
-
-                            await _pipeline.ProduceAndPlayAsync(events, _sourceVideoFilePath, _mediaPath, progress);
-                            return new ClientResponse(ResponseKind.EventResult, completion) { Events = events };
-                        }
-
-                    case "PlayerList":
-                        return new ClientResponse(ResponseKind.StructuredResult, envelope.Payload.GetRawText());
-
-                    case "Text":
-                        return new ClientResponse(ResponseKind.FreeformText, envelope.Payload.GetString() ?? "");
-
-                    default:
-                        return new ClientResponse(ResponseKind.Error, $"Unknown result type: {envelope.ChosenType}");
-                }
-            }
-            catch (Exception ex)
-            {
-                progress.Report(PipelineStage.Failed);
-                return new ClientResponse(ResponseKind.Error, ex.Message);
-            }
-        }
-
-
- */

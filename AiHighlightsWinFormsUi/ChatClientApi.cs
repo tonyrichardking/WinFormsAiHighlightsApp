@@ -19,6 +19,12 @@ namespace AiHighlightsWinFormsUi
             this.httpClient = httpClient;
         }
 
+        /// <summary>
+        /// Sends a message to the specified endpoint of the AI chat server and returns the response as a string.
+        /// </summary>
+        /// <param name="endPoint"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
         public async Task<string> SendMessageAsync(string endPoint, object message)
         {
             string request = null;

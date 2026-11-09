@@ -147,6 +147,12 @@ namespace WinFormsApp1
             rtbAiChat.ScrollToCaret();
         }
 
+        /// <summary>
+        /// Handles the KeyDown event for the txtInput TextBox. When the Enter key is pressed (without Shift), 
+        /// it processes the input text, sends it to the orchestrator, and updates the chat output based on the response.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void TxtInput_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Enter || e.Shift)
@@ -171,6 +177,9 @@ namespace WinFormsApp1
 
             try
             {
+                // Send the prompt to the orchestrator and get a response
+                // The orchestrator sends it to the server, receives the response, determines the appropriate response type,
+                // returns a ClientResponse object, and triggers the media pipeline.
                 var response = await _orchestrator.HandleInputAsync(promptText, selectedType, progress);
 
                 // route the response based on its kind, and render it in the chat output

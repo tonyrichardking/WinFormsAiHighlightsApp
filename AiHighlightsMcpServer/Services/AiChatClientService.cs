@@ -13,6 +13,14 @@ using System.Text;
 using System.Text.Json;
 using ChatRole = Microsoft.Extensions.AI.ChatRole;
 
+/// <summary>
+/// AiChatClientService is a service class that provides methods for interacting with an AI chat client. 
+/// It implements the IAiChatClientService interface and the IAsyncDisposable interface. 
+/// The class initializes the chat client, manages chat history, and provides methods for running prompts, 
+/// structured prompts, and typed prompts. It also allows setting system prompts, models, tools, and other 
+/// options for the chat client. The service supports both Ollama and Anthropic Claude models and can handle 
+/// function invocation and tool usage in the chat interactions.
+/// </summary>
 public class AiChatClientService : IAiChatClientService, IAsyncDisposable
 {
     public AiChatClientService()
@@ -130,11 +138,6 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
     public record PlayerResultEnvelope(PlayerList Result);
     public record TextResultEnvelope(string Result);
 
-    public async Task<AutoResult> RunPromptUnderTest<T>(string prompt)
-    {
-        return await RunAutoPrompt(prompt);
-    }
-
     // Carries the routing decision (which tool fired) plus the captured payload.
     public record AutoResult(string ChosenType, object? Payload);
 
@@ -172,14 +175,14 @@ public class AiChatClientService : IAiChatClientService, IAsyncDisposable
             var options = buildChatOptions(toolsForThisCall, 0);   // same call as yours
 
             var messages = new List<ChatMessage>(ChatHistory)
-        {
-            new ChatMessage(ChatRole.User, apiCall),
-            new ChatMessage(ChatRole.User,
-                "When you have the data you need, call EXACTLY ONE of the submit_* tools to return " +
-                "your answer, choosing the one that best fits the result. Each takes a single argument " +
-                "object with a top-level \"result\" property. Do NOT write any prose outside the tool call. " +
-                "If no structured tool fits, use submit_unstructured.")
-        };
+            {
+                new ChatMessage(ChatRole.User, apiCall),
+                new ChatMessage(ChatRole.User,
+                    "When you have the data you need, call EXACTLY ONE of the submit_* tools to return " +
+                    "your answer, choosing the one that best fits the result. Each takes a single argument " +
+                    "object with a top-level \"result\" property. Do NOT write any prose outside the tool call. " +
+                    "If no structured tool fits, use submit_unstructured.")
+            };
 
             ChatResponse response = await chatClient.GetResponseAsync(messages, options);
 

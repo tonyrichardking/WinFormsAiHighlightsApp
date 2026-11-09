@@ -45,13 +45,13 @@ namespace UnitTests
             string contestantItemId = "6eqit8ye8aomdsrrq0hk3v7gh";
             string contestantJsonSchemaText = SportsFeedProcessorTools.ReadSchemaDocument(contestantsItemNesting).Result;
             //object contestantSportFeedItemsText = SportsFeedProcessorTools.ReadSportFeed(contestantsItemNesting).Result;
-            string contestantSportFeedItemText = SportsFeedProcessorTools.ReadSportFeedItem(contestantsItemNesting, contestantItemId).Result;
+            //string contestantSportFeedItemText = SportsFeedProcessorTools.ReadSportFeedItem(contestantsItemNesting, contestantItemId).Result;
 
             // event item nesting
             string eventItemId = "2581965521";
             string eventJsonSchemaText = SportsFeedProcessorTools.ReadSchemaDocument(eventsItemNesting).Result;
             //object eventSportFeedItemsText = SportsFeedProcessorTools.ReadSportFeed(eventsItemNesting).Result;
-            string eventSportFeedItemText = SportsFeedProcessorTools.ReadSportFeedItem(eventsItemNesting, eventItemId).Result;
+            //string eventSportFeedItemText = SportsFeedProcessorTools.ReadSportFeedItem(eventsItemNesting, eventItemId).Result;
 
             string schemaIndexText = SportsFeedProcessorTools.ReadSchemaIndex().Result;
 
