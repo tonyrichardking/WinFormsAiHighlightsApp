@@ -88,10 +88,10 @@ dotnet test UnitTests/UnitTests.csproj --filter "ClassName=MCPSportsFeedToolsUni
 dotnet test UnitTests/UnitTests.csproj --filter "TestMethod=<MethodName>"
 ```
 
-### MCP Server Ports
-- `11190` — REST API used by the WinForms UI (`/aiChat/...` endpoints)
-- `5252` — MCP protocol endpoint (HTTP transport, stateless)
-- Swagger UI: `http://localhost:5252/swagger/ui`
+### MCP Server Port
+- `11190` (set in `appsettings.json`, `Kestrel:Endpoints:Http:Url`) — the only port. It serves the REST API used by the
+  WinForms UI (`/aiChat/...`) and the MCP endpoint (`/mcp`, HTTP transport, stateless), which the server also calls itself.
+- Swagger UI: `http://localhost:11190/` (served at the root)
 
 ### Key services
 

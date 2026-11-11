@@ -23,9 +23,8 @@ namespace WebApplication1
 
             var builder = WebApplication.CreateBuilder(webApplicationOptions);
 
-            // Make the ASP.NET Core host listen on a known HTTP URL for the MCP HTTP transport.
-            // Change the URL/port as required (e.g. "http://0.0.0.0:5252" for all interfaces).
-            builder.WebHost.UseUrls("http://localhost:5252");
+            // The listening port is set in appsettings.json (Kestrel:Endpoints:Http:Url); it serves both
+            // the REST API (/aiChat/...) and the MCP endpoint (/mcp).
 
             // Add services to the container.
             builder.Services.AddControllers();
